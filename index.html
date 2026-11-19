@@ -186,6 +186,15 @@
   .modal-nav button{pointer-events:auto;width:44px;height:44px;border-radius:50%;background:rgba(26,23,20,.85);border:1px solid var(--line);color:var(--txt);display:grid;place-items:center;transition:.2s}
   .modal-nav button:hover{background:var(--acc);color:var(--bg)}
   .modal-nav svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .h-big{font-size:clamp(2.4rem,6vw,4.6rem);letter-spacing:-.03em;line-height:1}
+  .reel-tag{position:absolute;left:16px;bottom:14px;z-index:2;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;color:var(--acid);text-transform:uppercase}
+  #reels{border-top:0}
+  section.acid .reel-card{width:min(360px,78vw)}
+  section.acid .reel-card:hover{border-color:rgba(181,230,29,.55)}
+  section.acid .reel-idx{color:var(--acid)}
+  section.acid .strip-progress i{background:var(--acid)}
+  section.acid .strip-count b{color:var(--acid)}
+  section.acid .strip-arrow:hover{background:var(--acid);border-color:var(--acid)}
 
   /* ---------- servicios ---------- */
   .servicios{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -279,7 +288,8 @@
     <div class="nav-links" id="navLinks">
       <a href="#trabajo">Videoclips</a>
       <a href="#escenario">Escenario</a>
-      <a href="#vertical">Vertical</a>
+      <a href="#3d">3D</a>
+      <a href="#reels">Reels</a>
       <a href="#servicios">Servicios</a>
       <a href="#sobre-mi">Backstage</a>
       <a href="#contacto" class="cta">Contacto</a>
@@ -344,22 +354,41 @@
     </div>
   </section>
 
-  <!-- ============ 03 · VERTICAL · FILM STRIP ============ -->
-  <section id="vertical" class="vertical">
+  <!-- ============ 03 · 3D · HDP ANDO BAIRES + CHECHA RIFA ============ -->
+  <section id="3d" class="vertical acid">
     <div class="wrap">
       <div class="sec-head reveal" style="margin-bottom:26px">
-        <div class="kicker">03 · Vertical</div>
-        <h2 class="h-916">9:16</h2>
+        <div class="kicker">03 · 3D — últimos trabajos</div>
+        <h2 class="h-916">3D</h2>
       </div>
     </div>
     <div class="strip-wrap reveal">
-      <button class="strip-arrow left" id="stripPrev" aria-label="Reel anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="strip" id="strip"><div class="strip-track" id="stripTrack"></div></div>
-      <button class="strip-arrow right" id="stripNext" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="strip-arrow left" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="strip"><div class="strip-track"></div></div>
+      <button class="strip-arrow right" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     </div>
     <div class="wrap strip-foot">
-      <div class="strip-progress"><i id="stripBar"></i></div>
-      <div class="strip-count"><b id="stripIdx">01</b> / <span id="stripTotal">03</span> · arrastrá · click = sonido</div>
+      <div class="strip-progress"><i></i></div>
+      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · arrastrá · click = sonido</div>
+    </div>
+  </section>
+
+  <!-- ============ 04 · VIDEOCLIPS EN VERTICAL ============ -->
+  <section id="reels" class="vertical">
+    <div class="wrap">
+      <div class="sec-head reveal" style="margin-bottom:26px">
+        <div class="kicker">04 · Videoclips — en vertical</div>
+        <h2 class="h-big">Videoclips</h2>
+      </div>
+    </div>
+    <div class="strip-wrap reveal">
+      <button class="strip-arrow left" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="strip"><div class="strip-track"></div></div>
+      <button class="strip-arrow right" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="wrap strip-foot">
+      <div class="strip-progress"><i></i></div>
+      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · arrastrá · click = sonido</div>
     </div>
   </section>
 
@@ -367,7 +396,7 @@
   <section id="servicios" class="servicios">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="kicker">04 · Toolbox — servicios</div>
+        <div class="kicker">05 · Toolbox — servicios</div>
         <h2>Todas mis herramientas a tu disposición</h2>
       </div>
       <div class="serv-grid">
@@ -407,7 +436,7 @@
           <img src="assets/about.jpg" alt="Francisco Benítez — frame del Reel 2026" loading="lazy">
         </figure>
         <div class="about-txt reveal">
-          <div class="kicker">05 · Backstage</div>
+          <div class="kicker">06 · Backstage</div>
           <h2 style="margin-bottom:22px">Audiovisual y Artista</h2>
           <p>Hace más de 12 años que edito, diseño y hago VFX — autónomo y autodidacta. Mi propuesta de valor y mayor herramienta es el <b>criterio</b>: proyecto una idea y la conecto con un boceto de la pieza final antes de tocar la cámara.</p>
           <p>Resido en el barrio de <b>Balvanera</b>, en Buenos Aires, Argentina.</p>
@@ -421,7 +450,7 @@
   <!-- ============ 06 · CONTACTO ============ -->
   <section id="contacto" class="contact">
     <div class="wrap reveal">
-      <div class="kicker">06 · Contacto</div>
+      <div class="kicker">07 · Contacto</div>
       <h2>¿Apretamos el <em>MÁYUS</em>?</h2>
       <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
       <div class="contact-cta">
@@ -504,12 +533,7 @@ const CONFIG = {
   ],
   /* ---- BLOQQ MÁYUS · Escenario ---- */
   facts: { title: "FACTS", img: "assets/real/WPE_jtKCojc.jpg", video: "https://www.youtube.com/watch?v=WPE_jtKCojc", meta: "BLOQQ MÁYUS · Videoclip oficial · 2026" },
-  /* ---- Vertical: reels reales (assets/reels/) ---- */
-  verticals: [
-    { src: "assets/reels/HDP_Juego_1_MIDI_1.mp4",            title: "HDP · Juego · MIDI" },
-    { src: "assets/reels/Promo01v2_Oscar Wilde_1.mp4",       title: "Promo · Oscar Wilde" },
-    { src: "assets/reels/SIN1ROSTRO_BLOQQ_Especial_1.mp4",   title: "Sin Rostro · Especial BLOQQ" }
-  ]
+  /* ---- Vertical: los reels se auto-descubren desde assets/reels/ (ver loadReels) ---- */
 };
 /* ================= FIN DE CONFIG ================= */
 
@@ -577,86 +601,87 @@ function openFacts() { openModal({ ...CONFIG.facts, vert: false }); }
 document.getElementById("factsCard").addEventListener("click", openFacts);
 document.getElementById("factsBtn").addEventListener("click", openFacts);
 
-/* ---- vertical · film strip interactivo ---- */
+/* ---- reels · auto-descubrimiento + dos film strips (3D / Videoclips) ---- */
 const pad2 = n => String(n).padStart(2, "0");
-const strip = document.getElementById("strip");
-const stripTrack = document.getElementById("stripTrack");
-stripTrack.innerHTML = CONFIG.verticals.map((v, i) => `
-  <article class="reel-card" data-i="${i}">
-    <div class="reel-ph"><i>${ICONS.play}</i></div>
-    <video src="${v.src}" muted loop playsinline preload="metadata"></video>
-    <span class="reel-idx">${pad2(i + 1)}</span>
-    <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
-  </article>`).join("");
-document.getElementById("stripTotal").textContent = pad2(CONFIG.verticals.length);
-
-const reelCards = [...stripTrack.querySelectorAll(".reel-card")];
-const reelVideos = reelCards.map(c => c.querySelector("video"));
-reelVideos.forEach((v, i) => v.addEventListener("loadeddata", () => reelCards[i].classList.add("ready")));
-function syncReelPlayback() {
-  reelVideos.forEach(v => {
+const REEL_API = "https://api.github.com/repos/BLOQQMAYUS/BLOQQMAYUS.github.io/contents/assets/reels";
+const FALLBACK_REELS = ["HDP_Juego_1_MIDI_1.mp4", "Promo01v2_Oscar Wilde_1.mp4", "SIN1ROSTRO_BLOQQ_Especial_1.mp4"];
+const is3D = n => /^HDP/i.test(n) || /CHECHA/i.test(n);
+function reelTitle(n) {
+  return n.replace(/\.mp4$/i, "").replace(/promo\d+v\d+/i, "Promo")
+    .split(/[_\s]+/).filter(t => t && !/^\d+$/.test(t) && !/^v\d+$/i.test(t)).join(" ");
+}
+const stripSyncs = [];
+function buildStrip(sec, items) {
+  const strip = sec.querySelector(".strip");
+  const track = sec.querySelector(".strip-track");
+  const bar = sec.querySelector(".strip-progress i");
+  const idxEl = sec.querySelector(".strip-count b");
+  sec.querySelector(".strip-total").textContent = pad2(items.length);
+  track.innerHTML = items.map((v, i) => `
+    <article class="reel-card" data-i="${i}">
+      <div class="reel-ph"><i>${ICONS.play}</i></div>
+      <video src="${v.src}" muted loop playsinline preload="metadata"></video>
+      <span class="reel-idx">${pad2(i + 1)}</span>
+      ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
+      <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
+    </article>`).join("");
+  const cards = [...track.querySelectorAll(".reel-card")];
+  const videos = cards.map(c => c.querySelector("video"));
+  videos.forEach((v, i) => v.addEventListener("loadeddata", () => cards[i].classList.add("ready")));
+  const sync = () => videos.forEach(v => {
     const r = v.getBoundingClientRect();
-    const visible = r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
-    if (visible && !modal.classList.contains("open")) v.play().catch(() => {});
-    else v.pause();
+    const vis = r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+    if (vis && !modal.classList.contains("open")) v.play().catch(() => {}); else v.pause();
   });
+  new IntersectionObserver(sync, { threshold: .25 }).observe(strip);
+  addEventListener("scroll", sync, { passive: true });
+  stripSyncs.push(sync);
+  /* drag con momentum */
+  let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0;
+  strip.addEventListener("pointerdown", e => {
+    down = true; moved = 0; sx = e.clientX; ss = strip.scrollLeft;
+    lx = e.clientX; lt = performance.now(); vel = 0;
+    cancelAnimationFrame(raf);
+    strip.classList.add("dragging");
+    strip.setPointerCapture(e.pointerId);
+  });
+  strip.addEventListener("pointermove", e => {
+    if (!down) return;
+    const dx = e.clientX - sx;
+    moved = Math.max(moved, Math.abs(dx));
+    strip.scrollLeft = ss - dx;
+    const now = performance.now(), dt = now - lt || 16;
+    vel = (e.clientX - lx) / dt; lx = e.clientX; lt = now;
+  });
+  const end = () => {
+    if (!down) return;
+    down = false; strip.classList.remove("dragging");
+    const glide = () => { vel *= .94; strip.scrollLeft -= vel * 16; if (Math.abs(vel) > .05) raf = requestAnimationFrame(glide); };
+    raf = requestAnimationFrame(glide);
+  };
+  strip.addEventListener("pointerup", end);
+  strip.addEventListener("pointercancel", end);
+  strip.addEventListener("click", e => {
+    if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
+    const c = e.target.closest(".reel-card");
+    if (c) openReel(items, +c.dataset.i);
+  }, true);
+  const step = () => (cards[0] ? cards[0].offsetWidth : 320) + 26;
+  sec.querySelector(".strip-arrow.left").addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
+  sec.querySelector(".strip-arrow.right").addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
+  const hud = () => {
+    const max = strip.scrollWidth - strip.clientWidth;
+    bar.style.width = (max > 0 ? (strip.scrollLeft / max) * 100 : 100) + "%";
+    idxEl.textContent = pad2(Math.min(items.length, Math.max(1, Math.round(strip.scrollLeft / step()) + 1)));
+  };
+  strip.addEventListener("scroll", hud, { passive: true });
+  hud();
 }
-const reelIO = new IntersectionObserver(syncReelPlayback, { threshold: .25 });
-reelCards.forEach(c => reelIO.observe(c));
-addEventListener("scroll", syncReelPlayback, { passive: true });
-
-/* drag con momentum */
-let down = false, startX = 0, startScroll = 0, vel = 0, lastX = 0, lastT = 0, moved = 0, glideRaf = 0;
-strip.addEventListener("pointerdown", e => {
-  down = true; moved = 0; startX = e.clientX; startScroll = strip.scrollLeft;
-  lastX = e.clientX; lastT = performance.now(); vel = 0;
-  cancelAnimationFrame(glideRaf);
-  strip.classList.add("dragging");
-  strip.setPointerCapture(e.pointerId);
-});
-strip.addEventListener("pointermove", e => {
-  if (!down) return;
-  const dx = e.clientX - startX;
-  moved = Math.max(moved, Math.abs(dx));
-  strip.scrollLeft = startScroll - dx;
-  const now = performance.now(), dt = now - lastT || 16;
-  vel = (e.clientX - lastX) / dt;
-  lastX = e.clientX; lastT = now;
-});
-function endDrag() {
-  if (!down) return;
-  down = false;
-  strip.classList.remove("dragging");
-  const glide = () => { vel *= .94; strip.scrollLeft -= vel * 16; if (Math.abs(vel) > .05) glideRaf = requestAnimationFrame(glide); };
-  glideRaf = requestAnimationFrame(glide);
-}
-strip.addEventListener("pointerup", endDrag);
-strip.addEventListener("pointercancel", endDrag);
-strip.addEventListener("click", e => {
-  if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
-  const c = e.target.closest(".reel-card");
-  if (c) openReel(+c.dataset.i);
-}, true);
-
-/* flechas + progreso + contador */
-const step = () => (reelCards[0] ? reelCards[0].offsetWidth : 320) + 26;
-document.getElementById("stripPrev").addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
-document.getElementById("stripNext").addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
-function stripHUD() {
-  const max = strip.scrollWidth - strip.clientWidth;
-  document.getElementById("stripBar").style.width = (max > 0 ? (strip.scrollLeft / max) * 100 : 100) + "%";
-  const idx = Math.min(CONFIG.verticals.length, Math.max(1, Math.round(strip.scrollLeft / step()) + 1));
-  document.getElementById("stripIdx").textContent = pad2(idx);
-}
-strip.addEventListener("scroll", stripHUD, { passive: true });
-stripHUD();
-
-/* modal de reels: con sonido y navegación */
-let reelCur = 0;
-function openReel(i) {
-  const n = CONFIG.verticals.length;
-  reelCur = ((i % n) + n) % n;
-  const v = CONFIG.verticals[reelCur];
+let reelList = [], reelCur = 0;
+function openReel(list, i) {
+  reelList = list;
+  reelCur = ((i % list.length) + list.length) % list.length;
+  const v = list[reelCur];
   mMedia.className = "modal-media vert";
   mMedia.innerHTML = `<video src="${v.src}" controls autoplay playsinline></video>
     <span class="modal-nav">
@@ -664,17 +689,40 @@ function openReel(i) {
       <button data-reelnav="next" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
     </span>`;
   document.getElementById("modalTitle").textContent = v.title;
-  document.getElementById("modalMeta").textContent = `Reel ${pad2(reelCur + 1)} / ${pad2(n)}`;
+  document.getElementById("modalMeta").textContent = (v.group ? v.group + " · " : "") + `Reel ${pad2(reelCur + 1)} / ${pad2(list.length)}`;
   document.getElementById("modalHint").textContent = "";
   document.getElementById("modalExt").hidden = true;
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
-  syncReelPlayback();
+  stripSyncs.forEach(f => f());
 }
 mMedia.addEventListener("click", e => {
   const b = e.target.closest("[data-reelnav]");
-  if (b) openReel(reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
+  if (b) openReel(reelList, reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
 });
+async function loadReels() {
+  let names = FALLBACK_REELS;
+  try {
+    const cached = sessionStorage.getItem("reels-manifest");
+    if (cached) names = JSON.parse(cached);
+    else {
+      const r = await fetch(REEL_API, { headers: { Accept: "application/vnd.github+json" } });
+      if (r.ok) {
+        const mp4 = (await r.json()).filter(x => /\.mp4$/i.test(x.name)).map(x => x.name);
+        if (mp4.length) { names = mp4; sessionStorage.setItem("reels-manifest", JSON.stringify(mp4)); }
+      }
+    }
+  } catch (e) { /* offline, file:// o rate-limit → fallback */ }
+  const items = names.map(n => ({
+    src: "assets/reels/" + encodeURIComponent(n),
+    title: reelTitle(n),
+    group: is3D(n) ? (/CHECHA/i.test(n) ? "CHECHA RIFA" : "HDP ANDO BAIRES") : ""
+  }));
+  const td = items.filter(i => i.group).sort((a, b) => (a.group === "HDP ANDO BAIRES" ? -1 : 1));
+  buildStrip(document.getElementById("3d"), td);
+  buildStrip(document.getElementById("reels"), items.filter(i => !i.group));
+}
+loadReels();
 
 /* ---- modal ---- */
 const modal = document.getElementById("modal");
@@ -718,7 +766,7 @@ function closeModal() {
   modal.classList.remove("open");
   mMedia.innerHTML = "";
   document.body.style.overflow = "";
-  syncReelPlayback();
+  stripSyncs.forEach(f => f());
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
