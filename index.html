@@ -264,18 +264,18 @@
   .foot b{color:var(--brasa);font-weight:400}
 
   /* ---------- modal ---------- */
-  .modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.65)}
   /* ===== previsualización limpia (reels): sin ventana, sin controles ===== */
   #rlBox{position:fixed;inset:0;z-index:300;display:none}
   #rlBox.open{display:block}
-  #rlBg{position:absolute;inset:0;background:rgba(10,8,6,.5);opacity:0;transition:opacity .4s}
+  #rlBg{position:absolute;inset:0;background:rgba(10,8,6,.65);opacity:0;transition:opacity .4s}
   #rlBox.on #rlBg{opacity:1}
   #rlVideo{position:fixed;object-fit:cover;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.55);
     transition:top .55s cubic-bezier(.65,0,.15,1),left .55s cubic-bezier(.65,0,.15,1),width .55s cubic-bezier(.65,0,.15,1),height .55s cubic-bezier(.65,0,.15,1),border-radius .55s}
   /* ===== mesa de luz (Toolbox) ===== */
   #ltBox{position:fixed;inset:0;z-index:280;display:none}
   #ltBox.open{display:block}
-  #ltBg{position:absolute;inset:0;background:rgba(10,8,6,.5);opacity:0;transition:opacity .35s}
+  #ltBg{position:absolute;inset:0;background:rgba(10,8,6,.65);opacity:0;transition:opacity .35s}
   #ltBox.on #ltBg{opacity:1}
   #ltPanel{position:absolute;left:50%;top:50%;transform:translate(-50%,-46%) scale(.97);opacity:0;
     width:min(1240px,96vw);max-height:92vh;overflow-y:auto;background:var(--hueso);color:var(--carbon);
@@ -522,7 +522,7 @@
   <button type="button" id="galX" aria-label="Cerrar galería"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
 
-<!-- previsualización limpia de reels: fondo 50% + video al centro ya reproduciendo, sin controles -->
+<!-- previsualización limpia de reels: fondo 65% + video al centro ya reproduciendo, sin controles -->
 <div id="rlBox" aria-hidden="true">
   <div id="rlBg"></div>
   <video id="rlVideo" playsinline loop preload="auto"></video>
@@ -854,7 +854,7 @@ document.addEventListener("visibilitychange", () => {
   else { scanNext(); if (rlPhase === "open") rlVideo.play().catch(() => {}); }
 });
 
-/* ---- previsualización limpia: fondo 50%, vuelo al centro YA reproduciendo,
+/* ---- previsualización limpia: fondo 65%, vuelo al centro YA reproduciendo,
    sin controles; click fuera (sobre el fondo oscurecido) = cerrar y volver ---- */
 const rlBox = document.getElementById("rlBox");
 const rlBg = document.getElementById("rlBg");

@@ -19,10 +19,12 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   la activa el botón flecha de la sección Contacto, como overlay a pantalla
   completa (`#galBox` + iframe a `lab/vortex/`, que se descarga al cerrar).
   Fondo: espacio 3D con estrellas sutiles. Click en una obra → mesa de luz
-  (50% de oscuridad, vuelo al centro, autoplay sin controles; click en la
+  (65% de oscuridad, vuelo al centro, autoplay sin controles; click en la
   preview = play/pausa invisible; click afuera = volver a la galería).
 - **Toda preview respeta la relación de aspecto original del archivo**
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
+- **Todas las mesas de luz / previews oscurecen el fondo al 65%**
+  (rgba(10,8,6,.65)): reels, mesas del Toolbox, modal y Galería 3D.
 - Las mesas de luz del Toolbox son "mesas de ideas" por rama, con placeholders
   punteados reservando lugar para imágenes futuras en formatos variados.
 - Todo lo que no sirva al objetivo portfolio → contacto se corta.

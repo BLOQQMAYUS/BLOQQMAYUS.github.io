@@ -109,8 +109,8 @@
   #nextBtn{border-color:rgba(181,230,29,.5);color:var(--acid)}
   #nextBtn:hover{background:var(--acid);color:var(--carbon);border-color:var(--acid)}
 
-  /* ---------- mesa de luz: 50% de oscuridad + preview al centro, sin controles ---------- */
-  #dim{position:fixed;inset:0;z-index:40;background:rgba(10,8,6,.5);opacity:0;pointer-events:none;transition:opacity .55s}
+  /* ---------- mesa de luz: 65% de oscuridad + preview al centro, sin controles ---------- */
+  #dim{position:fixed;inset:0;z-index:40;background:rgba(10,8,6,.65);opacity:0;pointer-events:none;transition:opacity .55s}
   #dim.on{opacity:1}
   .fly{position:fixed!important;z-index:45;margin:0!important;transform:none!important;
     transition:top .68s cubic-bezier(.65,0,.15,1),left .68s cubic-bezier(.65,0,.15,1),width .68s cubic-bezier(.65,0,.15,1),height .68s cubic-bezier(.65,0,.15,1),border-radius .68s,opacity .2s;
@@ -175,7 +175,7 @@
    Se activa con la flecha de la sección Contacto (overlay iframe).
    Espacio 3D con estrellas sutiles que pasan; obras derechas en las
    paredes del corredor. Avance: auto-paseo, deslizamiento, rueda, ‹ ›.
-   Click en una obra → vuela al centro en modo "mesa de luz" (50% de
+   Click en una obra → vuela al centro en modo "mesa de luz" (65% de
    oscuridad, autoplay, sin botones: click en la preview = play/pausa
    invisible; click afuera = vuelve a la galería).
    Rendimiento: transforms del mundo + reciclado de obras/estrellas;
@@ -293,12 +293,14 @@ function tick(t) {
 const drag = { down: false };
 const pts = new Map();
 let sx = 0, sy = 0, lx = 0, ly = 0, lt = 0, moved = 0, pinchD = 0;
+let downCard = null, downT = 0;
 const seen = () => $("hint").classList.add("seen");
 stage.addEventListener("pointerdown", e => {
   pts.set(e.pointerId, e);
   if (pts.size === 1) {
     drag.down = true; moved = 0; sx = lx = e.clientX; sy = ly = e.clientY;
     lt = performance.now(); flyVel = 0; targetZ = null;
+    downCard = e.target.closest(".vcard"); downT = performance.now();
     stage.classList.add("dragging");
   } else if (pts.size === 2) {
     const [a, b] = [...pts.values()];
@@ -329,8 +331,17 @@ const release = e => {
   if (pts.size < 2) pinchD = 0;
   if (!pts.size) { drag.down = false; stage.classList.remove("dragging"); }
 };
-stage.addEventListener("pointerup", release);
-stage.addEventListener("pointercancel", release);
+stage.addEventListener("pointerup", e => {
+  /* tap = abrir obra. OJO: setPointerCapture redirige el click derivado al
+     stage (closest(".vcard") daría null) → por eso se abre acá en pointerup,
+     nunca en el click. Mismo patrón que las tiras del sitio principal. */
+  const tap = downCard && pts.size === 1 && moved <= 8 && performance.now() - downT < 600;
+  const card = downCard;
+  release(e);
+  downCard = null;
+  if (tap && !phase && !cineOpen) openCine(+card.dataset.i);
+});
+stage.addEventListener("pointercancel", e => { release(e); downCard = null; });
 stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; targetZ = null; seen(); }, { passive: false });
 stage.addEventListener("dragstart", e => e.preventDefault());
 function step(d) {
@@ -349,12 +360,7 @@ addEventListener("keydown", e => {
   if (e.key === "ArrowDown" || e.key === "ArrowLeft") step(-1);
 });
 
-/* ---------- click → vuelo al centro · mesa de luz ---------- */
-stage.addEventListener("click", e => {
-  if (moved > 8 || phase) return;
-  const c = e.target.closest(".vcard");
-  if (c) openCine(+c.dataset.i);
-}, true);
+/* ---------- apertura de obra: solo por tap en pointerup (ver arriba) ---------- */
 
 function fitRect(aspect) {
   /* la preview respeta el aspecto original y deja aire alrededor (mesa de luz) */
