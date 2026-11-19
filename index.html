@@ -156,8 +156,10 @@
   .reel-card{position:relative;width:min(320px,74vw);aspect-ratio:9/16;border-radius:28px;overflow:hidden;border:3px solid #3A332B;background:#12100D;flex:none;scroll-snap-align:center;cursor:pointer;
     transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s;box-shadow:0 14px 40px rgba(0,0,0,.4)}
   .reel-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 30px 70px rgba(0,0,0,.6)}
-  .reel-card video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
-  .reel-card.ready video{opacity:1}
+  .reel-card video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s}
+  .reel-card.playing video{opacity:1}
+  .reel-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s;-webkit-user-drag:none}
+  .reel-card.has-poster .reel-poster{opacity:1}
   /* previews nunca seleccionables ni arrastrables (cualquier relación de aspecto) */
   .film,.reel-card,.esc-media,.film *,.reel-card *,.esc-media *{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   img,video{-webkit-user-drag:none;user-drag:none}
@@ -168,7 +170,7 @@
   .reel-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(244,238,227,.07) 50%,transparent 68%);transform:translateX(-100%)}
   .reel-card:hover:not(.ready) .reel-ph::after{animation:shimmer 2.4s infinite}
   @keyframes shimmer{to{transform:translateX(100%)}}
-  .reel-card.ready .reel-ph{background:rgba(18,16,13,.38)}
+  .reel-card.has-poster .reel-ph{background:linear-gradient(180deg,rgba(18,16,13,.1),rgba(18,16,13,.42))}
   .reel-card.playing .reel-ph{opacity:0;pointer-events:none}
   .reel-card.playing .reel-idx::after{content:" ●";color:var(--acid);animation:blink 1.2s infinite}
   .reel-idx{position:absolute;top:16px;left:18px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;color:rgba(244,238,227,.8)}
@@ -661,6 +663,7 @@ function buildStrip(sec, items) {
   track.innerHTML = items.map((v, i) => `
     <article class="reel-card" data-i="${i}">
       <div class="reel-ph"><i>${ICONS.play}</i></div>
+      <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" draggable="false">
       <video src="${v.src}" muted loop playsinline preload="none"></video>
       <span class="reel-idx">${pad2(i + 1)}</span>
       ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
@@ -672,12 +675,27 @@ function buildStrip(sec, items) {
     reelVideos.push(v);
     scanPool.push({ v, card: cards[i] });
     v.draggable = false;
-    v.addEventListener("playing", () => { cards[i].classList.add("ready", "playing"); pauseAllReelsExcept(v); });
+    v.addEventListener("playing", () => {
+      /* arranque tardío fuera de turno → se pausa solo (nada de desorden) */
+      if (modal.classList.contains("open") || (scanCur && scanCur.v !== v)) { v.pause(); return; }
+      cards[i].classList.add("ready", "playing");
+      pauseAllReelsExcept(v);
+    });
     v.addEventListener("pause", () => cards[i].classList.remove("playing"));
   });
-  /* drag con momentum */
+  cards.forEach(c => {
+    const p = c.querySelector(".reel-poster");
+    if (!p) return;
+    const mark = () => c.classList.add("has-poster");
+    if (p.complete && p.naturalWidth) mark(); else p.addEventListener("load", mark);
+  });
+  /* drag con momentum + TAP propio: setPointerCapture redirige el click al
+     contenedor, así que la tarjeta se detecta en pointerdown y se abre en pointerup */
   let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0;
+  let downCard = null, downT = 0, suppressClick = false;
   strip.addEventListener("pointerdown", e => {
+    downCard = e.target.closest ? e.target.closest(".reel-card") : null;
+    downT = performance.now();
     down = true; moved = 0; sx = e.clientX; ss = strip.scrollLeft;
     lx = e.clientX; lt = performance.now(); vel = 0;
     cancelAnimationFrame(raf);
@@ -695,15 +713,26 @@ function buildStrip(sec, items) {
   const end = () => {
     if (!down) return;
     down = false; strip.classList.remove("dragging");
+    if (moved <= 8 && downCard && performance.now() - downT < 600) {
+      suppressClick = true;
+      const c = downCard; downCard = null;
+      openReel(items, +c.dataset.i);          // tap = entrar a ver con sonido
+      return;
+    }
+    downCard = null;
     const glide = () => { vel *= .94; strip.scrollLeft -= vel * 16; if (Math.abs(vel) > .05) raf = requestAnimationFrame(glide); };
     raf = requestAnimationFrame(glide);
   };
   strip.addEventListener("pointerup", end);
-  strip.addEventListener("pointercancel", end);
+  strip.addEventListener("pointercancel", () => {
+    if (!down) return;
+    down = false; downCard = null; strip.classList.remove("dragging");
+  });
   strip.addEventListener("click", e => {
+    if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopPropagation(); return; }
     if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
     const c = e.target.closest(".reel-card");
-    if (c) openReel(items, +c.dataset.i);   // click = entrar a ver con sonido
+    if (c) openReel(items, +c.dataset.i);     // fallback (teclado / lectores)
   }, true);
   strip.addEventListener("dragstart", e => e.preventDefault());
   const step = () => (cards[0] ? cards[0].offsetWidth : 320) + 26;
@@ -717,19 +746,21 @@ function buildStrip(sec, items) {
   strip.addEventListener("scroll", hud, { passive: true });
   hud();
 }
-/* ---- scanner: UNA sola preview automática a la vez · 2 s por tarjeta · izq → der ----
-   Recorre las tarjetas visibles de ambas secciones verticales en orden DOM.
-   Se frena si hay un modal abierto o la pestaña está oculta. */
+/* ---- scanner: UNA preview a la vez · 2 s REALES de reproducción · izq → der ----
+   El corte cuenta desde que el video arranca de verdad ('playing'), no desde
+   que se pide. Si una pieza no arranca en 6 s se saltea y el orden sigue.
+   Se frena con modal abierto o pestaña oculta; reanuda al cerrar/volver. */
 const scanPool = [];
-let scanI = -1, scanCur = null;
+let scanI = -1, scanCur = null, scanTimer = 0, scanWait = 0;
 const onScreen = el => {
   const r = el.getBoundingClientRect();
   return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
 };
 function scanStop() {
+  clearTimeout(scanTimer); clearTimeout(scanWait);
   if (scanCur) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); scanCur = null; }
 }
-function scanStep() {
+function scanNext() {
   if (modal.classList.contains("open") || document.hidden) { scanStop(); return; }
   const n = scanPool.length;
   if (!n) return;
@@ -739,14 +770,31 @@ function scanStep() {
     if (onScreen(cand.card)) { next = cand; scanI = j; break; }
   }
   if (!next) { scanStop(); return; }
+  clearTimeout(scanTimer); clearTimeout(scanWait);
   if (scanCur && scanCur !== next) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); }
   scanCur = next;
   next.v.preload = "auto";
-  next.v.play().catch(() => {});
-  const after = scanPool[(scanI + 1) % n];   // pre-buffer de la siguiente: el corte de 2 s no espera red
+  const after = scanPool[(scanI + 1) % n];   // pre-buffer de la siguiente
   if (after && after !== next) after.v.preload = "auto";
+  const advance = () => {
+    if (scanCur !== next) return;
+    next.v.pause(); next.card.classList.remove("playing"); scanCur = null;
+    scanNext();
+  };
+  const arm = () => { clearTimeout(scanWait); scanTimer = setTimeout(advance, 2000); };
+  if (!next.v.paused && next.v.readyState >= 2) { arm(); return; }
+  const onPlaying = () => {
+    next.v.removeEventListener("playing", onPlaying);
+    if (scanCur === next) arm();
+  };
+  next.v.addEventListener("playing", onPlaying);
+  next.v.play().catch(() => {});
+  scanWait = setTimeout(() => {
+    next.v.removeEventListener("playing", onPlaying);
+    if (scanCur === next) { scanCur = null; scanNext(); }
+  }, 6000);
 }
-setInterval(scanStep, 2000);
+document.addEventListener("visibilitychange", () => { if (document.hidden) scanStop(); else scanNext(); });
 
 let reelList = [], reelCur = 0;
 function openReel(list, i) {
@@ -754,7 +802,7 @@ function openReel(list, i) {
   reelCur = ((i % list.length) + list.length) % list.length;
   const v = list[reelCur];
   mMedia.className = "modal-media vert";
-  mMedia.innerHTML = `<video src="${v.src}" controls autoplay playsinline></video>
+  mMedia.innerHTML = `<video src="${v.src}" poster="${v.poster || ""}" controls autoplay playsinline></video>
     <span class="modal-nav">
       <button data-reelnav="prev" aria-label="Reel anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <button data-reelnav="next" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
@@ -766,6 +814,7 @@ function openReel(list, i) {
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
   pauseAllReels();
+  scanStop();
 }
 async function loadReels() {  let names = FALLBACK_REELS;
   try {
@@ -781,12 +830,14 @@ async function loadReels() {  let names = FALLBACK_REELS;
   } catch (e) { /* offline, file:// o rate-limit → fallback */ }
   const items = names.map(n => ({
     src: "assets/reels/" + encodeURIComponent(n),
+    poster: "assets/posters/" + encodeURIComponent(n.replace(/\.mp4$/i, ".jpg")),
     title: reelTitle(n),
     group: is3D(n) ? (/CHECHA/i.test(n) ? "CHECHA RIFA" : "HDP ANDO BAIRES") : ""
   }));
   const td = items.filter(i => i.group).sort((a, b) => (a.group === "HDP ANDO BAIRES" ? -1 : 1));
   buildStrip(document.getElementById("3d"), td);
   buildStrip(document.getElementById("reels"), items.filter(i => !i.group));
+  scanNext();
 }
 
 /* ---- modal ---- */
@@ -827,12 +878,14 @@ function openModal(item) {
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
   pauseAllReels();
+  scanStop();
 }
 function closeModal() {
   modal.classList.remove("open");
   mMedia.innerHTML = "";
   document.body.style.overflow = "";
   pauseAllReels();
+  scanNext();
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
