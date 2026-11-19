@@ -699,12 +699,7 @@ function openReel(list, i) {
   document.body.style.overflow = "hidden";
   stripSyncs.forEach(f => f());
 }
-mMedia.addEventListener("click", e => {
-  const b = e.target.closest("[data-reelnav]");
-  if (b) openReel(reelList, reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
-});
-async function loadReels() {
-  let names = FALLBACK_REELS;
+async function loadReels() {  let names = FALLBACK_REELS;
   try {
     const cached = JSON.parse(sessionStorage.getItem("reels-manifest") || "null");
     if (cached && Date.now() - cached.t < 600000) names = cached.names;
@@ -725,7 +720,6 @@ async function loadReels() {
   buildStrip(document.getElementById("3d"), td);
   buildStrip(document.getElementById("reels"), items.filter(i => !i.group));
 }
-loadReels();
 
 /* ---- modal ---- */
 const modal = document.getElementById("modal");
@@ -776,6 +770,10 @@ document.getElementById("modalX").addEventListener("click", closeModal);
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 document.getElementById("showreelBtn").addEventListener("click", () =>
   openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
+mMedia.addEventListener("click", e => {
+  const b = e.target.closest("[data-reelnav]");
+  if (b) openReel(reelList, reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
+});
 
 /* ---- nav ---- */
 const nav = document.getElementById("nav");
@@ -799,6 +797,9 @@ setInterval(() => {
   const f = frame % 24, s = Math.floor(frame / 24) % 60, m = Math.floor(frame / 1440) % 60, h = Math.floor(frame / 86400);
   tcEl.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(f)}`;
 }, 1000 / 24);
+
+/* ---- reels: al final, con DOM y modal ya inicializados ---- */
+loadReels();
 </script>
 </body>
 </html>
