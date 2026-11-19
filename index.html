@@ -274,6 +274,13 @@
 
   /* ---------- modal ---------- */
   .modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+  /* ===== previsualización limpia (reels): sin ventana, sin controles ===== */
+  #rlBox{position:fixed;inset:0;z-index:300;display:none}
+  #rlBox.open{display:block}
+  #rlBg{position:absolute;inset:0;background:rgba(10,8,6,.5);opacity:0;transition:opacity .4s}
+  #rlBox.on #rlBg{opacity:1}
+  #rlVideo{position:fixed;object-fit:cover;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.55);
+    transition:top .55s cubic-bezier(.65,0,.15,1),left .55s cubic-bezier(.65,0,.15,1),width .55s cubic-bezier(.65,0,.15,1),height .55s cubic-bezier(.65,0,.15,1),border-radius .55s}
   .modal.open{display:flex}
   .modal-bg{position:absolute;inset:0;background:rgba(20,17,14,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
   .modal-box{position:relative;z-index:2;width:min(960px,100%);max-height:92svh;overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:20px;animation:pop .3s cubic-bezier(.2,.9,.3,1.2)}
@@ -511,6 +518,12 @@
 <!-- TEMPORAL · acceso al Vortex Lab — eliminar antes de compartir el sitio en serio -->
 <a id="labBtn" href="lab/vortex/" target="_blank" rel="noopener" title="Prototipo temporal — se elimina antes de compartir el sitio">⇪ Vortex Lab <i>· temporal</i></a>
 
+<!-- previsualización limpia de reels: fondo 50% + video al centro ya reproduciendo, sin controles -->
+<div id="rlBox" aria-hidden="true">
+  <div id="rlBg"></div>
+  <video id="rlVideo" playsinline loop preload="auto"></video>
+</div>
+
 <!-- ============ MODAL ============ -->
 <div class="modal" id="modal" role="dialog" aria-modal="true">
   <div class="modal-bg" id="modalBg"></div>
@@ -664,7 +677,7 @@ function buildStrip(sec, items) {
     <article class="reel-card" data-i="${i}">
       <div class="reel-ph"><i>${ICONS.play}</i></div>
       <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" draggable="false">
-      <video src="${v.src}" muted loop playsinline preload="none"></video>
+      <video src="${v.xs || v.lo || v.src}" muted loop playsinline preload="none"></video>
       <span class="reel-idx">${pad2(i + 1)}</span>
       ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
       <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
@@ -716,7 +729,7 @@ function buildStrip(sec, items) {
     if (moved <= 8 && downCard && performance.now() - downT < 600) {
       suppressClick = true;
       const c = downCard; downCard = null;
-      openReel(items, +c.dataset.i);          // tap = entrar a ver con sonido
+      openReel(items, +c.dataset.i, c);       // tap = previsualización limpia con sonido
       return;
     }
     downCard = null;
@@ -732,7 +745,7 @@ function buildStrip(sec, items) {
     if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopPropagation(); return; }
     if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
     const c = e.target.closest(".reel-card");
-    if (c) openReel(items, +c.dataset.i);     // fallback (teclado / lectores)
+    if (c) openReel(items, +c.dataset.i, c);  // fallback (teclado / lectores)
   }, true);
   strip.addEventListener("dragstart", e => e.preventDefault());
   const step = () => (cards[0] ? cards[0].offsetWidth : 320) + 26;
@@ -794,28 +807,84 @@ function scanNext() {
     if (scanCur === next) { scanCur = null; scanNext(); }
   }, 6000);
 }
-document.addEventListener("visibilitychange", () => { if (document.hidden) scanStop(); else scanNext(); });
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) { scanStop(); if (rlPhase === "open") rlVideo.pause(); }
+  else { scanNext(); if (rlPhase === "open") rlVideo.play().catch(() => {}); }
+});
 
-let reelList = [], reelCur = 0;
-function openReel(list, i) {
-  reelList = list;
-  reelCur = ((i % list.length) + list.length) % list.length;
-  const v = list[reelCur];
-  mMedia.className = "modal-media vert";
-  mMedia.innerHTML = `<video src="${v.src}" poster="${v.poster || ""}" controls autoplay playsinline></video>
-    <span class="modal-nav">
-      <button data-reelnav="prev" aria-label="Reel anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <button data-reelnav="next" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    </span>`;
-  document.getElementById("modalTitle").textContent = v.title;
-  document.getElementById("modalMeta").textContent = (v.group ? v.group + " · " : "") + `Reel ${pad2(reelCur + 1)} / ${pad2(list.length)}`;
-  document.getElementById("modalHint").textContent = "";
-  document.getElementById("modalExt").hidden = true;
-  modal.classList.add("open");
-  document.body.style.overflow = "hidden";
-  pauseAllReels();
-  scanStop();
+/* ---- previsualización limpia: fondo 50%, vuelo al centro YA reproduciendo,
+   sin controles; click fuera (sobre el fondo oscurecido) = cerrar y volver ---- */
+const rlBox = document.getElementById("rlBox");
+const rlBg = document.getElementById("rlBg");
+const rlVideo = document.getElementById("rlVideo");
+let rlCard = null, rlPhase = null, rlTimer = 0;
+function rlFit() {
+  const vw = innerWidth, vh = innerHeight, pad = vw < 700 ? 0 : Math.min(vh * .05, 48);
+  let h = vh - pad * 2, w = h * 9 / 16;
+  if (w > vw - pad * 2) { w = vw - pad * 2; h = w * 16 / 9; }
+  return { top: (vh - h) / 2, left: (vw - w) / 2, width: w, height: h };
 }
+function rlSetRect(r) {
+  rlVideo.style.top = r.top + "px"; rlVideo.style.left = r.left + "px";
+  rlVideo.style.width = r.width + "px"; rlVideo.style.height = r.height + "px";
+}
+function openReel(list, i, card) {
+  if (rlPhase) return;
+  const v = list[((i % list.length) + list.length) % list.length];
+  rlCard = card || null;
+  pauseAllReels(); scanStop();
+  rlVideo.src = v.lo || v.src;
+  rlVideo.poster = v.poster || "";
+  rlVideo.muted = true;                 // arranca mudo durante el vuelo (dentro del gesto)…
+  rlBox.classList.add("open");
+  rlVideo.style.transition = "none";
+  rlSetRect(rlCard ? rlCard.getBoundingClientRect() : rlFit());
+  rlVideo.style.borderRadius = "28px";
+  void rlVideo.offsetWidth;
+  rlVideo.style.transition = "";
+  rlSetRect(rlFit());
+  rlVideo.style.borderRadius = innerWidth < 700 ? "0" : "14px";
+  rlBox.classList.add("on");
+  document.body.style.overflow = "hidden";
+  rlVideo.play().catch(() => {});
+  rlPhase = "in";
+  clearTimeout(rlTimer);
+  rlTimer = setTimeout(rlLand, 700);
+}
+function rlLand() {
+  if (rlPhase !== "in") return;
+  rlPhase = "open";
+  rlVideo.muted = false;                // …y suena al llegar al centro
+}
+rlVideo.addEventListener("transitionend", e => {
+  if (e.propertyName !== "width" && e.propertyName !== "height") return;
+  if (rlPhase === "in") rlLand();
+  else if (rlPhase === "out") rlFinish();
+});
+function closeReel() {
+  if (rlPhase !== "open") return;
+  rlPhase = "out";
+  rlBox.classList.remove("on");
+  rlVideo.style.transition = "none";
+  rlSetRect(rlFit());
+  void rlVideo.offsetWidth;
+  rlVideo.style.transition = "";
+  rlSetRect(rlCard ? rlCard.getBoundingClientRect() : rlFit());
+  rlVideo.style.borderRadius = "28px";
+  clearTimeout(rlTimer);
+  rlTimer = setTimeout(rlFinish, 700);
+}
+function rlFinish() {
+  if (rlPhase !== "out") return;
+  rlPhase = null;
+  rlVideo.pause();
+  rlVideo.removeAttribute("src"); rlVideo.load();
+  rlBox.classList.remove("open", "on");
+  document.body.style.overflow = "";
+  scanNext();
+}
+rlBg.addEventListener("click", closeReel);
+addEventListener("resize", () => { if (rlPhase === "open" || rlPhase === "in") rlSetRect(rlFit()); });
 async function loadReels() {  let names = FALLBACK_REELS;
   try {
     const cached = JSON.parse(sessionStorage.getItem("reels-manifest") || "null");
@@ -830,6 +899,8 @@ async function loadReels() {  let names = FALLBACK_REELS;
   } catch (e) { /* offline, file:// o rate-limit → fallback */ }
   const items = names.map(n => ({
     src: "assets/reels/" + encodeURIComponent(n),
+    lo: "assets/reels-lo/" + encodeURIComponent(n),
+    xs: "assets/reels-xs/" + encodeURIComponent(n),
     poster: "assets/posters/" + encodeURIComponent(n.replace(/\.mp4$/i, ".jpg")),
     title: reelTitle(n),
     group: is3D(n) ? (/CHECHA/i.test(n) ? "CHECHA RIFA" : "HDP ANDO BAIRES") : ""
@@ -889,13 +960,9 @@ function closeModal() {
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal(); closeReel(); } });
 document.getElementById("showreelBtn").addEventListener("click", () =>
   openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
-mMedia.addEventListener("click", e => {
-  const b = e.target.closest("[data-reelnav]");
-  if (b) openReel(reelList, reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
-});
 
 /* ---- LED: destacar la box de contacto ---- */
 const contactBox = document.getElementById("contactBox");
