@@ -239,12 +239,51 @@
   .contact h2 em{font-style:normal;color:var(--acc)}
   .contact p{color:var(--mut);max-width:48ch;margin:18px auto 36px}
   /* botón flecha con LED: al apretarlo se destaca toda la box de contacto */
-  .led-arrow{position:relative;width:54px;height:54px;margin:22px auto 0;border-radius:50%;
-    border:1px solid rgba(244,238,227,.3);background:transparent;color:var(--txt);cursor:pointer;
-    display:grid;place-items:center;transition:border-color .25s,color .25s}
-  .led-arrow svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .led-arrow:hover{border-color:var(--acid);color:var(--acid)}
-  .led-arrow .led{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--acid);animation:blink 1.2s infinite}
+  /* ===== Cartel NEÓN 3D titilante · Galería 3D (evento acid + rosa) =====
+     Rendimiento: el glow (text-shadow) se pinta una sola vez; el titileo
+     anima SOLO opacidad (compuesto por GPU) y corre únicamente cuando el
+     cartel está a la vista (.lit vía IntersectionObserver). Sin loops JS. */
+  .neon{display:block;margin:30px auto 6px;padding:0;background:none;border:0;cursor:pointer;
+    perspective:900px;-webkit-tap-highlight-color:transparent}
+  .neon-box{position:relative;display:block;width:min(440px,86vw);padding:32px 26px 22px;
+    background:linear-gradient(160deg,#1d1915,#0e0c0a 72%);
+    border:2px solid #34291e;border-radius:14px;
+    transform:rotateX(9deg);transform-style:preserve-3d;
+    box-shadow:inset 0 1px 0 rgba(244,238,227,.09),inset 0 -16px 32px rgba(0,0,0,.55),
+      0 24px 44px rgba(0,0,0,.55),0 3px 0 #0a0806;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s,border-color .3s}
+  .neon-box::before{content:"";position:absolute;inset:0;border-radius:12px;pointer-events:none;
+    background:radial-gradient(ellipse at 50% 42%,rgba(181,230,29,.16),transparent 62%);transition:background .4s}
+  .neon-screw{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle at 35% 30%,#6b5d49,#241d15 72%);box-shadow:inset 0 -1px 1px rgba(0,0,0,.7)}
+  .neon-screw.tl{top:8px;left:8px}.neon-screw.tr{top:8px;right:8px}
+  .neon-screw.bl{bottom:8px;left:8px}.neon-screw.br{bottom:8px;right:8px}
+  .neon-tube{position:relative;display:block;font-family:var(--sans);font-weight:700;
+    font-size:clamp(1.9rem,7.4vw,2.9rem);letter-spacing:.05em;line-height:1;text-align:center;
+    transform:translateZ(28px);animation:neonFlicker 7s linear infinite;animation-play-state:paused;will-change:opacity}
+  .neon-word{color:#fff;text-shadow:0 0 2px #fff,0 0 6px #fff,0 0 14px var(--acid),0 0 26px var(--acid),0 0 48px var(--acid),0 0 92px rgba(181,230,29,.55)}
+  .neon-3d{color:#fff;margin-left:.16em;text-shadow:0 0 2px #fff,0 0 6px #fff,0 0 14px var(--rosa),0 0 26px var(--rosa),0 0 48px var(--rosa),0 0 92px rgba(217,115,127,.55)}
+  .neon-buzz{animation:neonBuzz 4.3s linear infinite;animation-play-state:paused;will-change:opacity}
+  .neon-sub{display:block;margin-top:15px;font-family:var(--mono);font-size:.6rem;letter-spacing:.34em;
+    text-transform:uppercase;color:var(--mut);transform:translateZ(12px)}
+  .neon.lit .neon-tube,.neon.lit .neon-buzz{animation-play-state:running}
+  .neon:hover .neon-box,.neon:focus-visible .neon-box{transform:rotateX(4deg) translateZ(12px);
+    border-color:#4a3c2a;box-shadow:inset 0 1px 0 rgba(244,238,227,.12),inset 0 -16px 32px rgba(0,0,0,.5),0 34px 64px rgba(0,0,0,.6),0 3px 0 #0a0806}
+  .neon:hover .neon-box::before,.neon:focus-visible .neon-box::before{background:radial-gradient(ellipse at 50% 42%,rgba(181,230,29,.28),transparent 66%)}
+  .neon:hover .neon-tube,.neon:hover .neon-buzz,.neon:focus-visible .neon-tube,.neon:focus-visible .neon-buzz{animation-play-state:paused;opacity:1}
+  .neon:focus-visible{outline:none}
+  .neon:focus-visible .neon-box{border-color:var(--acid)}
+  .neon:active .neon-box{transform:rotateX(9deg) translateZ(2px)}
+  @keyframes neonFlicker{
+    0%,100%{opacity:1}3%{opacity:1}4%{opacity:.82}5%{opacity:1}
+    42%{opacity:1}43%{opacity:.7}43.5%{opacity:1}44%{opacity:.86}44.5%{opacity:1}
+    71%{opacity:1}72%{opacity:.9}73%{opacity:1}}
+  @keyframes neonBuzz{
+    0%,100%{opacity:1}8%{opacity:1}9%{opacity:.32}9.5%{opacity:1}10%{opacity:.5}10.5%{opacity:1}
+    52%{opacity:1}53%{opacity:.22}54%{opacity:.9}55%{opacity:.4}56%{opacity:1}
+    80%{opacity:1}81%{opacity:.6}82%{opacity:1}}
+  @media(max-width:560px){.neon-box{padding:26px 16px 18px;transform:rotateX(6deg)}}
+  @media(prefers-reduced-motion:reduce){.neon-tube,.neon-buzz{animation:none;opacity:1}}
   .contact .wrap{border-radius:10px}
   .contact .wrap.lit{animation:spotlight 1.7s ease}
   @keyframes spotlight{
@@ -343,7 +382,7 @@
     border:1px solid var(--line);background:rgba(18,16,13,.8);color:var(--txt);display:grid;place-items:center;transition:.2s}
   #galX:hover{background:var(--brasa);border-color:var(--brasa)}
   #galX svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
-  .led-cap{font-family:var(--mono);font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mut);margin-top:10px}
+  .led-cap{display:none}
 
   /* ---------- reveal ---------- */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.6,.2,1)}
@@ -488,11 +527,14 @@
     <div class="wrap reveal" id="contactBox">
       <div class="kicker">05 · Contacto</div>
       <h2>activá el bloqq <em>MÁYUS</em></h2>
-      <button class="led-arrow" id="ledBtn" aria-label="Abrir la Galería 3D" title="Abrir la Galería 3D">
-        <svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg>
-        <i class="led"></i>
+      <button class="neon" id="ledBtn" aria-label="Abrir la Galería 3D" title="Abrir la Galería 3D">
+        <span class="neon-box">
+          <span class="neon-screw tl"></span><span class="neon-screw tr"></span>
+          <span class="neon-screw bl"></span><span class="neon-screw br"></span>
+          <span class="neon-tube"><span class="neon-word">GALER<span class="neon-buzz">Í</span>A</span><span class="neon-3d">3D</span></span>
+          <span class="neon-sub">⇪ entrá a la máquina</span>
+        </span>
       </button>
-      <div class="led-cap">galería 3d</div>
       <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
       <div class="contact-cta">
         <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
@@ -1154,6 +1196,12 @@ function closeGal() {
 window.galClose = closeGal;               // la galería (iframe) se cierra sola con Esc
 document.getElementById("ledBtn").addEventListener("click", openGal);
 document.getElementById("galX").addEventListener("click", closeGal);
+/* el neón titila solo cuando está a la vista → cero costo de animación fuera de pantalla */
+const neonSign = document.getElementById("ledBtn");
+if ("IntersectionObserver" in window) {
+  new IntersectionObserver(es => es.forEach(en =>
+    neonSign.classList.toggle("lit", en.isIntersecting)), { threshold: .15 }).observe(neonSign);
+} else { neonSign.classList.add("lit"); }
 
 /* ---- ninguna preview seleccionable ni arrastrable ---- */
 document.querySelectorAll("img").forEach(i => { i.draggable = false; });
