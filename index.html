@@ -10,12 +10,12 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://bloqqmayus.github.io/">
 <meta property="og:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical">
-<meta property="og:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. Tu idea, a PROYECTO. Buenos Aires, Argentina.">
+<meta property="og:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO. Buenos Aires, Argentina.">
 <meta property="og:image" content="https://bloqqmayus.github.io/assets/showreel.jpg">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker">
-<meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. Tu idea, a PROYECTO.">
+<meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO.">
 <meta name="twitter:image" content="https://bloqqmayus.github.io/assets/showreel.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
 <style>
@@ -139,8 +139,6 @@
   .esc-media:hover .play i{transform:scale(1.1)}
   .esc-quote{font-size:clamp(1.3rem,2.6vw,1.8rem);font-weight:700;line-height:1.25;color:var(--rosa);margin-bottom:18px;letter-spacing:-.01em}
   .esc-txt p{color:#D8D0C2;margin-bottom:20px}
-  .temas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
-  .temas span{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(217,115,127,.4);border-radius:999px;padding:7px 13px;color:var(--rosa)}
   .esc-links{display:flex;gap:12px;flex-wrap:wrap}
   .esc-links .btn{padding:12px 22px;font-size:.85rem}
 
@@ -160,13 +158,19 @@
   .reel-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 30px 70px rgba(0,0,0,.6)}
   .reel-card video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
   .reel-card.ready video{opacity:1}
+  /* previews nunca seleccionables ni arrastrables (cualquier relación de aspecto) */
+  .film,.reel-card,.esc-media,.film *,.reel-card *,.esc-media *{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+  img,video{-webkit-user-drag:none;user-drag:none}
   .reel-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,13,.4),transparent 26%,transparent 72%,rgba(18,16,13,.55));pointer-events:none;z-index:1}
-  .reel-ph{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#26211A,#12100D);transition:opacity .6s;z-index:1}
+  .reel-ph{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#26211A,#12100D);transition:opacity .4s,background .4s;z-index:1}
   .reel-ph i{width:60px;height:60px;border-radius:50%;background:var(--brasa);display:grid;place-items:center}
   .reel-ph svg{width:20px;height:20px;fill:var(--txt);margin-left:3px}
-  .reel-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(244,238,227,.07) 50%,transparent 68%);transform:translateX(-100%);animation:shimmer 2.4s infinite}
+  .reel-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(244,238,227,.07) 50%,transparent 68%);transform:translateX(-100%)}
+  .reel-card:hover:not(.ready) .reel-ph::after{animation:shimmer 2.4s infinite}
   @keyframes shimmer{to{transform:translateX(100%)}}
-  .reel-card.ready .reel-ph{opacity:0;pointer-events:none}
+  .reel-card.ready .reel-ph{background:rgba(18,16,13,.38)}
+  .reel-card.playing .reel-ph{opacity:0;pointer-events:none}
+  .reel-card.playing .reel-idx::after{content:" ●";color:var(--acid);animation:blink 1.2s infinite}
   .reel-idx{position:absolute;top:16px;left:18px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;color:rgba(244,238,227,.8)}
   .reel-exp{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;background:rgba(18,16,13,.7);border:1px solid var(--line);display:grid;place-items:center;opacity:0;transform:scale(.8);transition:.3s}
   .reel-card:hover .reel-exp{opacity:1;transform:scale(1)}
@@ -176,7 +180,7 @@
   .strip-arrow svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
   .strip-arrow.left{left:16px}
   .strip-arrow.right{right:16px}
-  @media(max-width:700px){.strip-arrow{display:none}}
+  @media(max-width:700px){.strip-arrow{display:none}.grain{animation:none;opacity:.03}}
   .strip-foot{display:flex;align-items:center;gap:22px}
   .strip-progress{flex:1;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
   .strip-progress i{display:block;height:100%;width:0;background:var(--acc);transition:width .12s linear}
@@ -232,6 +236,20 @@
   .contact h2{font-size:clamp(2.3rem,6.5vw,4.6rem)}
   .contact h2 em{font-style:normal;color:var(--acc)}
   .contact p{color:var(--mut);max-width:48ch;margin:18px auto 36px}
+  /* botón flecha con LED: al apretarlo se destaca toda la box de contacto */
+  .led-arrow{position:relative;width:54px;height:54px;margin:22px auto 0;border-radius:50%;
+    border:1px solid rgba(244,238,227,.3);background:transparent;color:var(--txt);cursor:pointer;
+    display:grid;place-items:center;transition:border-color .25s,color .25s}
+  .led-arrow svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .led-arrow:hover{border-color:var(--acid);color:var(--acid)}
+  .led-arrow .led{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:var(--acid);animation:blink 1.2s infinite}
+  .contact .wrap{border-radius:10px}
+  .contact .wrap.lit{animation:spotlight 1.7s ease}
+  @keyframes spotlight{
+    0%{box-shadow:0 0 0 0 rgba(242,165,26,0)}
+    12%{box-shadow:0 0 0 3px var(--ambar);background:rgba(242,165,26,.07)}
+    55%{box-shadow:0 0 0 3px var(--brasa);background:rgba(184,50,31,.06)}
+    100%{box-shadow:0 0 0 0 rgba(184,50,31,0);background:transparent}}
   .contact-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
   .socials{display:flex;justify-content:center;gap:14px;margin-top:40px;flex-wrap:wrap}
   .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:11px 20px;color:var(--mut);transition:.2s}
@@ -283,7 +301,7 @@
 
 <nav id="nav">
   <div class="nav-in">
-    <a class="logo" href="#top"><span class="key">⇪</span><span>BLOQQ MÁYUS</span></a>
+    <a class="logo" href="#top" aria-label="Volver arriba"><span class="key">⇪</span></a>
     <button class="burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
     <div class="nav-links" id="navLinks">
       <a href="#trabajo">Videoclips</a>
@@ -300,8 +318,8 @@
 <header class="hero" id="top">
   <div class="hero-img"><img src="assets/showreel.jpg" alt="Francisco Benítez mirando a cámara a través de sus dedos"></div>
   <div class="hero-in">
-    <div class="rec"><i></i> REC · BLOQQ MÁYUS · CABA</div>
-    <h1>Tu idea, a <em>PROYECTO</em>.<br>De <span class="min">minúsculas</span> a <em>MAYÚSCULAS</em>.</h1>
+    <div class="rec"><i></i> REC · FRANCISCO BENÍTEZ · CABA</div>
+    <h1>De tu idea, al <em>RESULTADO</em>.<br>De <span class="min">minúsculas</span> a <em>MAYÚSCULAS</em>.</h1>
     <p class="hero-sub">Soy <b data-bind="name">Francisco Benítez</b>, también conocido como <b>BLOQQ MÁYUS</b>. Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. Mi caja de herramientas está a tu disposición para volver realidad tus ideas y proyectos.</p>
     <div class="hero-cta">
       <button class="btn" id="showreelBtn">
@@ -343,7 +361,6 @@
         <div class="esc-txt reveal">
           <div class="esc-quote">«Nací pa caminar sobre brasas.»</div>
           <p>Además de filmmaker, rapero. Un alien que aterrizó en su propia ciudad y armó su propio universo: un OVNI y tres planetas. Acá la cámara, el VFX y el motion se ponen al servicio de su propia música.</p>
-          <div class="temas"><span>BIGG DHARMA</span><span>FACE DE FURRO</span><span>FACTS</span><span>HDP ANDO BAIRES</span></div>
           <div class="esc-links">
             <button class="btn" id="factsBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ver FACTS</button>
             <a class="btn btn-ghost" href="https://youtube.com/@bloqqmayus" target="_blank" rel="noopener">Canal ↗</a>
@@ -369,7 +386,7 @@
     </div>
     <div class="wrap strip-foot">
       <div class="strip-progress"><i></i></div>
-      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · arrastrá · click = sonido</div>
+      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · click = ver con sonido</div>
     </div>
   </section>
 
@@ -388,7 +405,7 @@
     </div>
     <div class="wrap strip-foot">
       <div class="strip-progress"><i></i></div>
-      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · arrastrá · click = sonido</div>
+      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · click = ver con sonido</div>
     </div>
   </section>
 
@@ -397,7 +414,7 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="kicker">05 · Toolbox — servicios</div>
-        <h2>Todas mis herramientas a tu disposición</h2>
+        <h2>Mis herramientas, a tu disposición.</h2>
       </div>
       <div class="serv-grid">
         <div class="serv reveal">
@@ -438,7 +455,8 @@
         <div class="about-txt reveal">
           <div class="kicker">06 · Backstage</div>
           <h2 style="margin-bottom:22px">Audiovisual y Artista</h2>
-          <p>Hace más de 12 años que edito, diseño y hago VFX — autónomo y autodidacta. Mi propuesta de valor y mayor herramienta es el <b>criterio</b>: proyecto una idea y la conecto con un boceto de la pieza final antes de tocar la cámara.</p>
+          <div class="esc-quote">«Creatividad y profesionalismo.»</div>
+          <p>Artista visual, filmmaker, rapero. En mi workflow; todo es una herramienta. Una idea se transforma en un guión, que pasa a ser una jornada de rodaje, o una sentado en la computadora, hasta dejar un nuevo mundo plasmado en una pantalla.</p>
           <p>Resido en el barrio de <b>Balvanera</b>, en Buenos Aires, Argentina.</p>
           <div class="stats" id="stats"></div>
           <div class="gear" id="gear"></div>
@@ -449,9 +467,13 @@
 
   <!-- ============ 06 · CONTACTO ============ -->
   <section id="contacto" class="contact">
-    <div class="wrap reveal">
+    <div class="wrap reveal" id="contactBox">
       <div class="kicker">07 · Contacto</div>
-      <h2>¿Apretamos el <em>MÁYUS</em>?</h2>
+      <h2>activá el bloqq <em>MÁYUS</em></h2>
+      <button class="led-arrow" id="ledBtn" aria-label="Destacar la caja de contacto" title="Destacar contacto">
+        <svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg>
+        <i class="led"></i>
+      </button>
       <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
       <div class="contact-cta">
         <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
@@ -613,7 +635,11 @@ function reelTitle(n) {
     .replace(/_(\d+)$/, " · $1")
     .split(/[_\s]+/).filter(t => t && !/^v\d+$/i.test(t)).join(" ");
 }
-const stripSyncs = [];
+/* Click-to-play: ningún video descarga ni reproduce hasta que se clickea.
+   Un solo video inline activo a la vez (registro global) → cero decoders simultáneos. */
+const reelVideos = [];
+const pauseAllReels = () => reelVideos.forEach(v => { if (!v.paused) v.pause(); });
+const pauseAllReelsExcept = keep => reelVideos.forEach(v => { if (v !== keep && !v.paused) v.pause(); });
 function buildStrip(sec, items) {
   const strip = sec.querySelector(".strip");
   const track = sec.querySelector(".strip-track");
@@ -623,22 +649,20 @@ function buildStrip(sec, items) {
   track.innerHTML = items.map((v, i) => `
     <article class="reel-card" data-i="${i}">
       <div class="reel-ph"><i>${ICONS.play}</i></div>
-      <video src="${v.src}" muted loop playsinline preload="metadata"></video>
+      <video src="${v.src}" muted loop playsinline preload="none"></video>
       <span class="reel-idx">${pad2(i + 1)}</span>
       ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
       <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
     </article>`).join("");
   const cards = [...track.querySelectorAll(".reel-card")];
   const videos = cards.map(c => c.querySelector("video"));
-  videos.forEach((v, i) => v.addEventListener("loadeddata", () => cards[i].classList.add("ready")));
-  const sync = () => videos.forEach(v => {
-    const r = v.getBoundingClientRect();
-    const vis = r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
-    if (vis && !modal.classList.contains("open")) v.play().catch(() => {}); else v.pause();
+  videos.forEach((v, i) => {
+    reelVideos.push(v);
+    scanPool.push({ v, card: cards[i] });
+    v.draggable = false;
+    v.addEventListener("playing", () => { cards[i].classList.add("ready", "playing"); pauseAllReelsExcept(v); });
+    v.addEventListener("pause", () => cards[i].classList.remove("playing"));
   });
-  new IntersectionObserver(sync, { threshold: .25 }).observe(strip);
-  addEventListener("scroll", sync, { passive: true });
-  stripSyncs.push(sync);
   /* drag con momentum */
   let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0;
   strip.addEventListener("pointerdown", e => {
@@ -667,8 +691,9 @@ function buildStrip(sec, items) {
   strip.addEventListener("click", e => {
     if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
     const c = e.target.closest(".reel-card");
-    if (c) openReel(items, +c.dataset.i);
+    if (c) openReel(items, +c.dataset.i);   // click = entrar a ver con sonido
   }, true);
+  strip.addEventListener("dragstart", e => e.preventDefault());
   const step = () => (cards[0] ? cards[0].offsetWidth : 320) + 26;
   sec.querySelector(".strip-arrow.left").addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
   sec.querySelector(".strip-arrow.right").addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
@@ -680,6 +705,37 @@ function buildStrip(sec, items) {
   strip.addEventListener("scroll", hud, { passive: true });
   hud();
 }
+/* ---- scanner: UNA sola preview automática a la vez · 2 s por tarjeta · izq → der ----
+   Recorre las tarjetas visibles de ambas secciones verticales en orden DOM.
+   Se frena si hay un modal abierto o la pestaña está oculta. */
+const scanPool = [];
+let scanI = -1, scanCur = null;
+const onScreen = el => {
+  const r = el.getBoundingClientRect();
+  return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+};
+function scanStop() {
+  if (scanCur) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); scanCur = null; }
+}
+function scanStep() {
+  if (modal.classList.contains("open") || document.hidden) { scanStop(); return; }
+  const n = scanPool.length;
+  if (!n) return;
+  let next = null;
+  for (let k = 1; k <= n; k++) {
+    const j = (scanI + k) % n, cand = scanPool[j];
+    if (onScreen(cand.card)) { next = cand; scanI = j; break; }
+  }
+  if (!next) { scanStop(); return; }
+  if (scanCur && scanCur !== next) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); }
+  scanCur = next;
+  next.v.preload = "auto";
+  next.v.play().catch(() => {});
+  const after = scanPool[(scanI + 1) % n];   // pre-buffer de la siguiente: el corte de 2 s no espera red
+  if (after && after !== next) after.v.preload = "auto";
+}
+setInterval(scanStep, 2000);
+
 let reelList = [], reelCur = 0;
 function openReel(list, i) {
   reelList = list;
@@ -697,7 +753,7 @@ function openReel(list, i) {
   document.getElementById("modalExt").hidden = true;
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
-  stripSyncs.forEach(f => f());
+  pauseAllReels();
 }
 async function loadReels() {  let names = FALLBACK_REELS;
   try {
@@ -758,12 +814,13 @@ function openModal(item) {
     "✦ Placeholder — cuando llegue el reel real, se reproduce acá.");
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
+  pauseAllReels();
 }
 function closeModal() {
   modal.classList.remove("open");
   mMedia.innerHTML = "";
   document.body.style.overflow = "";
-  stripSyncs.forEach(f => f());
+  pauseAllReels();
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
@@ -773,6 +830,20 @@ document.getElementById("showreelBtn").addEventListener("click", () =>
 mMedia.addEventListener("click", e => {
   const b = e.target.closest("[data-reelnav]");
   if (b) openReel(reelList, reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
+});
+
+/* ---- LED: destacar la box de contacto ---- */
+const contactBox = document.getElementById("contactBox");
+document.getElementById("ledBtn").addEventListener("click", () => {
+  contactBox.classList.remove("lit");
+  void contactBox.offsetWidth;
+  contactBox.classList.add("lit");
+});
+
+/* ---- ninguna preview seleccionable ni arrastrable ---- */
+document.querySelectorAll("img").forEach(i => { i.draggable = false; });
+document.addEventListener("dragstart", e => {
+  if (e.target.closest && e.target.closest(".film,.reel-card,.esc-media")) e.preventDefault();
 });
 
 /* ---- nav ---- */
@@ -793,10 +864,11 @@ const tcEl = document.getElementById("tc");
 let frame = 0;
 const pad = n => String(n).padStart(2, "0");
 setInterval(() => {
+  if (document.hidden) return;
   frame++;
   const f = frame % 24, s = Math.floor(frame / 24) % 60, m = Math.floor(frame / 1440) % 60, h = Math.floor(frame / 86400);
   tcEl.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(f)}`;
-}, 1000 / 24);
+}, 1000 / 12);
 
 /* ---- reels: al final, con DOM y modal ya inicializados ---- */
 loadReels();
