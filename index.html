@@ -250,6 +250,15 @@
     12%{box-shadow:0 0 0 3px var(--ambar);background:rgba(242,165,26,.07)}
     55%{box-shadow:0 0 0 3px var(--brasa);background:rgba(184,50,31,.06)}
     100%{box-shadow:0 0 0 0 rgba(184,50,31,0);background:transparent}}
+  /* ===== TEMPORAL · botón Vortex Lab — ELIMINAR (junto con #labBtn y /lab/) antes de compartir el sitio ===== */
+  #labBtn{position:fixed;left:14px;bottom:14px;z-index:90;display:flex;align-items:center;gap:8px;
+    font-family:var(--mono);font-size:.6rem;line-height:1;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
+    color:var(--acid);background:rgba(18,16,13,.82);border:1px solid rgba(181,230,29,.45);
+    padding:9px 12px;border-radius:2px;backdrop-filter:blur(4px)}
+  #labBtn i{font-style:normal;color:var(--mut);letter-spacing:.1em}
+  #labBtn:hover{background:var(--acid);color:var(--carbon)}
+  #labBtn:hover i{color:var(--carbon)}
+  @media(max-width:700px){#labBtn{left:10px;bottom:10px;padding:8px 10px;font-size:.55rem}}
   .contact-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
   .socials{display:flex;justify-content:center;gap:14px;margin-top:40px;flex-wrap:wrap}
   .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:11px 20px;color:var(--mut);transition:.2s}
@@ -496,6 +505,9 @@
     <span>videoclips · VFX · vertical <b>●</b> hecho en Balvanera</span>
   </div>
 </footer>
+
+<!-- TEMPORAL · acceso al Vortex Lab — eliminar antes de compartir el sitio en serio -->
+<a id="labBtn" href="lab/vortex/" target="_blank" rel="noopener" title="Prototipo temporal — se elimina antes de compartir el sitio">⇪ Vortex Lab <i>· temporal</i></a>
 
 <!-- ============ MODAL ============ -->
 <div class="modal" id="modal" role="dialog" aria-modal="true">

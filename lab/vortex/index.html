@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LAB · VORTEX — BLOQQ MÁYUS</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root{
+    --hollin:#1A1714; --carbon:#12100D; --brasa:#B8321F; --ambar:#F2A51A;
+    --rodo:#D9737F; --hueso:#F4EEE3; --acid:#B5E61D; --mut:#8A8177;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--hollin);color:var(--hueso);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+
+  /* ---------- escenario 3D ---------- */
+  #stage{position:fixed;inset:0;perspective:1000px;perspective-origin:50% 50%;z-index:1;touch-action:none;cursor:grab}
+  #stage.dragging{cursor:grabbing}
+  #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+
+  .vcard{
+    position:absolute;left:50%;top:50%;
+    width:var(--w);height:var(--h);
+    margin:calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
+    transform:var(--tf);
+    background:var(--carbon);border:1px solid rgba(244,238,227,.16);
+    border-radius:4px;overflow:hidden;cursor:pointer;
+    transition:border-color .25s;
+  }
+  .vcard:hover{transform:var(--tf) translateZ(70px) scale(1.05);border-color:var(--ambar)}
+  .vcard.yt{--w:252px;--h:142px}
+  .vcard.reel{--w:172px;--h:302px}
+  .vcard img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+  .vcard .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 8px;
+    background:linear-gradient(transparent,rgba(18,16,13,.94));
+    font:700 .72rem/1.25 var(--sans);letter-spacing:.01em;pointer-events:none}
+  .vcard .cap em{display:block;font:400 .58rem/1.4 var(--mono);font-style:normal;color:var(--mut);
+    letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vcard .yr{position:absolute;top:6px;left:7px;font:400 .56rem/1 var(--mono);letter-spacing:.12em;
+    color:var(--ambar);background:rgba(18,16,13,.78);padding:3px 5px;border-radius:2px;pointer-events:none}
+  .vcard .demo{position:absolute;top:6px;right:7px;font:400 .52rem/1 var(--mono);letter-spacing:.1em;
+    color:var(--mut);background:rgba(18,16,13,.78);padding:3px 5px;border-radius:2px;pointer-events:none}
+
+  /* celda de film tipográfica para reels sin poster */
+  .vcard.reel:not(.poster){display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
+    padding:16px 18px;background:linear-gradient(165deg,#26211A 0%,#12100D 70%)}
+  .vcard.reel:not(.poster)::before,.vcard.reel:not(.poster)::after{
+    content:"";position:absolute;top:0;bottom:0;width:7px;pointer-events:none;
+    background:repeating-linear-gradient(180deg,rgba(244,238,227,.14) 0 8px,transparent 8px 18px)}
+  .vcard.reel:not(.poster)::before{left:4px}
+  .vcard.reel:not(.poster)::after{right:4px}
+  .vcard.reel .n{font:700 3rem/1 var(--sans);color:var(--ambar);letter-spacing:-.03em}
+  .vcard.reel.is3d .n{color:var(--acid)}
+  .vcard.reel .t{font:700 .82rem/1.2 var(--sans);text-transform:uppercase;letter-spacing:.02em}
+  .vcard.reel .g{font:400 .55rem/1.5 var(--mono);color:var(--mut);letter-spacing:.18em;text-transform:uppercase}
+  .vcard.reel .pl{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;
+    background:var(--brasa);display:grid;place-items:center;pointer-events:none}
+  .vcard.reel .pl svg{width:12px;height:12px;fill:var(--hueso);margin-left:2px}
+  .vcard.reel.is3d .pl{background:var(--acid)}
+  .vcard.reel.is3d .pl svg{fill:var(--carbon)}
+
+  /* niebla de profundidad: el centro del vortex se funde a hollín (espacio, no por tarjeta) */
+  #fog{position:fixed;inset:0;z-index:2;pointer-events:none;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(26,23,20,.97) 0%, rgba(26,23,20,.85) 8%, rgba(26,23,20,.4) 20%, rgba(26,23,20,0) 44%),
+      radial-gradient(circle at 50% 50%, transparent 58%, rgba(18,16,13,.6) 100%)}
+  #hub{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none;
+    text-align:center;opacity:.5}
+  #hub b{display:block;font:700 3.4rem/1 var(--sans);color:var(--hueso)}
+  #hub b i{font-style:normal;color:var(--acid)}
+  #hub span{display:block;margin-top:6px;font:400 .58rem/1 var(--mono);letter-spacing:.34em;color:var(--mut);text-transform:uppercase}
+
+  /* ---------- HUD ---------- */
+  #hud{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:14px;
+    padding:14px 18px;pointer-events:none;flex-wrap:wrap}
+  #hud .brand{font:700 .95rem/1 var(--sans);letter-spacing:.02em}
+  #hud .brand i{font-style:normal;color:var(--acid)}
+  #hud .brand em{font-style:normal;color:var(--mut);font-weight:400}
+  #hud .tag{font:400 .58rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+    color:var(--acid);border:1px solid rgba(181,230,29,.4);padding:5px 8px;border-radius:2px}
+  #count{margin-left:auto;font:400 .6rem/1.5 var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase;text-align:right}
+  #hint{position:fixed;bottom:14px;left:18px;z-index:10;pointer-events:none;
+    font:400 .6rem/1.6 var(--mono);letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+  #back{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;
+    font:400 .6rem/1 var(--mono);letter-spacing:.14em;color:var(--hueso);text-decoration:none;
+    text-transform:uppercase;border:1px solid rgba(244,238,227,.25);padding:8px 12px;border-radius:2px;background:rgba(18,16,13,.6)}
+  #back:hover{border-color:var(--ambar);color:var(--ambar)}
+
+  /* ---------- panel de parámetros ---------- */
+  #panelBtn{position:fixed;right:18px;bottom:14px;z-index:11;cursor:pointer;
+    font:700 .68rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--hueso);
+    background:var(--brasa);border:0;padding:11px 14px;border-radius:2px}
+  #panelBtn:hover{background:var(--ambar);color:var(--carbon)}
+  #panel{position:fixed;right:18px;bottom:58px;z-index:11;width:264px;max-width:calc(100vw - 36px);
+    background:rgba(18,16,13,.94);border:1px solid rgba(244,238,227,.18);border-radius:4px;
+    padding:16px;display:none;backdrop-filter:blur(6px)}
+  #panel.open{display:block}
+  #panel h3{font:700 .7rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ambar);margin-bottom:12px}
+  #panel label{display:block;font:400 .58rem/1 var(--mono);letter-spacing:.12em;color:var(--mut);
+    text-transform:uppercase;margin:12px 0 5px}
+  #panel label b{color:var(--hueso);font-weight:400;float:right}
+  #panel input[type=range]{width:100%;accent-color:var(--brasa);height:18px}
+  #panel .row{display:flex;gap:8px;margin-top:14px}
+  #panel button{flex:1;cursor:pointer;font:700 .6rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
+    padding:9px 6px;border-radius:2px;border:1px solid rgba(244,238,227,.25);background:transparent;color:var(--hueso)}
+  #panel button:hover{border-color:var(--ambar);color:var(--ambar)}
+  #panel p{margin-top:12px;font:400 .56rem/1.6 var(--mono);color:var(--mut);letter-spacing:.04em}
+
+  /* ---------- modal ---------- */
+  #modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:20px}
+  #modal.open{display:grid}
+  #modalBg{position:absolute;inset:0;background:rgba(18,16,13,.9);backdrop-filter:blur(8px)}
+  #modalBox{position:relative;width:min(920px,94vw);background:var(--carbon);
+    border:1px solid rgba(244,238,227,.18);border-radius:4px;overflow:hidden}
+  #modalMedia{position:relative;background:#000;aspect-ratio:16/9;display:grid;place-items:center}
+  #modalMedia.vert{aspect-ratio:9/16;max-height:74vh;width:auto;margin:0 auto}
+  #modalMedia video,#modalMedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  #modalInfo{padding:14px 16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  #modalTitle{font:700 1rem/1.2 var(--sans)}
+  #modalMeta{font:400 .6rem/1.5 var(--mono);letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
+  #modalExt{margin-left:auto;font:400 .6rem/1 var(--mono);letter-spacing:.1em;color:var(--ambar);text-decoration:none;text-transform:uppercase}
+  #modalX{position:absolute;top:10px;right:10px;z-index:5;width:38px;height:38px;border-radius:50%;
+    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.7);color:var(--hueso);
+    font:400 1rem/1 var(--sans);cursor:pointer}
+  #modalX:hover{background:var(--brasa);border-color:var(--brasa)}
+  .mnav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:42px;border-radius:50%;
+    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.7);cursor:pointer;display:grid;place-items:center}
+  .mnav svg{width:16px;height:16px;stroke:var(--hueso);stroke-width:2;fill:none}
+  .mnav:hover{background:var(--brasa);border-color:var(--brasa)}
+  .mnav.prev{left:10px}.mnav.next{right:10px}
+
+  @media(max-width:700px){
+    .vcard.yt{--w:196px;--h:110px}
+    .vcard.reel{--w:138px;--h:242px}
+    .vcard.reel .n{font-size:2.2rem}
+    #hub b{font-size:2.4rem}
+    #count{display:none}
+    #hint{bottom:52px;left:12px;right:12px;font-size:.54rem}
+    #back{left:12px;transform:none;bottom:12px}
+    #panelBtn{right:12px;bottom:12px}
+    #panel{right:12px;bottom:54px}
+  }
+</style>
+</head>
+<body>
+
+<div id="stage"><div id="world"></div></div>
+<div id="fog"></div>
+<div id="hub"><b>⇪<i>.</i></b><span>150+ proyectos</span></div>
+
+<header id="hud">
+  <div class="brand">⇪ BLOQQ MÁYUS <em>· LAB</em></div>
+  <div class="tag">Vortex v0 · prototipo temporal · no indexado</div>
+  <div id="count"></div>
+</header>
+
+<div id="hint">arrastrá = girar + volar · rueda / pellizco = volar · click = reproducir</div>
+<a id="back" href="https://bloqqmayus.github.io/">← portfolio actual</a>
+
+<button id="panelBtn">⚙ parámetros</button>
+<aside id="panel">
+  <h3>Perillas del vortex</h3>
+  <label>piezas <b id="vN"></b></label>
+  <input id="pN" type="range" min="24" max="160" step="4">
+  <label>giro auto (°/s) <b id="vSpin"></b></label>
+  <input id="pSpin" type="range" min="0" max="24" step="1">
+  <label>vuelo auto (px/s) <b id="vFly"></b></label>
+  <input id="pFly" type="range" min="0" max="120" step="2">
+  <label>radio del túnel <b id="vR"></b></label>
+  <input id="pR" type="range" min="240" max="720" step="10">
+  <label>densidad (gap) <b id="vGap"></b></label>
+  <input id="pGap" type="range" min="80" max="280" step="5">
+  <div class="row">
+    <button id="reset">reset vista</button>
+    <button id="pause">pausar</button>
+  </div>
+  <p>Las tarjetas marcada «copia» son duplicados de demo: en la versión final cada una será un link real de tu historial. Los reels sin poster usan celdas tipográficas; cuando subas más videos, entra una miniatura por pieza.</p>
+</aside>
+
+<div id="modal">
+  <div id="modalBg"></div>
+  <div id="modalBox">
+    <button id="modalX" aria-label="Cerrar">✕</button>
+    <div id="modalMedia"></div>
+    <div id="modalInfo">
+      <span id="modalTitle"></span>
+      <span id="modalMeta"></span>
+      <a id="modalExt" target="_blank" rel="noopener">abrir ↗</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   VORTEX LAB — página TEMPORAL en /lab/vortex/ (no indexada).
+   Eliminar junto con el botón #labBtn antes de compartir en serio.
+   Túnel-espiral infinito: 1 transform por frame en #world,
+   tarjetas estáticas que se reciclan al pasar la cámara.
+   Ningún video descarga hasta el click (igual que el sitio nuevo).
+   ================================================================ */
+const UNIQUE = [{"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_01.mp4", "title": "HDP Ando Baires · 01", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_02.mp4", "title": "HDP Ando Baires · 02", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_03.mp4", "title": "HDP Ando Baires · 03", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_04.mp4", "title": "HDP Ando Baires · 04", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/CHECHA_Rifa.mp4", "title": "CHECHA Rifa", "author": "CHECHA", "group": "CHECHA", "is3d": true, "year": 2026}, {"kind": "yt", "yt": "WPE_jtKCojc", "title": "FACTS", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_FACTS.mp4", "title": "FACTS (vertical)", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": false, "year": 2026, "poster": "https://i.ytimg.com/vi/WPE_jtKCojc/hqdefault.jpg"}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/AL%20SALA%20BO_%20Oscar%20Wilde.mp4", "title": "Oscar Wilde", "author": "AL SALA BO", "group": "AL SALA BO", "is3d": false, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/LIHUEL%20YAIR_La%20vuelta%20del%20Zaraza.mp4", "title": "La vuelta del Zaraza", "author": "LIHUEL YAIR", "group": "LIHUEL YAIR", "is3d": false, "year": 2026}, {"kind": "yt", "yt": "Y2o1pV-uG6I", "title": "Palo Santo", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "2fJH1lNtwZk", "title": "Los Pérez García", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "8kXtlrirlvU", "title": "Rocafella", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "OvclU3AHgmY", "title": "Disney Plug", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "boEKNP9OH4I", "title": "Doc Pájaros Free", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "Yuh5ulasmBA", "title": "Los Beatles", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "HAxRAyv8Ll8", "title": "Tai Chi & Full Contact", "author": "iQ.NO1", "year": 2026}, {"kind": "yt", "yt": "6Y9qKhXRRI8", "title": "Esto No Se Acaba", "author": "Martocha × Dinámica", "year": 2026}, {"kind": "yt", "yt": "KyrM4OIZuv0", "title": "Caramelos de Colores", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "MrM7xpynHyo", "title": "Ser el Uno", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "5Xf4IfjnmFw", "title": "Hard-street", "author": "B13X & Showsa", "year": 2026}, {"kind": "yt", "yt": "Csj207PWog0", "title": "Showreel 2026", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "yt", "yt": "ngeHU0vpw_Q", "title": "Sopa de Papa", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "MV9vqqJxSEM", "title": "Rumpología", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "WE_XicUvCmA", "title": "Freestyle Navideño", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "SsO6Or59bhY", "title": "Escorpio", "author": "Mayor R", "year": 2025}, {"kind": "yt", "yt": "hTIK3eSvI3M", "title": "Tabla Esmeralda", "author": "B13X & Lasistta", "year": 2023}];
+
+const $ = id => document.getElementById(id);
+const stage = $("stage"), world = $("world"), modal = $("modal"), mMedia = $("modalMedia");
+const pad2 = n => String(n).padStart(2, "0");
+const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg>';
+const ARR = d => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+const GOLD = 137.508 * Math.PI / 180;   // ángulo áureo → espiral pareja sin alineaciones
+const PERSP = 1000, RECYCLE = 900;      // recicla cuando la tarjeta ya salió de cuadro
+
+const small = matchMedia("(max-width:700px)").matches;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const P = { n: 64, spin: reduced ? 0 : 6, fly: reduced ? 0 : 30, radius: small ? 300 : 470, gap: 150 };
+
+let pool = [], cards = [], camZ = 0, spinA = 0, spinVel = 0, flyVel = 0;
+let paused = false, modalOpen = false, raf = 0, lastT = 0;
+
+/* ---------- construcción ---------- */
+function cardHTML(it, i) {
+  const demo = it.copy ? '<span class="demo">copia</span>' : "";
+  const yr = `<span class="yr">${it.year}</span>`;
+  if (it.kind === "reel" && !it.poster) {
+    return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
+      <span class="n">${pad2(i + 1)}</span>
+      <span class="t">${it.title}</span>
+      <span class="g">${it.group} · reel${it.is3d ? " · 3D" : ""}</span>
+      ${yr}${demo}<i class="pl">${PLAY}</i></article>`;
+  }
+  const img = it.poster || `https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg`;
+  return `<article class="vcard ${it.kind}${it.poster ? " poster" : ""}${it.is3d ? " is3d" : ""}" data-i="${i}">
+    <img loading="lazy" decoding="async" src="${img}" alt="">
+    ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
+}
+function build() {
+  pool = [];
+  for (let i = 0; i < P.n; i++)
+    pool.push({ ...UNIQUE[i % UNIQUE.length], copy: Math.floor(i / UNIQUE.length) });
+  world.innerHTML = pool.map(cardHTML).join("");
+  cards = [...world.children];
+  layout();
+  $("count").textContent = `${P.n} piezas en órbita · ${UNIQUE.length} únicas` +
+    (P.n > UNIQUE.length ? ` · ${Math.ceil(P.n / UNIQUE.length)}× copias demo` : "");
+}
+function setTF(c) {
+  c.style.setProperty("--tf",
+    `translate3d(${c._x}px,${c._y}px,${c._z}px) rotateZ(${-c._th}rad)`);
+}
+function layout() {
+  cards.forEach((c, i) => {
+    const th = i * GOLD;
+    const r = P.radius * (0.78 + 0.44 * ((i % 7) / 6));  // radio variable = espiral orgánica
+    c._th = th; c._x = Math.cos(th) * r; c._y = Math.sin(th) * r; c._z = -i * P.gap;
+    setTF(c);
+  });
+}
+
+/* ---------- loop: 1 sola escritura de transform por frame ---------- */
+function tick(t) {
+  raf = requestAnimationFrame(tick);
+  const dt = Math.min((t - lastT) / 1000, .05) || .016;
+  lastT = t;
+  if (paused || modalOpen || document.hidden) return;
+  spinA += (P.spin * Math.PI / 180 + spinVel) * dt;
+  camZ += (P.fly + flyVel) * dt;
+  spinVel *= Math.pow(.06, dt);   // decaimiento del momentum
+  flyVel *= Math.pow(.06, dt);
+  const D = P.n * P.gap;
+  for (const c of cards) {
+    const z = c._z + camZ;
+    if (z > RECYCLE) { c._z -= D; setTF(c); }
+    else if (z < RECYCLE - D) { c._z += D; setTF(c); }
+  }
+  world.style.transform = `translateZ(${camZ}px) rotateZ(${spinA}rad)`;
+}
+
+/* ---------- drag / rueda / pellizco ---------- */
+const pts = new Map();
+let down = false, sx = 0, sy = 0, lx = 0, ly = 0, lt = 0, moved = 0, pinchD = 0;
+stage.addEventListener("pointerdown", e => {
+  pts.set(e.pointerId, e);
+  if (pts.size === 1) {
+    down = true; moved = 0; sx = lx = e.clientX; sy = ly = e.clientY;
+    lt = performance.now(); spinVel = flyVel = 0;
+    stage.classList.add("dragging");
+  } else if (pts.size === 2) {
+    const [a, b] = [...pts.values()];
+    pinchD = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+  }
+  stage.setPointerCapture(e.pointerId);
+});
+stage.addEventListener("pointermove", e => {
+  if (!pts.has(e.pointerId)) return;
+  pts.set(e.pointerId, e);
+  if (pts.size === 2) {
+    const [a, b] = [...pts.values()];
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    camZ += (d - pinchD) * 2.2; pinchD = d; moved = 99;
+    return;
+  }
+  if (!down) return;
+  const now = performance.now(), dt = Math.max(now - lt, 8) / 1000;
+  const dx = e.clientX - lx, dy = e.clientY - ly;
+  moved = Math.max(moved, Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy));
+  spinA -= dx * .0034;
+  camZ -= dy * 1.7;                 // arrastrar hacia arriba = volar hacia el fondo
+  spinVel = -dx * .0034 / dt * .016;
+  flyVel = -dy * 1.7 / dt * .016;
+  lx = e.clientX; ly = e.clientY; lt = now;
+});
+const release = e => {
+  pts.delete(e.pointerId);
+  if (pts.size < 2) pinchD = 0;
+  if (!pts.size) { down = false; stage.classList.remove("dragging"); }
+};
+stage.addEventListener("pointerup", release);
+stage.addEventListener("pointercancel", release);
+stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; }, { passive: false });
+stage.addEventListener("click", e => {
+  if (moved > 8) return;
+  const c = e.target.closest(".vcard");
+  if (c) openModal(+c.dataset.i);
+}, true);
+
+/* ---------- modal (click = única forma de reproducir) ---------- */
+let cur = 0;
+function openModal(i) {
+  cur = ((i % pool.length) + pool.length) % pool.length;
+  const it = pool[cur];
+  const nav = `<button class="mnav prev" data-nav="-1" aria-label="Anterior">${ARR("M15 5l-7 7 7 7")}</button>
+               <button class="mnav next" data-nav="1" aria-label="Siguiente">${ARR("M9 5l7 7-7 7")}</button>`;
+  if (it.kind === "reel") {
+    mMedia.className = "vert";
+    mMedia.innerHTML = `<video src="${it.src}" controls autoplay playsinline></video>${nav}`;
+    $("modalExt").href = it.src;
+  } else {
+    mMedia.className = "";
+    mMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0"
+      allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>${nav}`;
+    $("modalExt").href = `https://www.youtube.com/watch?v=${it.yt}`;
+  }
+  $("modalTitle").textContent = it.title;
+  $("modalMeta").textContent = `${it.author} · ${it.year} · ${it.kind === "reel" ? (it.is3d ? "reel 3D" : "reel") : "videoclip"} · ${pad2(cur + 1)}/${pad2(pool.length)}${it.copy ? " · copia demo" : ""}`;
+  modal.classList.add("open");
+  modalOpen = true;
+}
+function closeModal() {
+  modal.classList.remove("open");
+  mMedia.innerHTML = "";
+  modalOpen = false;
+}
+$("modalBg").addEventListener("click", closeModal);
+$("modalX").addEventListener("click", closeModal);
+mMedia.addEventListener("click", e => {
+  const b = e.target.closest("[data-nav]");
+  if (b) openModal(cur + +b.dataset.nav);
+});
+addEventListener("keydown", e => {
+  if (e.key === "Escape") closeModal();
+  if (modalOpen && e.key === "ArrowRight") openModal(cur + 1);
+  if (modalOpen && e.key === "ArrowLeft") openModal(cur - 1);
+});
+
+/* ---------- panel ---------- */
+const bind = (id, key, out, fmt, rebuild) => {
+  const inp = $(id);
+  inp.value = P[key];
+  $(out).textContent = fmt(P[key]);
+  inp.addEventListener("input", () => {
+    P[key] = +inp.value;
+    $(out).textContent = fmt(P[key]);
+    if (rebuild === "build") build();
+    else if (rebuild === "layout") layout();
+  });
+};
+bind("pN", "n", "vN", v => v, "build");
+bind("pSpin", "spin", "vSpin", v => v + "°");
+bind("pFly", "fly", "vFly", v => v);
+bind("pR", "radius", "vR", v => v + "px", "layout");
+bind("pGap", "gap", "vGap", v => v + "px", "layout");
+$("panelBtn").addEventListener("click", () => $("panel").classList.toggle("open"));
+$("reset").addEventListener("click", () => { camZ = 0; spinA = 0; spinVel = flyVel = 0; layout(); });
+$("pause").addEventListener("click", e => {
+  paused = !paused;
+  e.target.textContent = paused ? "reanudar" : "pausar";
+});
+if (!small) $("panel").classList.add("open");
+
+/* ---------- arranque ---------- */
+build();
+raf = requestAnimationFrame(t => { lastT = t; tick(t); });
+</script>
+</body>
+</html>
