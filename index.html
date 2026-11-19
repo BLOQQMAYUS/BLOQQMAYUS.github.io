@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical</title>
+<meta name="description" content="Francisco Benítez, alias BLOQQ MÁYUS: director creativo, rapero y filmmaker argentino. Guión, montaje, edición, VFX, motion graphics y contenido vertical. CABA, Buenos Aires.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
+<style>
+  /* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
+     Hollín #1A1714 · Brasa #B8321F · Ámbar #F2A51A
+     Rodocrosita #D9737F · Hueso #F4EEE3 · Verde ácido #B5E61D (solo eventos)
+     Sin glow ni bloom. Sin teal-and-orange. */
+  :root{
+    --bg:#1A1714; --bg2:#201C17; --card:#26211A; --line:rgba(244,238,227,.1);
+    --txt:#F4EEE3; --mut:#A79D8E;
+    --acc:#F2A51A; --brasa:#B8321F; --rosa:#D9737F; --acid:#B5E61D;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+    --sans:"Helvetica Neue",Helvetica,Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --rad:16px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+  ::selection{background:var(--acc);color:var(--bg)}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+  /* ---------- grano de película ---------- */
+  .grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:2000;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation:grain 8s steps(10) infinite}
+  @keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+
+  /* ---------- nav ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+  nav.scrolled{background:rgba(26,23,20,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+  .nav-in{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.08em;font-size:.95rem;text-transform:uppercase}
+  /* la tecla Bloq Mayús con antena: el botón del universo */
+  .key{position:relative;width:28px;height:28px;border:1.5px solid rgba(244,238,227,.35);border-radius:7px;display:grid;place-items:center;color:var(--acc);font-size:1rem;font-weight:700;flex:none}
+  .key::after{content:"";position:absolute;top:-6px;right:-4px;width:7px;height:7px;border-radius:50%;background:var(--acid);animation:blink 2.2s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+  .nav-links{display:flex;gap:26px;align-items:center;font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.12em}
+  .nav-links a{color:var(--mut);transition:color .2s}
+  .nav-links a:hover{color:var(--txt)}
+  .nav-links a.cta{color:var(--bg);background:var(--acc);padding:9px 18px;border-radius:999px;font-weight:700}
+  .nav-links a.cta:hover{background:#f7b83f;color:var(--bg)}
+  .burger{display:none;flex-direction:column;gap:5px;padding:8px}
+  .burger span{width:22px;height:2px;background:var(--txt);transition:.3s}
+  @media(max-width:880px){
+    .burger{display:flex}
+    .nav-links{position:fixed;top:64px;left:12px;right:12px;flex-direction:column;background:rgba(32,28,23,.97);border:1px solid var(--line);border-radius:16px;padding:24px;gap:20px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:.25s;backdrop-filter:blur(16px)}
+    .nav-links.open{opacity:1;pointer-events:auto;transform:none}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden}
+  .hero-img{position:absolute;inset:0}
+  .hero-img img{width:100%;height:100%;object-fit:cover;object-position:72% 28%;transform:scale(1.05);animation:slowzoom 24s ease-in-out infinite alternate}
+  @keyframes slowzoom{from{transform:scale(1.05)}to{transform:scale(1.13)}}
+  .hero-img::after{content:"";position:absolute;inset:0;background:
+    linear-gradient(180deg,rgba(26,23,20,.6) 0%,rgba(26,23,20,.18) 40%,rgba(26,23,20,.95) 100%),
+    linear-gradient(90deg,rgba(26,23,20,.88) 0%,rgba(26,23,20,.45) 50%,rgba(26,23,20,.15) 100%)}
+  .hero-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:150px 24px 76px}
+  .rec{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;color:var(--acc);text-transform:uppercase;margin-bottom:24px}
+  .rec i{width:9px;height:9px;border-radius:50%;background:var(--brasa);animation:blink 1.2s infinite}
+  h1{font-size:clamp(2.3rem,6vw,4.8rem);line-height:1.08;font-weight:700;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--acc)}
+  h1 .min{color:var(--mut)}
+  .hero-sub{margin:24px 0 36px;max-width:60ch;color:#D8D0C2;font-size:clamp(1rem,1.6vw,1.15rem)}
+  .hero-sub b{color:var(--txt)}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:var(--bg);font-weight:700;padding:15px 28px;border-radius:999px;font-size:.95rem;transition:transform .2s,background .2s;letter-spacing:.02em}
+  .btn:hover{background:#f7b83f;transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:var(--txt);border:1px solid rgba(244,238,227,.3)}
+  .btn-ghost:hover{background:rgba(244,238,227,.08);border-color:rgba(244,238,227,.55)}
+  .btn svg{width:16px;height:16px;flex:none}
+  .hero-meta{position:absolute;right:24px;bottom:24px;z-index:3;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;color:rgba(244,238,227,.55);text-transform:uppercase;text-align:right}
+  .hero-meta b{color:var(--rosa);font-weight:400}
+  @media(max-width:640px){.hero-meta{display:none}.hero-img img{object-position:62% 20%}}
+
+  /* ---------- secciones ---------- */
+  section{padding:110px 0}
+  .sec-head{margin-bottom:48px;max-width:760px}
+  .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:12px}
+  .kicker::after{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
+  h2{font-size:clamp(1.9rem,4.2vw,3rem);font-weight:700;letter-spacing:-.015em;line-height:1.08;text-transform:uppercase}
+  .sec-desc{color:var(--mut);margin-top:14px;font-size:1.02rem}
+
+  /* ---------- filtros + grid videoclips ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+  .chip{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--line);color:var(--mut);transition:.2s}
+  .chip:hover{color:var(--txt);border-color:rgba(244,238,227,.35)}
+  .chip.on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:700}
+  .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  @media(max-width:760px){.work-grid{grid-template-columns:1fr}}
+  .work-card{cursor:pointer}
+  .work-card.hidden{display:none}
+  .work-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+  .work-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.6,.2,1),filter .4s;filter:saturate(.92)}
+  .work-card:hover .work-media img{transform:scale(1.06);filter:saturate(1.08)}
+  .work-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(26,23,20,.6));opacity:0;transition:.35s}
+  .work-card:hover .work-media::after{opacity:1}
+  .play{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:.35s}
+  .play i{width:64px;height:64px;border-radius:50%;background:var(--brasa);display:grid;place-items:center;box-shadow:0 10px 34px rgba(0,0,0,.5);transform:scale(.8);transition:.35s}
+  .play svg{width:22px;height:22px;fill:var(--txt);margin-left:3px}
+  .work-card:hover .play{opacity:1}
+  .work-card:hover .play i{transform:scale(1)}
+  .work-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 4px 0}
+  .work-meta h3{font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+  .work-meta .mono{font-size:.68rem;color:var(--mut);letter-spacing:.12em;text-transform:uppercase;text-align:right;flex:none;max-width:55%}
+
+  /* ---------- escenario (BLOQQ artista) ---------- */
+  .escenario{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .esc-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  @media(max-width:860px){.esc-grid{grid-template-columns:1fr;gap:32px}}
+  .esc-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);cursor:pointer;background:var(--card)}
+  .esc-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+  .esc-media:hover img{transform:scale(1.05)}
+  .esc-media .play{opacity:1}
+  .esc-media .play i{transform:scale(1);background:rgba(184,50,31,.92)}
+  .esc-media:hover .play i{transform:scale(1.1)}
+  .esc-quote{font-size:clamp(1.3rem,2.6vw,1.8rem);font-weight:700;line-height:1.25;color:var(--rosa);margin-bottom:18px;letter-spacing:-.01em}
+  .esc-txt p{color:#D8D0C2;margin-bottom:20px}
+  .temas{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+  .temas span{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(217,115,127,.4);border-radius:999px;padding:7px 13px;color:var(--rosa)}
+  .esc-links{display:flex;gap:12px;flex-wrap:wrap}
+  .esc-links .btn{padding:12px 22px;font-size:.85rem}
+
+  /* ---------- vertical / social ---------- */
+  .vert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  @media(max-width:980px){.vert-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.vert-grid{grid-template-columns:1fr 1fr;gap:14px}}
+  .phone{position:relative;aspect-ratio:9/16;border-radius:26px;overflow:hidden;border:3px solid #3A332B;background:var(--card);cursor:pointer;transition:transform .35s,box-shadow .35s;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .phone:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.55)}
+  .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:var(--bg);border-radius:999px;z-index:3;border:1px solid rgba(244,238,227,.08)}
+  .phone img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:saturate(.85)}
+  .phone:hover img{transform:scale(1.05)}
+  .phone::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,23,20,.3) 0%,transparent 30%,transparent 55%,rgba(26,23,20,.88) 100%);z-index:1}
+  .platform{position:absolute;top:34px;right:12px;z-index:3;width:32px;height:32px;border-radius:10px;background:rgba(26,23,20,.75);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid var(--line)}
+  .platform svg{width:16px;height:16px;fill:var(--txt)}
+  .phone-info{position:absolute;left:14px;right:14px;bottom:14px;z-index:3}
+  .phone-info h3{font-size:.95rem;font-weight:700;line-height:1.25}
+  .views{font-family:var(--mono);font-size:.66rem;color:var(--acc);letter-spacing:.12em;margin-top:5px;display:flex;align-items:center;gap:6px;text-transform:uppercase}
+  .views svg{width:12px;height:12px;fill:var(--acc)}
+  .vert-note{margin-top:34px;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .vert-note i{color:var(--rosa);font-style:normal}
+  .vert-note a{color:var(--acc);border-bottom:1px solid rgba(242,165,26,.4)}
+
+  /* ---------- servicios ---------- */
+  .servicios{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .serv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  @media(max-width:860px){.serv-grid{grid-template-columns:1fr}}
+  .serv{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:34px 30px;transition:transform .3s,border-color .3s}
+  .serv:hover{transform:translateY(-5px);border-color:rgba(242,165,26,.45)}
+  .serv-ico{width:52px;height:52px;border-radius:14px;background:rgba(242,165,26,.1);border:1px solid rgba(242,165,26,.35);display:grid;place-items:center;margin-bottom:22px}
+  .serv-ico svg{width:24px;height:24px;stroke:var(--acc);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .serv h3{font-size:1.2rem;font-weight:700;margin-bottom:10px}
+  .serv p{color:var(--mut);font-size:.95rem;margin-bottom:18px}
+  .serv ul{list-style:none;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--rosa);display:flex;flex-direction:column;gap:8px}
+  .serv ul li::before{content:"— ";color:var(--mut)}
+
+  /* ---------- sobre mí ---------- */
+  .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
+  @media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:36px}}
+  .about-img{position:relative;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line)}
+  .about-img img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:60% center}
+  .about-txt p{color:#D8D0C2;margin-bottom:16px}
+  .about-txt p b{color:var(--txt)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}
+  @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
+  .stat b{display:block;font-size:1.6rem;font-weight:700;color:var(--acc);letter-spacing:-.02em}
+  .stat span{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
+  .gear{display:flex;flex-wrap:wrap;gap:8px}
+  .gear span{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--mut)}
+
+  /* ---------- contacto ---------- */
+  .contact{background:var(--bg2);border-top:1px solid var(--line);text-align:center}
+  .contact .kicker{justify-content:center}
+  .contact .kicker::before{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
+  .contact h2{font-size:clamp(2.3rem,6.5vw,4.6rem)}
+  .contact h2 em{font-style:normal;color:var(--acc)}
+  .contact p{color:var(--mut);max-width:48ch;margin:18px auto 36px}
+  .contact-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .socials{display:flex;justify-content:center;gap:14px;margin-top:40px;flex-wrap:wrap}
+  .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:11px 20px;color:var(--mut);transition:.2s}
+  .socials a:hover{color:var(--txt);border-color:var(--acc);transform:translateY(-2px)}
+  .socials svg{width:15px;height:15px;fill:currentColor}
+
+  footer{border-top:1px solid var(--line);padding:28px 0;background:var(--bg)}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+  .foot i{color:var(--acc);font-style:normal}
+  .foot b{color:var(--brasa);font-weight:400}
+
+  /* ---------- modal ---------- */
+  .modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-bg{position:absolute;inset:0;background:rgba(20,17,14,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .modal-box{position:relative;z-index:2;width:min(960px,100%);max-height:92svh;overflow:auto;background:var(--bg2);border:1px solid var(--line);border-radius:20px;animation:pop .3s cubic-bezier(.2,.9,.3,1.2)}
+  @keyframes pop{from{opacity:0;transform:scale(.94) translateY(14px)}to{opacity:1;transform:none}}
+  .modal-media{position:relative;background:#12100D}
+  .modal-media img{width:100%;max-height:68svh;object-fit:contain;margin:0 auto}
+  .modal-media.vert img{max-height:68svh;width:auto;max-width:100%}
+  .modal-media iframe,.modal-media video{width:100%;aspect-ratio:16/9;border:0;display:block}
+  .modal-media.vert iframe,.modal-media.vert video{aspect-ratio:9/16;max-height:68svh;width:auto;max-width:100%;margin:0 auto}
+  .modal-cap{padding:22px 26px;display:flex;justify-content:space-between;gap:18px;align-items:baseline;flex-wrap:wrap}
+  .modal-cap h3{font-size:1.3rem;font-weight:700}
+  .modal-cap .mono{font-size:.68rem;color:var(--mut);letter-spacing:.13em;text-transform:uppercase}
+  .modal-hint{padding:0 26px 22px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--rosa)}
+  .modal-open{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+  .modal-open a{display:inline-flex;align-items:center;gap:10px;background:var(--brasa);color:var(--txt);font-weight:700;padding:16px 30px;border-radius:999px;font-size:1rem;transition:.2s;box-shadow:0 10px 34px rgba(0,0,0,.5)}
+  .modal-open a:hover{background:#d13c26;transform:scale(1.05)}
+  .modal-open a svg{width:18px;height:18px;fill:currentColor}
+  .modal-cap a.ext{font-family:var(--mono);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);border-bottom:1px solid rgba(242,165,26,.4);flex:none}
+  .modal-cap a.ext:hover{color:#f7b83f}
+  .modal-x{position:absolute;top:14px;right:14px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(26,23,20,.8);border:1px solid var(--line);display:grid;place-items:center;font-size:1.1rem;transition:.2s}
+  .modal-x:hover{background:var(--acc);color:var(--bg)}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.6,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top"><span class="key">⇪</span><span>BLOQQ MÁYUS</span></a>
+    <button class="burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
+    <div class="nav-links" id="navLinks">
+      <a href="#trabajo">Videoclips</a>
+      <a href="#escenario">Escenario</a>
+      <a href="#vertical">Vertical</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#sobre-mi">Backstage</a>
+      <a href="#contacto" class="cta">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-img"><img src="assets/showreel.jpg" alt="Francisco Benítez mirando a cámara a través de sus dedos"></div>
+  <div class="hero-in">
+    <div class="rec"><i></i> REC · BLOQQ MÁYUS · CABA</div>
+    <h1>Tu idea, a <em>PROYECTO</em>.<br>De <span class="min">minúsculas</span> a <em>MAYÚSCULAS</em>.</h1>
+    <p class="hero-sub">Soy <b data-bind="name">Francisco Benítez</b>, también conocido como <b>BLOQQ MÁYUS</b>. Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. Mi caja de herramientas está a tu disposición para volver realidad tus ideas y proyectos.</p>
+    <div class="hero-cta">
+      <button class="btn" id="showreelBtn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Ver showreel
+      </button>
+      <a class="btn btn-ghost" href="#trabajo">Ver videoclips</a>
+    </div>
+  </div>
+  <div class="hero-meta">4K · 24 FPS<br>TC <b id="tc">00:00:00:00</b></div>
+</header>
+
+<main>
+  <!-- ============ 01 · TRABAJO · VIDEOCLIPS ============ -->
+  <section id="trabajo">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">01 · Trabajo seleccionado</div>
+        <h2>Videoclips para artistas</h2>
+        <p class="sec-desc">Videoclips oficiales para MUSHER, Tierras Raras, B13X y más. Cada pieza, de la idea al corte final.</p>
+      </div>
+      <div class="filters reveal" id="filters"></div>
+      <div class="work-grid" id="workGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 · PLANETA ESCENARIO · BLOQQ ARTISTA ============ -->
+  <section id="escenario" class="escenario">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">02 · Planeta Escenario — el artista</div>
+        <h2>BLOQQ MÁYUS</h2>
+      </div>
+      <div class="esc-grid">
+        <div class="esc-media reveal" id="factsCard" title="Ver FACTS">
+          <img src="assets/real/WPE_jtKCojc.jpg" alt="BLOQQ MÁYUS — FACTS, videoclip oficial" loading="lazy">
+          <span class="play"><i><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></i></span>
+        </div>
+        <div class="esc-txt reveal">
+          <div class="esc-quote">«Nací pa caminar sobre brasas.»</div>
+          <p>Además de filmmaker, rapero. Un alien que aterrizó en su propia ciudad y armó su propio universo: un OVNI y tres planetas. Acá la cámara, el VFX y el motion se ponen al servicio de su propia música.</p>
+          <div class="temas"><span>BIGG DHARMA</span><span>FACE DE FURRO</span><span>FACTS</span><span>HDP ANDO BAIRES</span></div>
+          <div class="esc-links">
+            <button class="btn" id="factsBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ver FACTS</button>
+            <a class="btn btn-ghost" href="https://youtube.com/@bloqqmayus" target="_blank" rel="noopener">Canal ↗</a>
+            <a class="btn btn-ghost" href="https://www.youtube.com/playlist?list=PLKbTkhAEW00E" target="_blank" rel="noopener">Playlist ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 · VERTICAL / SOCIAL ============ -->
+  <section id="vertical">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">03 · Vertical first</div>
+        <h2>Contenido para redes</h2>
+        <p class="sec-desc">Reels y Shorts pensados para el scroll: hook en los primeros 2 segundos, ritmo y retención.</p>
+      </div>
+      <div class="vert-grid" id="vertGrid"></div>
+      <div class="vert-note reveal"><i>✦</i> Sección en construcción — los reels llegan pronto. Mientras: <a href="https://instagram.com/bloqqmayus" target="_blank" rel="noopener">@bloqqmayus ↗</a></div>
+    </div>
+  </section>
+
+  <!-- ============ 04 · HANGAR · SERVICIOS ============ -->
+  <section id="servicios" class="servicios">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="kicker">04 · Toolbox — servicios</div>
+        <h2>Todas mis herramientas a tu disposición</h2>
+      </div>
+      <div class="serv-grid">
+        <div class="serv reveal">
+          <div class="serv-ico"><svg viewBox="0 0 24 24"><path d="M2 8l14-4 1 4-14 4zM3 12h18v8H3zM16 4l2 4M11 5.5l2 4M6 7l2 4"/></svg></div>
+          <h3>Dirección &amp; Rodaje</h3>
+          <p>Concepto, guion, dirección y cámara. Videoclips y piezas para marcas con look de cine y una idea detrás.</p>
+          <ul><li>Tratamiento visual</li><li>Dirección de fotografía</li><li>Sonido directo</li></ul>
+        </div>
+        <div class="serv reveal">
+          <div class="serv-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 6.5M12 12L5.5 18.5M12 12l8-3"/></svg></div>
+          <h3>Post, Color &amp; VFX</h3>
+          <p>+12 años de oficio: edición, etalonaje, VFX y motion graphics hasta la pieza final.</p>
+          <ul><li>Edición &amp; color</li><li>VFX &amp; motion graphics</li><li>3D</li></ul>
+        </div>
+        <div class="serv reveal">
+          <div class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M10 8v5l4.5-2.5zM12 17v4M8 21h8"/></svg></div>
+          <h3>Lo viejo funciona</h3>
+          <p>El horizontal no pasó de moda. Videoclips, spots y piezas para YouTube con guion, narrativa y look de cine — el formato de siempre, con todo el oficio adentro.</p>
+          <ul><li>Videoclips &amp; spots</li><li>Guión &amp; narrativa</li><li>16:9</li></ul>
+        </div>
+        <div class="serv reveal">
+          <div class="serv-ico"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M10 5h4M4 14l3-3 3 2 4-5 3 3"/></svg></div>
+          <h3>Estrategia Vertical</h3>
+          <p>Paquetes de contenido 9:16 para Reels, TikTok y Shorts: ideación, hooks, rodaje por lotes y análisis de métricas.</p>
+          <ul><li>Calendario de contenido</li><li>Batch shooting mensual</li><li>Reporte de retención</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 05 · HANGAR · SOBRE MÍ ============ -->
+  <section id="sobre-mi">
+    <div class="wrap">
+      <div class="about-grid">
+        <figure class="about-img reveal">
+          <img src="assets/about.jpg" alt="Francisco Benítez — frame del Reel 2026" loading="lazy">
+        </figure>
+        <div class="about-txt reveal">
+          <div class="kicker">05 · Backstage</div>
+          <h2 style="margin-bottom:22px">Profesional &amp; artista independiente</h2>
+          <p>Hace más de 12 años que edito, diseño y hago VFX — autónomo y autodidacta. Mi propuesta de valor y mayor herramienta es el <b>criterio</b>: proyecto una idea y la conecto con un boceto de la pieza final antes de tocar la cámara.</p>
+          <p>Resido en el barrio de <b>Balvanera</b>, en Buenos Aires, Argentina.</p>
+          <div class="stats" id="stats"></div>
+          <div class="gear" id="gear"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 06 · CONTACTO ============ -->
+  <section id="contacto" class="contact">
+    <div class="wrap reveal">
+      <div class="kicker">06 · Contacto</div>
+      <h2>¿Apretamos el <em>MÁYUS</em>?</h2>
+      <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
+      <div class="contact-cta">
+        <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          <span data-bind="email">fs7benitez@gmail.com</span>
+        </a>
+        <a class="btn btn-ghost" id="phoneBtn" href="tel:+541159754088">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>
+          <span data-bind="phone">+54 11 5975 4088</span>
+        </a>
+      </div>
+      <div class="socials" id="socials"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">CABA, Buenos Aires</span></span>
+    <span>videoclips · VFX · vertical <b>●</b> hecho en Balvanera</span>
+  </div>
+</footer>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="modal-bg" id="modalBg"></div>
+  <div class="modal-box">
+    <button class="modal-x" id="modalX" aria-label="Cerrar">✕</button>
+    <div class="modal-media" id="modalMedia"></div>
+    <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener" hidden>Ver en YouTube ↗</a></div>
+    <div class="modal-hint" id="modalHint"></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   ✏️  CONFIG — EDITA SOLO ESTE BLOQUE
+   · img:   miniatura (las de /assets/real son las oficiales de YouTube)
+   · video: URL de YouTube, Vimeo o .mp4 → el modal lo reproduce
+   · role:  tu crédito en cada pieza (ajustar cuando corresponda)
+   ================================================================ */
+const CONFIG = {
+  name: "Francisco Benítez",
+  city: "Balvanera, Buenos Aires",
+  email: "fs7benitez@gmail.com",
+  phone: "+54 11 5975 4088",
+  showreel: { title: "Reel 2026", img: "assets/showreel.jpg", video: "https://www.youtube.com/watch?v=Csj207PWog0" },
+  clients: ["MUSHER", "TIERRAS RARAS", "DANO", "MIR NICOLAS", "CEROUNNO", "H DE PERRA", "EL MORTEDOR", "LOW", "B13X", "LASISTTA", "SHOWSA", "MARTOCHA", "DINÁMICA", "iQ.NO1", "MAYOR R", "BLOQQ MÁYUS"],
+  stats: [
+    { n: "12+",  label: "Años de oficio" },
+    { n: "150+", label: "Proyectos realizados" },
+    { n: "75%",  label: "Autodidacta | 25% cursos oficiales" },
+    { n: "+300", label: "Horas de contenido generadas" }
+  ],
+  gear: ["Guión", "Dirección", "Montaje", "Edición", "VFX", "Motion Graphics", "3D", "Diseño"],
+  socials: [
+    { id: "instagram", label: "@bloqqmayus", url: "https://instagram.com/bloqqmayus" },
+    { id: "youtube",   label: "YouTube",     url: "https://youtube.com/@bloqqmayus" },
+    { id: "linkedin",  label: "LinkedIn",    url: "https://www.linkedin.com/in/franciscosben%C3%ADtez/" }
+  ],
+  /* ---- Videoclips para clientes (más nuevos primero) ---- */
+  films: [
+    { title: "Hard-street",          cat: "B13X", artist: "Barbara13X & Showsa", year: "2026", role: "Videoclip oficial", img: "assets/real/5Xf4IfjnmFw.jpg", video: "https://www.youtube.com/watch?v=5Xf4IfjnmFw" },
+    { title: "Palo Santo",         cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/Y2o1pV-uG6I.jpg", video: "https://www.youtube.com/watch?v=Y2o1pV-uG6I" },
+    { title: "Los Pérez García",   cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/2fJH1lNtwZk.jpg", video: "https://www.youtube.com/watch?v=2fJH1lNtwZk" },
+    { title: "Rocafella",          cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/8kXtlrirlvU.jpg", video: "https://www.youtube.com/watch?v=8kXtlrirlvU" },
+    { title: "Disney Plug",        cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/OvclU3AHgmY.jpg", video: "https://www.youtube.com/watch?v=OvclU3AHgmY" },
+    { title: "Doc Pájaros Free",   cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/boEKNP9OH4I.jpg", video: "https://www.youtube.com/watch?v=boEKNP9OH4I" },
+    { title: "Los Beatles",        cat: "TIERRAS RARAS", artist: "Tierras Raras", lineup: "Dano, Mir Nicolas, Cerounno & H de Perra", year: "2026", role: "Videoclip oficial", img: "assets/real/Yuh5ulasmBA.jpg", video: "https://www.youtube.com/watch?v=Yuh5ulasmBA" },
+    { title: "Tai Chi & Full Contact", cat: "iQ.NO1", artist: "iQ.NO1", year: "2026", role: "Videoclip oficial", img: "assets/real/HAxRAyv8Ll8.jpg", video: "https://www.youtube.com/watch?v=HAxRAyv8Ll8" },
+    { title: "Esto No Se Acaba",     cat: "MARTOCHA", artist: "Martocha × Dinámica", year: "2026", role: "Videoclip oficial", img: "assets/real/6Y9qKhXRRI8.jpg", video: "https://www.youtube.com/watch?v=6Y9qKhXRRI8" },
+    { title: "Caramelos de Colores", cat: "MUSHER", artist: "Musher ft. H de Perra",  year: "2026", role: "Videoclip oficial", img: "assets/real/KyrM4OIZuv0.jpg", video: "https://www.youtube.com/watch?v=KyrM4OIZuv0" },
+    { title: "Ser el Uno",         cat: "MUSHER", artist: "Musher ft. El Mortedor", year: "2026", role: "Videoclip oficial", img: "assets/real/MrM7xpynHyo.jpg", video: "https://www.youtube.com/watch?v=MrM7xpynHyo" },
+    { title: "Sopa de Papa",       cat: "MUSHER", artist: "Musher",                 year: "2025", role: "Videoclip oficial", img: "assets/real/ngeHU0vpw_Q.jpg", video: "https://www.youtube.com/watch?v=ngeHU0vpw_Q" },
+    { title: "Rumpología",         cat: "MUSHER", artist: "Musher ft. Low",         year: "2025", role: "Videoclip oficial", img: "assets/real/MV9vqqJxSEM.jpg", video: "https://www.youtube.com/watch?v=MV9vqqJxSEM" },
+    { title: "Freestyle Navideño", cat: "MUSHER", artist: "Musher",                 year: "2025", role: "Videoclip oficial", img: "assets/real/WE_XicUvCmA.jpg", video: "https://www.youtube.com/watch?v=WE_XicUvCmA" },
+    { title: "Escorpio",             cat: "MAYOR R", artist: "Mayor R", year: "2025", role: "Videoclip oficial", img: "assets/real/SsO6Or59bhY.jpg", video: "https://www.youtube.com/watch?v=SsO6Or59bhY" },
+    { title: "Tabla Esmeralda",      cat: "B13X", artist: "B13X & Lasistta", year: "2023", role: "Videoclip oficial", img: "assets/real/hTIK3eSvI3M.jpg", video: "https://www.youtube.com/watch?v=hTIK3eSvI3M" }
+  ],
+  /* ---- BLOQQ MÁYUS · Escenario ---- */
+  facts: { title: "FACTS", img: "assets/real/WPE_jtKCojc.jpg", video: "https://www.youtube.com/watch?v=WPE_jtKCojc", meta: "BLOQQ MÁYUS · Videoclip oficial · 2026" },
+  /* ---- Vertical: DEMO hasta que lleguen los reels reales ---- */
+  verticals: [
+    { title: "Reel demo 01", platform: "instagram", views: "demo", img: "assets/vert-1.jpg", video: "" },
+    { title: "Reel demo 02", platform: "tiktok",    views: "demo", img: "assets/vert-2.jpg", video: "" },
+    { title: "Reel demo 03", platform: "instagram", views: "demo", img: "assets/vert-3.jpg", video: "" },
+    { title: "Reel demo 04", platform: "youtube",   views: "demo", img: "assets/vert-4.jpg", video: "" }
+  ]
+};
+/* ================= FIN DE CONFIG ================= */
+
+const ICONS = {
+  instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 1.8.2 2.2.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4 1.3-.1 1.7-.1 4.9-.1zM12 0C8.7 0 8.3 0 7 .1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.7-2.2 1.4C1.2 2.7.8 3.4.5 4.2.3 5 .1 5.8.1 7 0 8.3 0 8.7 0 12s0 3.7.1 5c0 1.2.2 2.1.5 2.9.3.8.7 1.5 1.4 2.2.7.7 1.4 1.1 2.2 1.4.8.3 1.6.5 2.9.5 1.3.1 1.7.1 5 .1s3.7 0 5-.1c1.2 0 2.1-.2 2.9-.5.8-.3 1.5-.7 2.2-1.4.7-.7 1.1-1.4 1.4-2.2.3-.8.5-1.6.5-2.9.1-1.3.1-1.7.1-5s0-3.7-.1-5c0-1.2-.2-2.1-.5-2.9-.3-.8-.7-1.5-1.4-2.2C21.3 1.2 20.6.8 19.8.5c-.8-.3-1.6-.5-2.9-.5C15.7 0 15.3 0 12 0zm0 5.8A6.2 6.2 0 1 0 18.2 12 6.2 6.2 0 0 0 12 5.8zm0 10.2A4 4 0 1 1 16 12a4 4 0 0 1-4 4zM19.8 4.2a1.4 1.4 0 1 1-1.4-1.4 1.4 1.4 0 0 1 1.4 1.4z"/></svg>',
+  tiktok: '<svg viewBox="0 0 24 24"><path d="M19.6 5.8a4.8 4.8 0 0 1-3.4-3.7V1.5h-3.3v13.7a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9a6.2 6.2 0 1 0 5.3 6.1V8.6a8 8 0 0 0 4.7 1.5V6.8a4.8 4.8 0 0 1-1.3-1z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4L15.8 12z"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>',
+  play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+  eye: '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zm0 12.5a5 5 0 1 1 5-5 5 5 0 0 1-5 5zm0-8a3 3 0 1 0 3 3 3 3 0 0 0-3-3z"/></svg>'
+};
+
+/* ---- binds de texto ---- */
+document.querySelectorAll("[data-bind]").forEach(el => {
+  const k = el.dataset.bind;
+  if (CONFIG[k]) el.textContent = CONFIG[k];
+});
+document.getElementById("mailBtn").href = "mailto:" + CONFIG.email;
+document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
+
+/* ---- stats + skills ---- */
+document.getElementById("stats").innerHTML = CONFIG.stats.map(s =>
+  `<div class="stat"><b>${s.n}</b><span>${s.label}</span></div>`).join("");
+document.getElementById("gear").innerHTML = CONFIG.gear.map(g => `<span>${g}</span>`).join("");
+
+/* ---- redes ---- */
+document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
+  `<a href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
+
+/* ---- grid de videoclips + filtros ---- */
+const workGrid = document.getElementById("workGrid");
+workGrid.innerHTML = CONFIG.films.map((f, i) => `
+  <article class="work-card reveal" data-cat="${f.cat}" data-i="${i}">
+    <div class="work-media">
+      <img src="${f.img}" alt="${f.title} — ${f.artist}" loading="lazy">
+      <span class="play"><i>${ICONS.play}</i></span>
+    </div>
+    <div class="work-meta">
+      <h3>${f.title}</h3>
+      <span class="mono">${f.artist} · ${f.year}</span>
+    </div>
+  </article>`).join("");
+
+const counts = {};
+CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);
+const cats = ["Todos", ...Object.keys(counts).sort((a, b) => counts[b] - counts[a])];
+const filters = document.getElementById("filters");
+filters.innerHTML = cats.map((c, i) =>
+  `<button class="chip${i === 0 ? " on" : ""}" data-cat="${c}">${c}</button>`).join("");
+filters.addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  filters.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  workGrid.querySelectorAll(".work-card").forEach(card => {
+    card.classList.toggle("hidden", b.dataset.cat !== "Todos" && card.dataset.cat !== b.dataset.cat);
+  });
+});
+workGrid.addEventListener("click", e => {
+  const card = e.target.closest(".work-card"); if (!card) return;
+  const f = CONFIG.films[+card.dataset.i];
+  openModal({ ...f, meta: `${f.lineup || f.artist} · ${f.role} · ${f.year}`, vert: false });
+});
+
+/* ---- Escenario: FACTS ---- */
+function openFacts() { openModal({ ...CONFIG.facts, vert: false }); }
+document.getElementById("factsCard").addEventListener("click", openFacts);
+document.getElementById("factsBtn").addEventListener("click", openFacts);
+
+/* ---- grid vertical (demo) ---- */
+const vertGrid = document.getElementById("vertGrid");
+vertGrid.innerHTML = CONFIG.verticals.map((v, i) => `
+  <article class="phone reveal" data-i="${i}" title="${v.title}">
+    <img src="${v.img}" alt="${v.title}" loading="lazy">
+    <span class="platform">${ICONS[v.platform] || ""}</span>
+    <div class="phone-info">
+      <h3>${v.title}</h3>
+      <div class="views">${ICONS.eye} ${v.views}</div>
+    </div>
+  </article>`).join("");
+vertGrid.addEventListener("click", e => {
+  const p = e.target.closest(".phone"); if (!p) return;
+  const v = CONFIG.verticals[+p.dataset.i];
+  openModal({ ...v, meta: `${v.platform.toUpperCase()} · placeholder`, vert: true });
+});
+
+/* ---- modal ---- */
+const modal = document.getElementById("modal");
+const mMedia = document.getElementById("modalMedia");
+function videoEmbed(url) {
+  if (!url) return null;
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/);
+  if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  const vm = url.match(/vimeo\.com\/(\d+)/);
+  if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return `<video src="${url}" controls autoplay playsinline></video>`;
+  return `<iframe src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+}
+function openModal(item) {
+  /* YouTube no acepta embeds desde file:// (Error 153): solo http/https */
+  const canEmbed = /^https?:$/.test(location.protocol);
+  const embed = canEmbed ? videoEmbed(item.video) : null;
+  mMedia.className = "modal-media" + (item.vert ? " vert" : "");
+  if (embed) {
+    mMedia.innerHTML = embed;
+  } else if (item.video) {
+    mMedia.innerHTML = `<img src="${item.img}" alt="${item.title}"><span class="modal-open"><a href="${item.video}" target="_blank" rel="noopener">${ICONS.play} Ver en YouTube</a></span>`;
+  } else {
+    mMedia.innerHTML = `<img src="${item.img}" alt="${item.title}">`;
+  }
+  document.getElementById("modalTitle").textContent = item.title;
+  document.getElementById("modalMeta").textContent = item.meta || "";
+  const ext = document.getElementById("modalExt");
+  if (item.video) {
+    ext.hidden = false;
+    ext.href = item.video;
+    ext.textContent = /vimeo\.com/.test(item.video) ? "Ver en Vimeo ↗" : (/youtube|youtu\.be/.test(item.video) ? "Ver en YouTube ↗" : "Abrir video ↗");
+  } else ext.hidden = true;
+  document.getElementById("modalHint").textContent = embed ? "" :
+    (item.video ? "✦ Archivo local: YouTube no incrusta desde file:// — usá el botón. Publicado en la web, reproduce acá mismo." :
+    "✦ Placeholder — cuando llegue el reel real, se reproduce acá.");
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal() {
+  modal.classList.remove("open");
+  mMedia.innerHTML = "";
+  document.body.style.overflow = "";
+}
+document.getElementById("modalBg").addEventListener("click", closeModal);
+document.getElementById("modalX").addEventListener("click", closeModal);
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+document.getElementById("showreelBtn").addEventListener("click", () =>
+  openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
+
+/* ---- nav ---- */
+const nav = document.getElementById("nav");
+addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 40), { passive: true });
+const navLinks = document.getElementById("navLinks");
+document.getElementById("burger").addEventListener("click", () => navLinks.classList.toggle("open"));
+navLinks.addEventListener("click", e => { if (e.target.tagName === "A") navLinks.classList.remove("open"); });
+
+/* ---- reveal on scroll ---- */
+const io = new IntersectionObserver(entries => entries.forEach(en => {
+  if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+}), { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* ---- timecode decorativo (24 fps) ---- */
+const tcEl = document.getElementById("tc");
+let frame = 0;
+const pad = n => String(n).padStart(2, "0");
+setInterval(() => {
+  frame++;
+  const f = frame % 24, s = Math.floor(frame / 24) % 60, m = Math.floor(frame / 1440) % 60, h = Math.floor(frame / 86400);
+  tcEl.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(f)}`;
+}, 1000 / 24);
+</script>
+</body>
+</html>
