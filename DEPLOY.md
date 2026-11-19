@@ -35,6 +35,18 @@ git push -u origin main
 ```
 Después, Settings → Pages igual que en el paso 5 de la Opción A.
 
+## Opción C — automática (con el asistente)
+
+Con un token fino de GitHub (permiso *Contents: read/write*, solo este repo):
+
+```bash
+./deploy.sh <TOKEN> "mensaje del commit"
+```
+
+Clona el repo publicado, sincroniza `index.html` + `assets/` + guías + `.nojekyll`,
+commitea y pushea. GitHub Pages republica solo en ~1 minuto.
+El token se usa en memoria durante el push: no se guarda en archivos ni en el repo.
+
 ## Notas
 
 - **URL en la raíz**: si nombrás la repo `TU-USUARIO.github.io`, el sitio queda
