@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LAB · VORTEX — BLOQQ MÁYUS</title>
+<title>GALERÍA 3D · LAB — BLOQQ MÁYUS</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
   :root{
@@ -16,208 +16,222 @@
   html,body{height:100%;overflow:hidden}
   body{background:var(--hollin);color:var(--hueso);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 
-  /* ---------- escenario 3D ---------- */
-  #stage{position:fixed;inset:0;perspective:1000px;perspective-origin:50% 50%;z-index:1;touch-action:none;cursor:grab}
+  /* ---------- corredor 3D ---------- */
+  #stage{position:fixed;inset:0;perspective:900px;perspective-origin:50% 50%;z-index:1;touch-action:none;cursor:grab}
   #stage.dragging{cursor:grabbing}
   #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+  #floor,#ceil{position:absolute;left:50%;top:50%;width:2600px;height:24000px;margin:-12000px 0 0 -1300px;pointer-events:none}
+  #floor{background:
+    repeating-linear-gradient(0deg, rgba(244,238,227,.09) 0 1px, transparent 1px 170px),
+    repeating-linear-gradient(90deg, rgba(244,238,227,.045) 0 1px, transparent 1px 325px)}
+  #ceil{background:
+    repeating-linear-gradient(0deg, rgba(244,238,227,.05) 0 1px, transparent 1px 170px)}
 
+  /* obras: siempre derechas, en las paredes del corredor */
   .vcard{
     position:absolute;left:50%;top:50%;
     width:var(--w);height:var(--h);
     margin:calc(var(--h) / -2) 0 0 calc(var(--w) / -2);
     transform:var(--tf);
-    background:var(--carbon);border:1px solid rgba(244,238,227,.16);
-    border-radius:4px;overflow:hidden;cursor:pointer;
+    background:var(--carbon);border:1px solid rgba(244,238,227,.22);
+    border-radius:3px;overflow:hidden;cursor:pointer;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);
     transition:border-color .25s;
+    user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
   }
-  .vcard:hover{transform:var(--tf) translateZ(70px) scale(1.05);border-color:var(--ambar)}
-  .vcard.yt{--w:252px;--h:142px}
-  .vcard.reel{--w:172px;--h:302px}
-  .vcard img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
-  .vcard .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 10px 8px;
+  .vcard:hover{transform:var(--tf) translateZ(46px);border-color:var(--ambar)}
+  .vcard.yt{--w:340px;--h:191px}
+  .vcard.reel{--w:216px;--h:384px}
+  .vcard img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+  .vcard .cap{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 9px;
     background:linear-gradient(transparent,rgba(18,16,13,.94));
-    font:700 .72rem/1.25 var(--sans);letter-spacing:.01em;pointer-events:none}
+    font:700 .78rem/1.25 var(--sans);pointer-events:none}
   .vcard .cap em{display:block;font:400 .58rem/1.4 var(--mono);font-style:normal;color:var(--mut);
     letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .vcard .yr{position:absolute;top:6px;left:7px;font:400 .56rem/1 var(--mono);letter-spacing:.12em;
-    color:var(--ambar);background:rgba(18,16,13,.78);padding:3px 5px;border-radius:2px;pointer-events:none}
-  .vcard .demo{position:absolute;top:6px;right:7px;font:400 .52rem/1 var(--mono);letter-spacing:.1em;
-    color:var(--mut);background:rgba(18,16,13,.78);padding:3px 5px;border-radius:2px;pointer-events:none}
+  .vcard .yr{position:absolute;top:7px;left:8px;font:400 .56rem/1 var(--mono);letter-spacing:.12em;
+    color:var(--ambar);background:rgba(18,16,13,.78);padding:3px 6px;border-radius:2px;pointer-events:none}
+  .vcard .demo{position:absolute;top:7px;right:8px;font:400 .52rem/1 var(--mono);letter-spacing:.1em;
+    color:var(--mut);background:rgba(18,16,13,.78);padding:3px 6px;border-radius:2px;pointer-events:none}
 
   /* celda de film tipográfica para reels sin poster */
-  .vcard.reel:not(.poster){display:flex;flex-direction:column;justify-content:flex-end;gap:6px;
-    padding:16px 18px;background:linear-gradient(165deg,#26211A 0%,#12100D 70%)}
+  .vcard.reel:not(.poster){display:flex;flex-direction:column;justify-content:flex-end;gap:7px;
+    padding:18px 20px;background:linear-gradient(165deg,#26211A 0%,#12100D 70%)}
   .vcard.reel:not(.poster)::before,.vcard.reel:not(.poster)::after{
     content:"";position:absolute;top:0;bottom:0;width:7px;pointer-events:none;
     background:repeating-linear-gradient(180deg,rgba(244,238,227,.14) 0 8px,transparent 8px 18px)}
   .vcard.reel:not(.poster)::before{left:4px}
   .vcard.reel:not(.poster)::after{right:4px}
-  .vcard.reel .n{font:700 3rem/1 var(--sans);color:var(--ambar);letter-spacing:-.03em}
+  .vcard.reel .n{font:700 3.2rem/1 var(--sans);color:var(--ambar);letter-spacing:-.03em}
   .vcard.reel.is3d .n{color:var(--acid)}
-  .vcard.reel .t{font:700 .82rem/1.2 var(--sans);text-transform:uppercase;letter-spacing:.02em}
+  .vcard.reel .t{font:700 .88rem/1.2 var(--sans);text-transform:uppercase;letter-spacing:.02em}
   .vcard.reel .g{font:400 .55rem/1.5 var(--mono);color:var(--mut);letter-spacing:.18em;text-transform:uppercase}
-  .vcard.reel .pl{position:absolute;right:14px;bottom:14px;width:34px;height:34px;border-radius:50%;
+  .vcard.reel .pl{position:absolute;right:16px;bottom:16px;width:36px;height:36px;border-radius:50%;
     background:var(--brasa);display:grid;place-items:center;pointer-events:none}
   .vcard.reel .pl svg{width:12px;height:12px;fill:var(--hueso);margin-left:2px}
   .vcard.reel.is3d .pl{background:var(--acid)}
   .vcard.reel.is3d .pl svg{fill:var(--carbon)}
 
-  /* niebla de profundidad: el centro del vortex se funde a hollín (espacio, no por tarjeta) */
+  /* niebla: el fondo del corredor se funde a hollín */
   #fog{position:fixed;inset:0;z-index:2;pointer-events:none;
     background:
-      radial-gradient(circle at 50% 50%, rgba(26,23,20,.97) 0%, rgba(26,23,20,.85) 8%, rgba(26,23,20,.4) 20%, rgba(26,23,20,0) 44%),
-      radial-gradient(circle at 50% 50%, transparent 58%, rgba(18,16,13,.6) 100%)}
-  #hub{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none;
-    text-align:center;opacity:.5}
-  #hub b{display:block;font:700 3.4rem/1 var(--sans);color:var(--hueso)}
+      radial-gradient(circle at 50% 50%, rgba(26,23,20,.97) 0%, rgba(26,23,20,.85) 7%, rgba(26,23,20,.38) 19%, rgba(26,23,20,0) 42%),
+      radial-gradient(circle at 50% 50%, transparent 60%, rgba(18,16,13,.55) 100%)}
+  #hub{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none;text-align:center;opacity:.32}
+  #hub b{display:block;font:700 2.6rem/1 var(--sans)}
   #hub b i{font-style:normal;color:var(--acid)}
-  #hub span{display:block;margin-top:6px;font:400 .58rem/1 var(--mono);letter-spacing:.34em;color:var(--mut);text-transform:uppercase}
+  #hub span{display:block;margin-top:5px;font:400 .52rem/1 var(--mono);letter-spacing:.34em;color:var(--mut);text-transform:uppercase}
 
   /* ---------- HUD ---------- */
-  #hud{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:14px;
+  #hud{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:12px;
     padding:14px 18px;pointer-events:none;flex-wrap:wrap}
-  #hud .brand{font:700 .95rem/1 var(--sans);letter-spacing:.02em}
+  #hud .brand{font:700 .95rem/1 var(--sans)}
   #hud .brand i{font-style:normal;color:var(--acid)}
   #hud .brand em{font-style:normal;color:var(--mut);font-weight:400}
-  #hud .tag{font:400 .58rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
+  #hud .tag{font:400 .56rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
     color:var(--acid);border:1px solid rgba(181,230,29,.4);padding:5px 8px;border-radius:2px}
-  #count{margin-left:auto;font:400 .6rem/1.5 var(--mono);letter-spacing:.1em;color:var(--mut);text-transform:uppercase;text-align:right}
-  #hint{position:fixed;bottom:14px;left:18px;z-index:10;pointer-events:none;
-    font:400 .6rem/1.6 var(--mono);letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
-  #back{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:10;
-    font:400 .6rem/1 var(--mono);letter-spacing:.14em;color:var(--hueso);text-decoration:none;
-    text-transform:uppercase;border:1px solid rgba(244,238,227,.25);padding:8px 12px;border-radius:2px;background:rgba(18,16,13,.6)}
+  #hud .right{margin-left:auto;display:flex;align-items:center;gap:12px;pointer-events:auto}
+  #count{font:400 .62rem/1 var(--mono);letter-spacing:.14em;color:var(--ambar);text-transform:uppercase}
+  #back{font:400 .58rem/1 var(--mono);letter-spacing:.12em;color:var(--hueso);text-decoration:none;
+    text-transform:uppercase;border:1px solid rgba(244,238,227,.25);padding:7px 10px;border-radius:2px;background:rgba(18,16,13,.6)}
   #back:hover{border-color:var(--ambar);color:var(--ambar)}
 
-  /* ---------- panel de parámetros ---------- */
-  #panelBtn{position:fixed;right:18px;bottom:14px;z-index:11;cursor:pointer;
-    font:700 .68rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--hueso);
-    background:var(--brasa);border:0;padding:11px 14px;border-radius:2px}
-  #panelBtn:hover{background:var(--ambar);color:var(--carbon)}
-  #panel{position:fixed;right:18px;bottom:58px;z-index:11;width:264px;max-width:calc(100vw - 36px);
-    background:rgba(18,16,13,.94);border:1px solid rgba(244,238,227,.18);border-radius:4px;
-    padding:16px;display:none;backdrop-filter:blur(6px)}
-  #panel.open{display:block}
-  #panel h3{font:700 .7rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ambar);margin-bottom:12px}
-  #panel label{display:block;font:400 .58rem/1 var(--mono);letter-spacing:.12em;color:var(--mut);
-    text-transform:uppercase;margin:12px 0 5px}
-  #panel label b{color:var(--hueso);font-weight:400;float:right}
-  #panel input[type=range]{width:100%;accent-color:var(--brasa);height:18px}
-  #panel .row{display:flex;gap:8px;margin-top:14px}
-  #panel button{flex:1;cursor:pointer;font:700 .6rem/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;
-    padding:9px 6px;border-radius:2px;border:1px solid rgba(244,238,227,.25);background:transparent;color:var(--hueso)}
-  #panel button:hover{border-color:var(--ambar);color:var(--ambar)}
-  #panel p{margin-top:12px;font:400 .56rem/1.6 var(--mono);color:var(--mut);letter-spacing:.04em}
+  /* ---------- navegación intuitiva ---------- */
+  #navUI{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:10;
+    display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
+  #hint{font:400 .6rem/1.5 var(--mono);letter-spacing:.12em;color:var(--mut);text-transform:uppercase;
+    text-align:center;transition:opacity .6s;max-width:88vw}
+  #hint.seen{opacity:.45}
+  #hint b{color:var(--hueso);font-weight:400}
+  .navrow{display:flex;gap:14px;pointer-events:auto}
+  .navrow button{width:56px;height:56px;border-radius:50%;cursor:pointer;
+    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.78);color:var(--hueso);
+    display:grid;place-items:center;transition:.25s;backdrop-filter:blur(4px)}
+  .navrow button svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .navrow button:hover{background:var(--brasa);border-color:var(--brasa)}
+  .navrow button:active{transform:scale(.92)}
+  #nextBtn{border-color:rgba(181,230,29,.5);color:var(--acid)}
+  #nextBtn:hover{background:var(--acid);color:var(--carbon);border-color:var(--acid)}
 
-  /* ---------- modal ---------- */
-  #modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:20px}
-  #modal.open{display:grid}
-  #modalBg{position:absolute;inset:0;background:rgba(18,16,13,.9);backdrop-filter:blur(8px)}
-  #modalBox{position:relative;width:min(920px,94vw);background:var(--carbon);
-    border:1px solid rgba(244,238,227,.18);border-radius:4px;overflow:hidden}
-  #modalMedia{position:relative;background:#000;aspect-ratio:16/9;display:grid;place-items:center}
-  #modalMedia.vert{aspect-ratio:9/16;max-height:74vh;width:auto;margin:0 auto}
-  #modalMedia video,#modalMedia iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-  #modalInfo{padding:14px 16px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
-  #modalTitle{font:700 1rem/1.2 var(--sans)}
-  #modalMeta{font:400 .6rem/1.5 var(--mono);letter-spacing:.14em;color:var(--mut);text-transform:uppercase}
-  #modalExt{margin-left:auto;font:400 .6rem/1 var(--mono);letter-spacing:.1em;color:var(--ambar);text-decoration:none;text-transform:uppercase}
-  #modalX{position:absolute;top:10px;right:10px;z-index:5;width:38px;height:38px;border-radius:50%;
-    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.7);color:var(--hueso);
-    font:400 1rem/1 var(--sans);cursor:pointer}
-  #modalX:hover{background:var(--brasa);border-color:var(--brasa)}
-  .mnav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:42px;height:42px;border-radius:50%;
-    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.7);cursor:pointer;display:grid;place-items:center}
-  .mnav svg{width:16px;height:16px;stroke:var(--hueso);stroke-width:2;fill:none}
-  .mnav:hover{background:var(--brasa);border-color:var(--brasa)}
-  .mnav.prev{left:10px}.mnav.next{right:10px}
+  /* ---------- capa de vuelo + cine ---------- */
+  #dim{position:fixed;inset:0;z-index:40;background:rgba(18,16,13,.82);opacity:0;pointer-events:none;transition:opacity .55s}
+  #dim.on{opacity:1}
+  .fly{position:fixed!important;z-index:45;margin:0!important;transform:none!important;
+    transition:top .68s cubic-bezier(.65,0,.15,1),left .68s cubic-bezier(.65,0,.15,1),width .68s cubic-bezier(.65,0,.15,1),height .68s cubic-bezier(.65,0,.15,1),border-radius .68s,opacity .2s;
+    box-shadow:0 30px 90px rgba(0,0,0,.6)}
+  .fly.gone{opacity:0;pointer-events:none}
+  #cine{position:fixed;inset:0;z-index:50;background:#000;display:none}
+  #cine.open{display:block}
+  #cineMedia{position:absolute;inset:0;display:grid;place-items:center}
+  #cineMedia video{width:100%;height:100%;object-fit:contain}
+  #cineMedia iframe{border:0}
+  #cineBar{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:12px;
+    padding:14px 16px;background:linear-gradient(rgba(0,0,0,.82),transparent);transition:opacity .4s}
+  #cine.flying #cineBar,#cine.flying .cnav{opacity:0;pointer-events:none}
+  #cineTitle{font:700 .95rem/1.2 var(--sans)}
+  #cineMeta{font:400 .58rem/1.4 var(--mono);letter-spacing:.13em;color:var(--mut);text-transform:uppercase}
+  #cineExt{margin-left:auto;font:400 .58rem/1 var(--mono);letter-spacing:.1em;color:var(--ambar);text-decoration:none;text-transform:uppercase;white-space:nowrap}
+  #cineX{width:40px;height:40px;border-radius:50%;border:1px solid rgba(244,238,227,.35);
+    background:rgba(18,16,13,.7);color:var(--hueso);font:400 1rem/1 var(--sans);cursor:pointer;flex:none}
+  #cineX:hover{background:var(--brasa);border-color:var(--brasa)}
+  .cnav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:46px;height:46px;border-radius:50%;
+    border:1px solid rgba(244,238,227,.35);background:rgba(18,16,13,.7);cursor:pointer;display:grid;place-items:center;transition:opacity .4s}
+  .cnav svg{width:17px;height:17px;stroke:var(--hueso);stroke-width:2;fill:none}
+  .cnav:hover{background:var(--brasa);border-color:var(--brasa)}
+  .cnav.prev{left:12px}.cnav.next{right:12px}
+  #rotateHint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;display:none;
+    align-items:center;gap:9px;font:400 .62rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
+    color:var(--hueso);background:rgba(18,16,13,.88);border:1px solid rgba(242,165,26,.55);
+    padding:11px 15px;border-radius:999px}
+  #rotateHint.show{display:flex}
+  #rotateHint svg{width:16px;height:16px;stroke:var(--ambar);stroke-width:2;fill:none;animation:tilt 1.6s ease-in-out infinite}
+  @keyframes tilt{0%,100%{transform:rotate(0)}50%{transform:rotate(90deg)}}
 
   @media(max-width:700px){
-    .vcard.yt{--w:196px;--h:110px}
-    .vcard.reel{--w:138px;--h:242px}
-    .vcard.reel .n{font-size:2.2rem}
-    #hub b{font-size:2.4rem}
-    #count{display:none}
-    #hint{bottom:52px;left:12px;right:12px;font-size:.54rem}
-    #back{left:12px;transform:none;bottom:12px}
-    #panelBtn{right:12px;bottom:12px}
-    #panel{right:12px;bottom:54px}
+    .vcard.yt{--w:238px;--h:134px}
+    .vcard.reel{--w:156px;--h:277px}
+    .vcard.reel .n{font-size:2.3rem}
+    .vcard .cap{font-size:.66rem}
+    #hud .tag{display:none}
+    #hub b{font-size:1.9rem}
+    #hint{font-size:.53rem}
+    .navrow button{width:52px;height:52px}
+    #cineMeta{display:none}
   }
 </style>
 </head>
 <body>
 
-<div id="stage"><div id="world"></div></div>
+<div id="stage">
+  <div id="world">
+    <div id="floor"></div>
+    <div id="ceil"></div>
+  </div>
+</div>
 <div id="fog"></div>
 <div id="hub"><b>⇪<i>.</i></b><span>150+ proyectos</span></div>
 
 <header id="hud">
-  <div class="brand">⇪ BLOQQ MÁYUS <em>· LAB</em></div>
-  <div class="tag">Vortex v0 · prototipo temporal · no indexado</div>
-  <div id="count"></div>
+  <div class="brand">⇪ BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
+  <div class="tag">Lab temporal · no indexado</div>
+  <div class="right">
+    <span id="count">OBRA 01 / 64</span>
+    <a id="back" href="https://bloqqmayus.github.io/">← portfolio</a>
+  </div>
 </header>
 
-<div id="hint">arrastrá = girar + volar · rueda / pellizco = volar · click = reproducir</div>
-<a id="back" href="https://bloqqmayus.github.io/">← portfolio actual</a>
-
-<button id="panelBtn">⚙ parámetros</button>
-<aside id="panel">
-  <h3>Perillas del vortex</h3>
-  <label>piezas <b id="vN"></b></label>
-  <input id="pN" type="range" min="24" max="160" step="4">
-  <label>giro auto (°/s) <b id="vSpin"></b></label>
-  <input id="pSpin" type="range" min="0" max="24" step="1">
-  <label>vuelo auto (px/s) <b id="vFly"></b></label>
-  <input id="pFly" type="range" min="0" max="120" step="2">
-  <label>radio del túnel <b id="vR"></b></label>
-  <input id="pR" type="range" min="240" max="720" step="10">
-  <label>densidad (gap) <b id="vGap"></b></label>
-  <input id="pGap" type="range" min="80" max="280" step="5">
-  <div class="row">
-    <button id="reset">reset vista</button>
-    <button id="pause">pausar</button>
-  </div>
-  <p>Las tarjetas marcada «copia» son duplicados de demo: en la versión final cada una será un link real de tu historial. Los reels sin poster usan celdas tipográficas; cuando subas más videos, entra una miniatura por pieza.</p>
-</aside>
-
-<div id="modal">
-  <div id="modalBg"></div>
-  <div id="modalBox">
-    <button id="modalX" aria-label="Cerrar">✕</button>
-    <div id="modalMedia"></div>
-    <div id="modalInfo">
-      <span id="modalTitle"></span>
-      <span id="modalMeta"></span>
-      <a id="modalExt" target="_blank" rel="noopener">abrir ↗</a>
-    </div>
+<div id="navUI">
+  <div id="hint">deslizá <b>hacia arriba</b> para caminar la galería · <b>click en una obra</b> = pantalla completa</div>
+  <div class="navrow">
+    <button id="prevBtn" aria-label="Obra anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button id="nextBtn" aria-label="Obra siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
   </div>
 </div>
 
+<div id="dim"></div>
+<div id="fly" class="vcard fly" style="display:none"></div>
+
+<div id="cine">
+  <div id="cineMedia"></div>
+  <div id="cineBar">
+    <span id="cineTitle"></span>
+    <span id="cineMeta"></span>
+    <a id="cineExt" target="_blank" rel="noopener">abrir ↗</a>
+    <button id="cineX" aria-label="Cerrar">✕</button>
+  </div>
+  <button class="cnav prev" data-cnav="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="cnav next" data-cnav="1" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+</div>
+
+<div id="rotateHint"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M2 12a10 10 0 0 1 3-7"/></svg> girá el teléfono para verla horizontal</div>
+
 <script>
 /* ================================================================
-   VORTEX LAB — página TEMPORAL en /lab/vortex/ (no indexada).
-   Eliminar junto con el botón #labBtn antes de compartir en serio.
-   Túnel-espiral infinito: 1 transform por frame en #world,
-   tarjetas estáticas que se reciclan al pasar la cámara.
-   Ningún video descarga hasta el click (igual que el sitio nuevo).
+   GALERÍA 3D · LAB — página TEMPORAL en /lab/vortex/ (no indexada).
+   Corredor con obras derechas en ambas paredes. Avance: auto-paseo,
+   deslizamiento, rueda, botones ‹ ›. Click → vuelo a pantalla completa
+   (con rotación automática en móviles cuando el sistema lo permite).
+   Rendimiento: 3 transforms por frame (mundo + piso + techo), obras
+   estáticas que se reciclan, ningún video descarga hasta el click.
    ================================================================ */
 const UNIQUE = [{"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_01.mp4", "title": "HDP Ando Baires · 01", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_02.mp4", "title": "HDP Ando Baires · 02", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_03.mp4", "title": "HDP Ando Baires · 03", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_04.mp4", "title": "HDP Ando Baires · 04", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/CHECHA_Rifa.mp4", "title": "CHECHA Rifa", "author": "CHECHA", "group": "CHECHA", "is3d": true, "year": 2026}, {"kind": "yt", "yt": "WPE_jtKCojc", "title": "FACTS", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_FACTS.mp4", "title": "FACTS (vertical)", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": false, "year": 2026, "poster": "https://i.ytimg.com/vi/WPE_jtKCojc/hqdefault.jpg"}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/AL%20SALA%20BO_%20Oscar%20Wilde.mp4", "title": "Oscar Wilde", "author": "AL SALA BO", "group": "AL SALA BO", "is3d": false, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/LIHUEL%20YAIR_La%20vuelta%20del%20Zaraza.mp4", "title": "La vuelta del Zaraza", "author": "LIHUEL YAIR", "group": "LIHUEL YAIR", "is3d": false, "year": 2026}, {"kind": "yt", "yt": "Y2o1pV-uG6I", "title": "Palo Santo", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "2fJH1lNtwZk", "title": "Los Pérez García", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "8kXtlrirlvU", "title": "Rocafella", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "OvclU3AHgmY", "title": "Disney Plug", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "boEKNP9OH4I", "title": "Doc Pájaros Free", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "Yuh5ulasmBA", "title": "Los Beatles", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "HAxRAyv8Ll8", "title": "Tai Chi & Full Contact", "author": "iQ.NO1", "year": 2026}, {"kind": "yt", "yt": "6Y9qKhXRRI8", "title": "Esto No Se Acaba", "author": "Martocha × Dinámica", "year": 2026}, {"kind": "yt", "yt": "KyrM4OIZuv0", "title": "Caramelos de Colores", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "MrM7xpynHyo", "title": "Ser el Uno", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "5Xf4IfjnmFw", "title": "Hard-street", "author": "B13X & Showsa", "year": 2026}, {"kind": "yt", "yt": "Csj207PWog0", "title": "Showreel 2026", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "yt", "yt": "ngeHU0vpw_Q", "title": "Sopa de Papa", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "MV9vqqJxSEM", "title": "Rumpología", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "WE_XicUvCmA", "title": "Freestyle Navideño", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "SsO6Or59bhY", "title": "Escorpio", "author": "Mayor R", "year": 2025}, {"kind": "yt", "yt": "hTIK3eSvI3M", "title": "Tabla Esmeralda", "author": "B13X & Lasistta", "year": 2023}];
 
 const $ = id => document.getElementById(id);
-const stage = $("stage"), world = $("world"), modal = $("modal"), mMedia = $("modalMedia");
+const stage = $("stage"), world = $("world"), floor = $("floor"), ceil = $("ceil");
+const fly = $("fly"), dim = $("dim"), cine = $("cine"), cineMedia = $("cineMedia");
 const pad2 = n => String(n).padStart(2, "0");
 const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg>';
-const ARR = d => `<svg viewBox="0 0 24 24"><path d="${d}"/></svg>`;
-const GOLD = 137.508 * Math.PI / 180;   // ángulo áureo → espiral pareja sin alineaciones
-const PERSP = 1000, RECYCLE = 900;      // recicla cuando la tarjeta ya salió de cuadro
 
+const N = 64, G = 340, D = N * G;          // obras, paso, profundidad total
+const AUTO = 80;                            // paseo automático (px/s)
 const small = matchMedia("(max-width:700px)").matches;
-const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const P = { n: 64, spin: reduced ? 0 : 6, fly: reduced ? 0 : 30, radius: small ? 300 : 470, gap: 150 };
+const isTouch = matchMedia("(pointer:coarse)").matches || "ontouchstart" in window;
+const WALL = small ? 195 : 430;             // separación de las paredes
+const TILT = 16;                            // giro fijo y simétrico hacia el pasillo (nada random)
 
-let pool = [], cards = [], camZ = 0, spinA = 0, spinVel = 0, flyVel = 0;
-let paused = false, modalOpen = false, raf = 0, lastT = 0;
+let pool = [], cards = [], camZ = -520, flyVel = 0, targetZ = null;
+let cineOpen = false, phase = null, idx = 0, cineCard = null, cineAspect = 16 / 9;
+let raf = 0, lastT = 0, lastCount = "";
 
 /* ---------- construcción ---------- */
 function cardHTML(it, i) {
@@ -225,72 +239,80 @@ function cardHTML(it, i) {
   const yr = `<span class="yr">${it.year}</span>`;
   if (it.kind === "reel" && !it.poster) {
     return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
-      <span class="n">${pad2(i + 1)}</span>
-      <span class="t">${it.title}</span>
+      <span class="n">${pad2(i + 1)}</span><span class="t">${it.title}</span>
       <span class="g">${it.group} · reel${it.is3d ? " · 3D" : ""}</span>
       ${yr}${demo}<i class="pl">${PLAY}</i></article>`;
   }
   const img = it.poster || `https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg`;
   return `<article class="vcard ${it.kind}${it.poster ? " poster" : ""}${it.is3d ? " is3d" : ""}" data-i="${i}">
-    <img loading="lazy" decoding="async" src="${img}" alt="">
+    <img loading="lazy" decoding="async" src="${img}" alt="" draggable="false">
     ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
 }
 function build() {
   pool = [];
-  for (let i = 0; i < P.n; i++)
+  for (let i = 0; i < N; i++)
     pool.push({ ...UNIQUE[i % UNIQUE.length], copy: Math.floor(i / UNIQUE.length) });
-  world.innerHTML = pool.map(cardHTML).join("");
-  cards = [...world.children];
+  world.insertAdjacentHTML("beforeend", pool.map(cardHTML).join(""));
+  cards = [...world.querySelectorAll(".vcard")];
   layout();
-  $("count").textContent = `${P.n} piezas en órbita · ${UNIQUE.length} únicas` +
-    (P.n > UNIQUE.length ? ` · ${Math.ceil(P.n / UNIQUE.length)}× copias demo` : "");
 }
 function setTF(c) {
-  c.style.setProperty("--tf",
-    `translate3d(${c._x}px,${c._y}px,${c._z}px) rotateZ(${-c._th}rad)`);
+  c.style.setProperty("--tf", `translate3d(${c._x}px,0,${c._z}px) rotateY(${c._ry}deg)`);
 }
 function layout() {
   cards.forEach((c, i) => {
-    const th = i * GOLD;
-    const r = P.radius * (0.78 + 0.44 * ((i % 7) / 6));  // radio variable = espiral orgánica
-    c._th = th; c._x = Math.cos(th) * r; c._y = Math.sin(th) * r; c._z = -i * P.gap;
+    const left = i % 2 === 0;
+    c._x = left ? -WALL : WALL;
+    c._ry = left ? TILT : -TILT;
+    c._z = -i * G;
     setTF(c);
   });
 }
 
-/* ---------- loop: 1 sola escritura de transform por frame ---------- */
+/* ---------- loop ---------- */
 function tick(t) {
   raf = requestAnimationFrame(tick);
   const dt = Math.min((t - lastT) / 1000, .05) || .016;
   lastT = t;
-  if (paused || modalOpen || document.hidden) return;
-  spinA += (P.spin * Math.PI / 180 + spinVel) * dt;
-  camZ += (P.fly + flyVel) * dt;
-  spinVel *= Math.pow(.06, dt);   // decaimiento del momentum
-  flyVel *= Math.pow(.06, dt);
-  const D = P.n * P.gap;
+  if (cineOpen || document.hidden) return;
+  if (targetZ !== null) {
+    camZ += (targetZ - camZ) * Math.min(1, dt * 5);
+    if (Math.abs(targetZ - camZ) < 1) { camZ = targetZ; targetZ = null; }
+  } else if (!drag.down) {
+    camZ += (AUTO + flyVel) * dt;
+    flyVel *= Math.pow(.05, dt);
+  }
   for (const c of cards) {
     const z = c._z + camZ;
-    if (z > RECYCLE) { c._z -= D; setTF(c); }
-    else if (z < RECYCLE - D) { c._z += D; setTF(c); }
+    if (z > 620) { c._z -= D; setTF(c); }
+    else if (z < 620 - D) { c._z += D; setTF(c); }
   }
-  world.style.transform = `translateZ(${camZ}px) rotateZ(${spinA}rad)`;
+  world.style.transform = `translateZ(${camZ}px)`;
+  const off = -12000 - (camZ % 170);        // piso/techo infinitos y continuos
+  floor.style.transform = `translate3d(0,310px,${off}px) rotateX(90deg)`;
+  ceil.style.transform = `translate3d(0,-350px,${off}px) rotateX(90deg)`;
+  const n = ((Math.round(camZ / G) % N) + N) % N;
+  const label = `OBRA ${pad2(n + 1)} / ${N}`;
+  if (label !== lastCount) { $("count").textContent = label; lastCount = label; }
 }
 
-/* ---------- drag / rueda / pellizco ---------- */
+/* ---------- avance: drag vertical / rueda / pellizco / botones ---------- */
+const drag = { down: false };
 const pts = new Map();
-let down = false, sx = 0, sy = 0, lx = 0, ly = 0, lt = 0, moved = 0, pinchD = 0;
+let sx = 0, sy = 0, lx = 0, ly = 0, lt = 0, moved = 0, pinchD = 0;
+const seen = () => $("hint").classList.add("seen");
 stage.addEventListener("pointerdown", e => {
   pts.set(e.pointerId, e);
   if (pts.size === 1) {
-    down = true; moved = 0; sx = lx = e.clientX; sy = ly = e.clientY;
-    lt = performance.now(); spinVel = flyVel = 0;
+    drag.down = true; moved = 0; sx = lx = e.clientX; sy = ly = e.clientY;
+    lt = performance.now(); flyVel = 0; targetZ = null;
     stage.classList.add("dragging");
   } else if (pts.size === 2) {
     const [a, b] = [...pts.values()];
     pinchD = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
   }
   stage.setPointerCapture(e.pointerId);
+  seen();
 });
 stage.addEventListener("pointermove", e => {
   if (!pts.has(e.pointerId)) return;
@@ -301,94 +323,178 @@ stage.addEventListener("pointermove", e => {
     camZ += (d - pinchD) * 2.2; pinchD = d; moved = 99;
     return;
   }
-  if (!down) return;
+  if (!drag.down) return;
   const now = performance.now(), dt = Math.max(now - lt, 8) / 1000;
   const dx = e.clientX - lx, dy = e.clientY - ly;
   moved = Math.max(moved, Math.abs(e.clientX - sx) + Math.abs(e.clientY - sy));
-  spinA -= dx * .0034;
-  camZ -= dy * 1.7;                 // arrastrar hacia arriba = volar hacia el fondo
-  spinVel = -dx * .0034 / dt * .016;
+  camZ -= dy * 1.7;                          // deslizar hacia arriba = avanzar
   flyVel = -dy * 1.7 / dt * .016;
   lx = e.clientX; ly = e.clientY; lt = now;
 });
 const release = e => {
   pts.delete(e.pointerId);
   if (pts.size < 2) pinchD = 0;
-  if (!pts.size) { down = false; stage.classList.remove("dragging"); }
+  if (!pts.size) { drag.down = false; stage.classList.remove("dragging"); }
 };
 stage.addEventListener("pointerup", release);
 stage.addEventListener("pointercancel", release);
-stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; }, { passive: false });
+stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; targetZ = null; seen(); }, { passive: false });
+stage.addEventListener("dragstart", e => e.preventDefault());
+function step(d) {
+  targetZ = (d > 0 ? Math.floor(camZ / G) + 1 : Math.ceil(camZ / G) - 1) * G;
+  flyVel = 0; seen();
+}
+$("nextBtn").addEventListener("click", () => step(1));
+$("prevBtn").addEventListener("click", () => step(-1));
+addEventListener("keydown", e => {
+  if (cineOpen) {
+    if (e.key === "Escape") closeCine();
+    if (e.key === "ArrowRight") cineNav(1);
+    if (e.key === "ArrowLeft") cineNav(-1);
+    return;
+  }
+  if (e.key === "ArrowUp" || e.key === "ArrowRight") step(1);
+  if (e.key === "ArrowDown" || e.key === "ArrowLeft") step(-1);
+});
+
+/* ---------- click → vuelo a pantalla completa ---------- */
 stage.addEventListener("click", e => {
-  if (moved > 8) return;
+  if (moved > 8 || phase) return;
   const c = e.target.closest(".vcard");
-  if (c) openModal(+c.dataset.i);
+  if (c) openCine(+c.dataset.i);
 }, true);
 
-/* ---------- modal (click = única forma de reproducir) ---------- */
-let cur = 0;
-function openModal(i) {
-  cur = ((i % pool.length) + pool.length) % pool.length;
-  const it = pool[cur];
-  const nav = `<button class="mnav prev" data-nav="-1" aria-label="Anterior">${ARR("M15 5l-7 7 7 7")}</button>
-               <button class="mnav next" data-nav="1" aria-label="Siguiente">${ARR("M9 5l7 7-7 7")}</button>`;
-  if (it.kind === "reel") {
-    mMedia.className = "vert";
-    mMedia.innerHTML = `<video src="${it.src}" controls autoplay playsinline></video>${nav}`;
-    $("modalExt").href = it.src;
-  } else {
-    mMedia.className = "";
-    mMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0"
-      allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen
-      referrerpolicy="strict-origin-when-cross-origin"></iframe>${nav}`;
-    $("modalExt").href = `https://www.youtube.com/watch?v=${it.yt}`;
-  }
-  $("modalTitle").textContent = it.title;
-  $("modalMeta").textContent = `${it.author} · ${it.year} · ${it.kind === "reel" ? (it.is3d ? "reel 3D" : "reel") : "videoclip"} · ${pad2(cur + 1)}/${pad2(pool.length)}${it.copy ? " · copia demo" : ""}`;
-  modal.classList.add("open");
-  modalOpen = true;
+function fitRect(aspect) {
+  const vw = innerWidth, vh = innerHeight;
+  let w = vw, h = vw / aspect;
+  if (h > vh) { h = vh; w = vh * aspect; }
+  return { top: (vh - h) / 2, left: (vw - w) / 2, width: w, height: h };
 }
-function closeModal() {
-  modal.classList.remove("open");
-  mMedia.innerHTML = "";
-  modalOpen = false;
+function setRect(el, r) {
+  el.style.top = r.top + "px"; el.style.left = r.left + "px";
+  el.style.width = r.width + "px"; el.style.height = r.height + "px";
 }
-$("modalBg").addEventListener("click", closeModal);
-$("modalX").addEventListener("click", closeModal);
-mMedia.addEventListener("click", e => {
-  const b = e.target.closest("[data-nav]");
-  if (b) openModal(cur + +b.dataset.nav);
+function openCine(i) {
+  idx = ((i % N) + N) % N;
+  const it = pool[idx];
+  cineCard = cards[idx];
+  cineOpen = true; targetZ = null; flyVel = 0;
+  cineAspect = it.kind === "reel" ? 9 / 16 : 16 / 9;
+  dim.classList.add("on");
+  cine.classList.add("open", "flying");
+  /* clon visual de la obra → vuela desde su posición exacta hasta llenar la pantalla */
+  fly.className = "vcard fly " + it.kind + (it.poster ? " poster" : "") + (it.is3d ? " is3d" : "");
+  fly.innerHTML = cineCard.innerHTML;
+  fly.style.display = "block";
+  fly.classList.remove("gone");
+  fly.style.transition = "none";
+  setRect(fly, cineCard.getBoundingClientRect());
+  fly.style.borderRadius = "3px";
+  void fly.offsetWidth;
+  fly.style.transition = "";
+  setRect(fly, fitRect(cineAspect));
+  fly.style.borderRadius = "0";
+  phase = "in";
+  setTimeout(() => { if (phase === "in") land(); }, 850);
+  tryFsOrient(it);
+}
+fly.addEventListener("transitionend", e => {
+  if (e.propertyName !== "width" && e.propertyName !== "height") return;
+  if (phase === "in") land();
+  else if (phase === "out") finishClose();
 });
-addEventListener("keydown", e => {
-  if (e.key === "Escape") closeModal();
-  if (modalOpen && e.key === "ArrowRight") openModal(cur + 1);
-  if (modalOpen && e.key === "ArrowLeft") openModal(cur - 1);
+function land() {
+  phase = "open";
+  fly.classList.add("gone");
+  mount(pool[idx]);
+  cine.classList.remove("flying");
+}
+function mount(it) {
+  if (it.kind === "reel") {
+    cineMedia.innerHTML = `<video src="${it.src}" controls autoplay playsinline></video>`;
+    $("cineExt").href = it.src;
+  } else {
+    cineMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0"
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    $("cineExt").href = `https://www.youtube.com/watch?v=${it.yt}`;
+    fitIframe();
+  }
+  $("cineTitle").textContent = it.title;
+  $("cineMeta").textContent = `${it.author} · ${it.year} · ${it.kind === "reel" ? (it.is3d ? "reel 3D" : "reel") : "videoclip"} · obra ${pad2(idx + 1)}/${N}${it.copy ? " · copia demo" : ""}`;
+}
+function fitIframe() {
+  const f = cineMedia.querySelector("iframe");
+  if (f) { const r = fitRect(16 / 9); f.style.width = r.width + "px"; f.style.height = r.height + "px"; }
+}
+function cineNav(d) {
+  if (phase !== "open") return;
+  idx = ((idx + d) % N + N) % N;
+  cineCard = cards[idx];
+  const it = pool[idx];
+  cineAspect = it.kind === "reel" ? 9 / 16 : 16 / 9;
+  mount(it);
+  tryFsOrient(it);
+}
+document.querySelectorAll(".cnav").forEach(b =>
+  b.addEventListener("click", () => cineNav(+b.dataset.cnav)));
+$("cineX").addEventListener("click", () => closeCine());
+
+function closeCine(skipFly) {
+  if (phase !== "open") return;
+  cineMedia.innerHTML = "";                  // corta reproducción ya
+  if (skipFly) { finishClose(); return; }
+  phase = "out";
+  cine.classList.add("flying");
+  fly.classList.remove("gone");
+  fly.style.display = "block";
+  fly.style.transition = "none";
+  setRect(fly, fitRect(cineAspect));
+  fly.style.borderRadius = "0";
+  void fly.offsetWidth;
+  fly.style.transition = "";
+  setRect(fly, cineCard.getBoundingClientRect());
+  fly.style.borderRadius = "3px";
+  dim.classList.remove("on");
+  setTimeout(() => { if (phase === "out") finishClose(); }, 850);
+}
+function finishClose() {
+  phase = null;
+  fly.style.display = "none";
+  fly.classList.remove("gone");
+  cine.classList.remove("open", "flying");
+  dim.classList.remove("on");
+  $("rotateHint").classList.remove("show");
+  cineOpen = false;
+  try {
+    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
+    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+  } catch (e) {}
+}
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement && cineOpen && phase === "open") closeCine(true);
 });
 
-/* ---------- panel ---------- */
-const bind = (id, key, out, fmt, rebuild) => {
-  const inp = $(id);
-  inp.value = P[key];
-  $(out).textContent = fmt(P[key]);
-  inp.addEventListener("input", () => {
-    P[key] = +inp.value;
-    $(out).textContent = fmt(P[key]);
-    if (rebuild === "build") build();
-    else if (rebuild === "layout") layout();
-  });
-};
-bind("pN", "n", "vN", v => v, "build");
-bind("pSpin", "spin", "vSpin", v => v + "°");
-bind("pFly", "fly", "vFly", v => v);
-bind("pR", "radius", "vR", v => v + "px", "layout");
-bind("pGap", "gap", "vGap", v => v + "px", "layout");
-$("panelBtn").addEventListener("click", () => $("panel").classList.toggle("open"));
-$("reset").addEventListener("click", () => { camZ = 0; spinA = 0; spinVel = flyVel = 0; layout(); });
-$("pause").addEventListener("click", e => {
-  paused = !paused;
-  e.target.textContent = paused ? "reanudar" : "pausar";
+/* ---------- pantalla completa + rotación automática (móviles) ---------- */
+function hintMaybe(want) {
+  if (want === "landscape" && innerHeight > innerWidth) $("rotateHint").classList.add("show");
+}
+function tryFsOrient(it) {
+  if (!isTouch) return;                      // desktop: pantalla completa "de página", sin rotación
+  const want = it.kind === "yt" ? "landscape" : "portrait";
+  const lock = () => {
+    if (screen.orientation && screen.orientation.lock)
+      screen.orientation.lock(want).catch(() => hintMaybe(want));
+    else hintMaybe(want);
+  };
+  if (cine.requestFullscreen) cine.requestFullscreen().then(lock).catch(() => hintMaybe(want));
+  else hintMaybe(want);                      // iOS Safari: no fuerza giro → pista visual
+}
+addEventListener("resize", () => {
+  if (innerWidth > innerHeight) $("rotateHint").classList.remove("show");
+  if (phase === "in" || phase === "out") setRect(fly, fitRect(cineAspect));
+  if (cineOpen) fitIframe();
 });
-if (!small) $("panel").classList.add("open");
 
 /* ---------- arranque ---------- */
 build();
