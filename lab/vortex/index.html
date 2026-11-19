@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>GALERÍA 3D · LAB — BLOQQ MÁYUS</title>
-<meta name="robots" content="noindex, nofollow">
+<title>GALERÍA 3D — BLOQQ MÁYUS</title>
 <style>
   :root{
     --hollin:#1A1714; --carbon:#12100D; --brasa:#B8321F; --ambar:#F2A51A;
@@ -20,12 +19,9 @@
   #stage{position:fixed;inset:0;perspective:900px;perspective-origin:50% 50%;z-index:1;touch-action:none;cursor:grab}
   #stage.dragging{cursor:grabbing}
   #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
-  #floor,#ceil{position:absolute;left:50%;top:50%;width:2600px;height:24000px;margin:-12000px 0 0 -1300px;pointer-events:none}
-  #floor{background:
-    repeating-linear-gradient(0deg, rgba(244,238,227,.09) 0 1px, transparent 1px 170px),
-    repeating-linear-gradient(90deg, rgba(244,238,227,.045) 0 1px, transparent 1px 325px)}
-  #ceil{background:
-    repeating-linear-gradient(0deg, rgba(244,238,227,.05) 0 1px, transparent 1px 170px)}
+  /* ---------- espacio 3D: estrellas sutiles que pasan con el avance ---------- */
+  .star{position:absolute;left:50%;top:50%;background:var(--hueso);border-radius:50%;
+    pointer-events:none;will-change:transform}
 
   /* obras: siempre derechas, en las paredes del corredor */
   .vcard{
@@ -113,39 +109,21 @@
   #nextBtn{border-color:rgba(181,230,29,.5);color:var(--acid)}
   #nextBtn:hover{background:var(--acid);color:var(--carbon);border-color:var(--acid)}
 
-  /* ---------- capa de vuelo + cine ---------- */
-  #dim{position:fixed;inset:0;z-index:40;background:rgba(18,16,13,.82);opacity:0;pointer-events:none;transition:opacity .55s}
+  /* ---------- mesa de luz: 50% de oscuridad + preview al centro, sin controles ---------- */
+  #dim{position:fixed;inset:0;z-index:40;background:rgba(10,8,6,.5);opacity:0;pointer-events:none;transition:opacity .55s}
   #dim.on{opacity:1}
   .fly{position:fixed!important;z-index:45;margin:0!important;transform:none!important;
     transition:top .68s cubic-bezier(.65,0,.15,1),left .68s cubic-bezier(.65,0,.15,1),width .68s cubic-bezier(.65,0,.15,1),height .68s cubic-bezier(.65,0,.15,1),border-radius .68s,opacity .2s;
     box-shadow:0 30px 90px rgba(0,0,0,.6)}
   .fly.gone{opacity:0;pointer-events:none}
-  #cine{position:fixed;inset:0;z-index:50;background:#000;display:none}
+  #cine{position:fixed;inset:0;z-index:50;display:none}
   #cine.open{display:block}
   #cineMedia{position:absolute;inset:0;display:grid;place-items:center}
-  #cineMedia video{width:100%;height:100%;object-fit:contain}
-  #cineMedia iframe{border:0}
-  #cineBar{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:12px;
-    padding:14px 16px;background:linear-gradient(rgba(0,0,0,.82),transparent);transition:opacity .4s}
-  #cine.flying #cineBar,#cine.flying .cnav{opacity:0;pointer-events:none}
-  #cineTitle{font:700 .95rem/1.2 var(--sans)}
-  #cineMeta{font:400 .58rem/1.4 var(--mono);letter-spacing:.13em;color:var(--mut);text-transform:uppercase}
-  #cineExt{margin-left:auto;font:400 .58rem/1 var(--mono);letter-spacing:.1em;color:var(--ambar);text-decoration:none;text-transform:uppercase;white-space:nowrap}
-  #cineX{width:40px;height:40px;border-radius:50%;border:1px solid rgba(244,238,227,.35);
-    background:rgba(18,16,13,.7);color:var(--hueso);font:400 1rem/1 var(--sans);cursor:pointer;flex:none}
-  #cineX:hover{background:var(--brasa);border-color:var(--brasa)}
-  .cnav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:46px;height:46px;border-radius:50%;
-    border:1px solid rgba(244,238,227,.35);background:rgba(18,16,13,.7);cursor:pointer;display:grid;place-items:center;transition:opacity .4s}
-  .cnav svg{width:17px;height:17px;stroke:var(--hueso);stroke-width:2;fill:none}
-  .cnav:hover{background:var(--brasa);border-color:var(--brasa)}
-  .cnav.prev{left:12px}.cnav.next{right:12px}
-  #rotateHint{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;display:none;
-    align-items:center;gap:9px;font:400 .62rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;
-    color:var(--hueso);background:rgba(18,16,13,.88);border:1px solid rgba(242,165,26,.55);
-    padding:11px 15px;border-radius:999px}
-  #rotateHint.show{display:flex}
-  #rotateHint svg{width:16px;height:16px;stroke:var(--ambar);stroke-width:2;fill:none;animation:tilt 1.6s ease-in-out infinite}
-  @keyframes tilt{0%,100%{transform:rotate(0)}50%{transform:rotate(90deg)}}
+  #cineMedia video{border-radius:3px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.6);cursor:pointer}
+  #cineMedia iframe{border:0;border-radius:3px;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+  /* embebida en el portfolio: la ✕ del overlay reemplaza al link "portfolio" */
+  body.embedded #back{display:none}
+  body.embedded #hud{padding-right:64px}
 
   @media(max-width:700px){
     .vcard.yt{--w:238px;--h:134px}
@@ -156,24 +134,19 @@
     #hub b{font-size:1.9rem}
     #hint{font-size:.53rem}
     .navrow button{width:52px;height:52px}
-    #cineMeta{display:none}
   }
 </style>
 </head>
 <body>
 
 <div id="stage">
-  <div id="world">
-    <div id="floor"></div>
-    <div id="ceil"></div>
-  </div>
+  <div id="world"></div>
 </div>
 <div id="fog"></div>
-<div id="hub"><b>⇪<i>.</i></b><span>150+ proyectos</span></div>
+<div id="hub"><b>⇪<i>.</i></b><span>galería 3d</span></div>
 
 <header id="hud">
   <div class="brand">⇪ BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
-  <div class="tag">Lab temporal · no indexado</div>
   <div class="right">
     <span id="count">OBRA 01 / 64</span>
     <a id="back" href="https://bloqqmayus.github.io/">← portfolio</a>
@@ -181,7 +154,7 @@
 </header>
 
 <div id="navUI">
-  <div id="hint">deslizá <b>hacia arriba</b> para caminar la galería · <b>click en una obra</b> = pantalla completa</div>
+  <div id="hint">deslizá <b>hacia arriba</b> para caminar · <b>click en una obra</b> = mesa de luz · <b>click afuera</b> = volver</div>
   <div class="navrow">
     <button id="prevBtn" aria-label="Obra anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
     <button id="nextBtn" aria-label="Obra siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
@@ -191,33 +164,27 @@
 <div id="dim"></div>
 <div id="fly" class="vcard fly" style="display:none"></div>
 
+<!-- mesa de luz: preview al centro, sin botones; click en la preview = play/pausa invisible -->
 <div id="cine">
   <div id="cineMedia"></div>
-  <div id="cineBar">
-    <span id="cineTitle"></span>
-    <span id="cineMeta"></span>
-    <a id="cineExt" target="_blank" rel="noopener">abrir ↗</a>
-    <button id="cineX" aria-label="Cerrar">✕</button>
-  </div>
-  <button class="cnav prev" data-cnav="-1" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-  <button class="cnav next" data-cnav="1" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
 </div>
-
-<div id="rotateHint"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M2 12a10 10 0 0 1 3-7"/></svg> girá el teléfono para verla horizontal</div>
 
 <script>
 /* ================================================================
-   GALERÍA 3D · LAB — página TEMPORAL en /lab/vortex/ (no indexada).
-   Corredor con obras derechas en ambas paredes. Avance: auto-paseo,
-   deslizamiento, rueda, botones ‹ ›. Click → vuelo a pantalla completa
-   (con rotación automática en móviles cuando el sistema lo permite).
-   Rendimiento: 3 transforms por frame (mundo + piso + techo), obras
-   estáticas que se reciclan, ningún video descarga hasta el click.
+   GALERÍA 3D — BLOQQ MÁYUS · función oficial del portfolio.
+   Se activa con la flecha de la sección Contacto (overlay iframe).
+   Espacio 3D con estrellas sutiles que pasan; obras derechas en las
+   paredes del corredor. Avance: auto-paseo, deslizamiento, rueda, ‹ ›.
+   Click en una obra → vuela al centro en modo "mesa de luz" (50% de
+   oscuridad, autoplay, sin botones: click en la preview = play/pausa
+   invisible; click afuera = vuelve a la galería).
+   Rendimiento: transforms del mundo + reciclado de obras/estrellas;
+   ningún video descarga hasta el click (posters en las paredes).
    ================================================================ */
 const UNIQUE = [{"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_01.mp4", "title": "HDP Ando Baires · 01", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_02.mp4", "title": "HDP Ando Baires · 02", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_03.mp4", "title": "HDP Ando Baires · 03", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_HDP%20Ando%20Baires_04.mp4", "title": "HDP Ando Baires · 04", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": true, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/CHECHA_Rifa.mp4", "title": "CHECHA Rifa", "author": "CHECHA", "group": "CHECHA", "is3d": true, "year": 2026}, {"kind": "yt", "yt": "WPE_jtKCojc", "title": "FACTS", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/BLOQQ%20M%C3%81YUS_FACTS.mp4", "title": "FACTS (vertical)", "author": "BLOQQ MÁYUS", "group": "BLOQQ MÁYUS", "is3d": false, "year": 2026, "poster": "https://i.ytimg.com/vi/WPE_jtKCojc/hqdefault.jpg"}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/AL%20SALA%20BO_%20Oscar%20Wilde.mp4", "title": "Oscar Wilde", "author": "AL SALA BO", "group": "AL SALA BO", "is3d": false, "year": 2026}, {"kind": "reel", "src": "https://bloqqmayus.github.io/assets/reels/LIHUEL%20YAIR_La%20vuelta%20del%20Zaraza.mp4", "title": "La vuelta del Zaraza", "author": "LIHUEL YAIR", "group": "LIHUEL YAIR", "is3d": false, "year": 2026}, {"kind": "yt", "yt": "Y2o1pV-uG6I", "title": "Palo Santo", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "2fJH1lNtwZk", "title": "Los Pérez García", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "8kXtlrirlvU", "title": "Rocafella", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "OvclU3AHgmY", "title": "Disney Plug", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "boEKNP9OH4I", "title": "Doc Pájaros Free", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "Yuh5ulasmBA", "title": "Los Beatles", "author": "Tierras Raras", "year": 2026}, {"kind": "yt", "yt": "HAxRAyv8Ll8", "title": "Tai Chi & Full Contact", "author": "iQ.NO1", "year": 2026}, {"kind": "yt", "yt": "6Y9qKhXRRI8", "title": "Esto No Se Acaba", "author": "Martocha × Dinámica", "year": 2026}, {"kind": "yt", "yt": "KyrM4OIZuv0", "title": "Caramelos de Colores", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "MrM7xpynHyo", "title": "Ser el Uno", "author": "Musher", "year": 2026}, {"kind": "yt", "yt": "5Xf4IfjnmFw", "title": "Hard-street", "author": "B13X & Showsa", "year": 2026}, {"kind": "yt", "yt": "Csj207PWog0", "title": "Showreel 2026", "author": "BLOQQ MÁYUS", "year": 2026}, {"kind": "yt", "yt": "ngeHU0vpw_Q", "title": "Sopa de Papa", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "MV9vqqJxSEM", "title": "Rumpología", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "WE_XicUvCmA", "title": "Freestyle Navideño", "author": "Musher", "year": 2025}, {"kind": "yt", "yt": "SsO6Or59bhY", "title": "Escorpio", "author": "Mayor R", "year": 2025}, {"kind": "yt", "yt": "hTIK3eSvI3M", "title": "Tabla Esmeralda", "author": "B13X & Lasistta", "year": 2023}];
 
 const $ = id => document.getElementById(id);
-const stage = $("stage"), world = $("world"), floor = $("floor"), ceil = $("ceil");
+const stage = $("stage"), world = $("world");
 const fly = $("fly"), dim = $("dim"), cine = $("cine"), cineMedia = $("cineMedia");
 const pad2 = n => String(n).padStart(2, "0");
 const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg>';
@@ -234,24 +201,46 @@ let cineOpen = false, phase = null, idx = 0, cineCard = null, cineAspect = 16 / 
 let raf = 0, lastT = 0, lastCount = "";
 
 /* ---------- construcción ---------- */
+/* toda obra muestra imagen: los reels derivan su poster de assets/posters/ */
+const posterOf = it => it.poster || (it.kind === "reel"
+  ? it.src.replace("/assets/reels/", "/assets/posters/").replace(/\.mp4$/i, ".jpg")
+  : `https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg`);
 function cardHTML(it, i) {
   const demo = it.copy ? '<span class="demo">copia</span>' : "";
   const yr = `<span class="yr">${it.year}</span>`;
-  if (it.kind === "reel" && !it.poster) {
+  const img = posterOf(it);
+  if (it.kind === "reel" && !img) {
     return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
       <span class="n">${pad2(i + 1)}</span><span class="t">${it.title}</span>
       <span class="g">${it.group} · reel${it.is3d ? " · 3D" : ""}</span>
       ${yr}${demo}<i class="pl">${PLAY}</i></article>`;
   }
-  const img = it.poster || `https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg`;
-  return `<article class="vcard ${it.kind}${it.poster ? " poster" : ""}${it.is3d ? " is3d" : ""}" data-i="${i}">
+  return `<article class="vcard ${it.kind} poster${it.is3d ? " is3d" : ""}" data-i="${i}">
     <img loading="lazy" decoding="async" src="${img}" alt="" draggable="false">
     ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
+}
+/* estrellas: puntos sutiles en el volumen del corredor, pasan con el avance */
+const STARS = 150;
+let stars = [];
+function buildStars() {
+  let h = "";
+  for (let i = 0; i < STARS; i++) {
+    const sz = (Math.random() * 1.6 + .8).toFixed(1);
+    const op = (Math.random() * .5 + .15).toFixed(2);
+    const x = Math.round((Math.random() * 2 - 1) * 1500);
+    const y = Math.round((Math.random() * 2 - 1) * 900);
+    const z = Math.round(-Math.random() * D);
+    h += `<i class="star" data-s="${i}" data-x="${x}" data-y="${y}" data-z="${z}"
+      style="width:${sz}px;height:${sz}px;opacity:${op};transform:translate3d(${x}px,${y}px,${z}px)"></i>`;
+  }
+  world.insertAdjacentHTML("afterbegin", h);
+  stars = [...world.querySelectorAll(".star")];
 }
 function build() {
   pool = [];
   for (let i = 0; i < N; i++)
     pool.push({ ...UNIQUE[i % UNIQUE.length], copy: Math.floor(i / UNIQUE.length) });
+  buildStars();
   world.insertAdjacentHTML("beforeend", pool.map(cardHTML).join(""));
   cards = [...world.querySelectorAll(".vcard")];
   layout();
@@ -287,10 +276,14 @@ function tick(t) {
     if (z > 620) { c._z -= D; setTF(c); }
     else if (z < 620 - D) { c._z += D; setTF(c); }
   }
+  for (const s of stars) {
+    const z = +s.dataset.z + camZ;
+    if (z > 620 || z < 620 - D) {
+      s.dataset.z = z > 620 ? +s.dataset.z - D : +s.dataset.z + D;
+      s.style.transform = `translate3d(${s.dataset.x}px,${s.dataset.y}px,${s.dataset.z}px)`;
+    }
+  }
   world.style.transform = `translateZ(${camZ}px)`;
-  const off = -12000 - (camZ % 170);        // piso/techo infinitos y continuos
-  floor.style.transform = `translate3d(0,310px,${off}px) rotateX(90deg)`;
-  ceil.style.transform = `translate3d(0,-350px,${off}px) rotateX(90deg)`;
   const n = ((Math.round(camZ / G) % N) + N) % N;
   const label = `OBRA ${pad2(n + 1)} / ${N}`;
   if (label !== lastCount) { $("count").textContent = label; lastCount = label; }
@@ -349,15 +342,14 @@ $("prevBtn").addEventListener("click", () => step(-1));
 addEventListener("keydown", e => {
   if (cineOpen) {
     if (e.key === "Escape") closeCine();
-    if (e.key === "ArrowRight") cineNav(1);
-    if (e.key === "ArrowLeft") cineNav(-1);
     return;
   }
+  if (e.key === "Escape" && window.parent && window.parent !== window && parent.galClose) { parent.galClose(); return; }
   if (e.key === "ArrowUp" || e.key === "ArrowRight") step(1);
   if (e.key === "ArrowDown" || e.key === "ArrowLeft") step(-1);
 });
 
-/* ---------- click → vuelo a pantalla completa ---------- */
+/* ---------- click → vuelo al centro · mesa de luz ---------- */
 stage.addEventListener("click", e => {
   if (moved > 8 || phase) return;
   const c = e.target.closest(".vcard");
@@ -365,10 +357,11 @@ stage.addEventListener("click", e => {
 }, true);
 
 function fitRect(aspect) {
-  const vw = innerWidth, vh = innerHeight;
+  /* la preview respeta el aspecto original y deja aire alrededor (mesa de luz) */
+  const vw = innerWidth * .94, vh = innerHeight * .92;
   let w = vw, h = vw / aspect;
   if (h > vh) { h = vh; w = vh * aspect; }
-  return { top: (vh - h) / 2, left: (vw - w) / 2, width: w, height: h };
+  return { top: (innerHeight - h) / 2, left: (innerWidth - w) / 2, width: w, height: h };
 }
 function setRect(el, r) {
   el.style.top = r.top + "px"; el.style.left = r.left + "px";
@@ -381,9 +374,9 @@ function openCine(i) {
   cineOpen = true; targetZ = null; flyVel = 0;
   cineAspect = it.kind === "reel" ? 9 / 16 : 16 / 9;
   dim.classList.add("on");
-  cine.classList.add("open", "flying");
-  /* clon visual de la obra → vuela desde su posición exacta hasta llenar la pantalla */
-  fly.className = "vcard fly " + it.kind + (it.poster ? " poster" : "") + (it.is3d ? " is3d" : "");
+  cine.classList.add("open");
+  /* clon visual de la obra → vuela desde su posición exacta hasta el centro */
+  fly.className = "vcard fly " + it.kind + " poster" + (it.is3d ? " is3d" : "");
   fly.innerHTML = cineCard.innerHTML;
   fly.style.display = "block";
   fly.classList.remove("gone");
@@ -393,10 +386,8 @@ function openCine(i) {
   void fly.offsetWidth;
   fly.style.transition = "";
   setRect(fly, fitRect(cineAspect));
-  fly.style.borderRadius = "0";
   phase = "in";
   setTimeout(() => { if (phase === "in") land(); }, 850);
-  tryFsOrient(it);
 }
 fly.addEventListener("transitionend", e => {
   if (e.propertyName !== "width" && e.propertyName !== "height") return;
@@ -407,54 +398,43 @@ function land() {
   phase = "open";
   fly.classList.add("gone");
   mount(pool[idx]);
-  cine.classList.remove("flying");
 }
+/* sin controles: video nativo autoplay (loop) o embed de YouTube sin barra.
+   Click en la preview = play/pausa invisible. Click afuera = volver. */
 function mount(it) {
+  const r = fitRect(it.kind === "reel" ? 9 / 16 : 16 / 9);
+  const sz = `width:${r.width}px;height:${r.height}px`;
   if (it.kind === "reel") {
-    cineMedia.innerHTML = `<video src="${it.src}" controls autoplay playsinline></video>`;
-    $("cineExt").href = it.src;
+    const src = it.src.replace("/assets/reels/", "/assets/reels-lo/");
+    cineMedia.innerHTML = `<video src="${src}" style="${sz}" autoplay loop playsinline></video>`;
+    const v = cineMedia.querySelector("video");
+    if (v && v.play) v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });
   } else {
-    cineMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0"
-      allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen
+    cineMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0&controls=0&playsinline=1"
+      style="${sz}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
-    $("cineExt").href = `https://www.youtube.com/watch?v=${it.yt}`;
-    fitIframe();
   }
-  $("cineTitle").textContent = it.title;
-  $("cineMeta").textContent = `${it.author} · ${it.year} · ${it.kind === "reel" ? (it.is3d ? "reel 3D" : "reel") : "videoclip"} · obra ${pad2(idx + 1)}/${N}${it.copy ? " · copia demo" : ""}`;
 }
-function fitIframe() {
-  const f = cineMedia.querySelector("iframe");
-  if (f) { const r = fitRect(16 / 9); f.style.width = r.width + "px"; f.style.height = r.height + "px"; }
-}
-function cineNav(d) {
+cineMedia.addEventListener("click", e => {
   if (phase !== "open") return;
-  idx = ((idx + d) % N + N) % N;
-  cineCard = cards[idx];
-  const it = pool[idx];
-  cineAspect = it.kind === "reel" ? 9 / 16 : 16 / 9;
-  mount(it);
-  tryFsOrient(it);
-}
-document.querySelectorAll(".cnav").forEach(b =>
-  b.addEventListener("click", () => cineNav(+b.dataset.cnav)));
-$("cineX").addEventListener("click", () => closeCine());
+  const v = cineMedia.querySelector("video");
+  if (v && (e.target === v || v.contains(e.target))) { v.paused ? v.play() : v.pause(); }
+});
+cine.addEventListener("click", e => {
+  if (phase === "open" && (e.target === cine || e.target === cineMedia)) closeCine();
+});
 
-function closeCine(skipFly) {
+function closeCine() {
   if (phase !== "open") return;
   cineMedia.innerHTML = "";                  // corta reproducción ya
-  if (skipFly) { finishClose(); return; }
   phase = "out";
-  cine.classList.add("flying");
   fly.classList.remove("gone");
   fly.style.display = "block";
   fly.style.transition = "none";
   setRect(fly, fitRect(cineAspect));
-  fly.style.borderRadius = "0";
   void fly.offsetWidth;
   fly.style.transition = "";
   setRect(fly, cineCard.getBoundingClientRect());
-  fly.style.borderRadius = "3px";
   dim.classList.remove("on");
   setTimeout(() => { if (phase === "out") finishClose(); }, 850);
 }
@@ -462,41 +442,21 @@ function finishClose() {
   phase = null;
   fly.style.display = "none";
   fly.classList.remove("gone");
-  cine.classList.remove("open", "flying");
+  cine.classList.remove("open");
   dim.classList.remove("on");
-  $("rotateHint").classList.remove("show");
-  cineOpen = false;
-  try {
-    if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen();
-    if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-  } catch (e) {}
-}
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement && cineOpen && phase === "open") closeCine(true);
-});
-
-/* ---------- pantalla completa + rotación automática (móviles) ---------- */
-function hintMaybe(want) {
-  if (want === "landscape" && innerHeight > innerWidth) $("rotateHint").classList.add("show");
-}
-function tryFsOrient(it) {
-  if (!isTouch) return;                      // desktop: pantalla completa "de página", sin rotación
-  const want = it.kind === "yt" ? "landscape" : "portrait";
-  const lock = () => {
-    if (screen.orientation && screen.orientation.lock)
-      screen.orientation.lock(want).catch(() => hintMaybe(want));
-    else hintMaybe(want);
-  };
-  if (cine.requestFullscreen) cine.requestFullscreen().then(lock).catch(() => hintMaybe(want));
-  else hintMaybe(want);                      // iOS Safari: no fuerza giro → pista visual
+  cineOpen = false;                          // el paseo se reanuda solo
 }
 addEventListener("resize", () => {
-  if (innerWidth > innerHeight) $("rotateHint").classList.remove("show");
   if (phase === "in" || phase === "out") setRect(fly, fitRect(cineAspect));
-  if (cineOpen) fitIframe();
+  if (phase === "open") {
+    const m = cineMedia.firstElementChild;
+    if (m) { const r = fitRect(cineAspect); m.style.width = r.width + "px"; m.style.height = r.height + "px"; }
+  }
 });
 
 /* ---------- arranque ---------- */
+/* embebida en el portfolio (iframe): la ✕ del overlay cierra; Esc también */
+if (window.parent && window.parent !== window) document.body.classList.add("embedded");
 build();
 raf = requestAnimationFrame(t => { lastT = t; tick(t); });
 </script>

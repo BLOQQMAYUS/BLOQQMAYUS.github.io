@@ -252,15 +252,6 @@
     12%{box-shadow:0 0 0 3px var(--ambar);background:rgba(242,165,26,.07)}
     55%{box-shadow:0 0 0 3px var(--brasa);background:rgba(184,50,31,.06)}
     100%{box-shadow:0 0 0 0 rgba(184,50,31,0);background:transparent}}
-  /* ===== TEMPORAL · botón Vortex Lab — ELIMINAR (junto con #labBtn y /lab/) antes de compartir el sitio ===== */
-  #labBtn{position:fixed;left:14px;bottom:14px;z-index:90;display:flex;align-items:center;gap:8px;
-    font-family:var(--mono);font-size:.6rem;line-height:1;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;
-    color:var(--acid);background:rgba(18,16,13,.82);border:1px solid rgba(181,230,29,.45);
-    padding:9px 12px;border-radius:2px;backdrop-filter:blur(4px)}
-  #labBtn i{font-style:normal;color:var(--mut);letter-spacing:.1em}
-  #labBtn:hover{background:var(--acid);color:var(--carbon)}
-  #labBtn:hover i{color:var(--carbon)}
-  @media(max-width:700px){#labBtn{left:10px;bottom:10px;padding:8px 10px;font-size:.55rem}}
   .contact-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
   .socials{display:flex;justify-content:center;gap:14px;margin-top:40px;flex-wrap:wrap}
   .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:11px 20px;color:var(--mut);transition:.2s}
@@ -343,6 +334,16 @@
   .modal-cap a.ext:hover{color:#f7b83f}
   .modal-x{position:absolute;top:14px;right:14px;z-index:5;width:40px;height:40px;border-radius:50%;background:rgba(26,23,20,.8);border:1px solid var(--line);display:grid;place-items:center;font-size:1.1rem;transition:.2s}
   .modal-x:hover{background:var(--acc);color:var(--bg)}
+
+  /* ---------- galería 3D · overlay activado por la flecha de contacto ---------- */
+  #galBox{position:fixed;inset:0;z-index:400;background:var(--hollin);opacity:0;pointer-events:none;transition:opacity .45s}
+  #galBox.open{opacity:1;pointer-events:auto}
+  #galFrame{width:100%;height:100%;border:0;display:block}
+  #galX{position:fixed;top:12px;right:12px;z-index:410;width:44px;height:44px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(18,16,13,.8);color:var(--txt);display:grid;place-items:center;transition:.2s}
+  #galX:hover{background:var(--brasa);border-color:var(--brasa)}
+  #galX svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+  .led-cap{font-family:var(--mono);font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mut);margin-top:10px}
 
   /* ---------- reveal ---------- */
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.6,.2,1)}
@@ -482,15 +483,16 @@
     </div>
   </section>
 
-  <!-- ============ 06 · CONTACTO ============ -->
+  <!-- ============ 05 · CONTACTO ============ -->
   <section id="contacto" class="contact">
     <div class="wrap reveal" id="contactBox">
       <div class="kicker">05 · Contacto</div>
       <h2>activá el bloqq <em>MÁYUS</em></h2>
-      <button class="led-arrow" id="ledBtn" aria-label="Destacar la caja de contacto" title="Destacar contacto">
+      <button class="led-arrow" id="ledBtn" aria-label="Abrir la Galería 3D" title="Abrir la Galería 3D">
         <svg viewBox="0 0 24 24"><path d="M12 4v14M6 12l6 6 6-6"/></svg>
         <i class="led"></i>
       </button>
+      <div class="led-cap">galería 3d</div>
       <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
       <div class="contact-cta">
         <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
@@ -514,8 +516,11 @@
   </div>
 </footer>
 
-<!-- TEMPORAL · acceso al Vortex Lab — eliminar antes de compartir el sitio en serio -->
-<a id="labBtn" href="lab/vortex/" target="_blank" rel="noopener" title="Prototipo temporal — se elimina antes de compartir el sitio">⇪ Vortex Lab <i>· temporal</i></a>
+<!-- Galería 3D · función oficial: la activa la flecha de la sección contacto -->
+<div id="galBox" aria-hidden="true">
+  <iframe id="galFrame" title="Galería 3D — BLOQQ MÁYUS" allow="autoplay; fullscreen"></iframe>
+  <button type="button" id="galX" aria-label="Cerrar galería"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
 
 <!-- previsualización limpia de reels: fondo 50% + video al centro ya reproduciendo, sin controles -->
 <div id="rlBox" aria-hidden="true">
@@ -625,11 +630,7 @@ document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
    cronológico como archivo de datos; los videos nuevos entran al pool
    y se mezclan con el resto, sin prioridad por fecha ni antigüedad. */
 const workGrid = document.getElementById("workGrid");
-const workOrder = CONFIG.films.map((_, i) => i);
-for (let i = workOrder.length - 1; i > 0; i--) {
-  const j = Math.floor(Math.random() * (i + 1));
-  [workOrder[i], workOrder[j]] = [workOrder[j], workOrder[i]];
-}
+const workOrder = shuffle(CONFIG.films.map((_, i) => i));
 workGrid.innerHTML = workOrder.map((fi, pos) => {
   const f = CONFIG.films[fi];
   return `
@@ -685,6 +686,14 @@ workGrid.addEventListener("click", e => {
 
 /* ---- reels · auto-descubrimiento + dos film strips (3D / Videoclips) ---- */
 const pad2 = n => String(n).padStart(2, "0");
+/* mezcla Fisher–Yates — regla permanente de orden aleatorio en todo el sitio */
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 const REEL_API = "https://api.github.com/repos/BLOQQMAYUS/BLOQQMAYUS.github.io/contents/assets/reels";
 const FALLBACK_REELS = ["BLOQQ MÁYUS_HDP Ando Baires_01.mp4", "BLOQQ MÁYUS_HDP Ando Baires_02.mp4", "BLOQQ MÁYUS_HDP Ando Baires_03.mp4", "BLOQQ MÁYUS_HDP Ando Baires_04.mp4", "CHECHA_Rifa.mp4", "AL SALA BO_ Oscar Wilde.mp4", "BLOQQ MÁYUS_FACTS.mp4", "LIHUEL YAIR_La vuelta del Zaraza.mp4"];
 const is3D = n => /HDP/i.test(n) || /CHECHA/i.test(n);
@@ -807,7 +816,7 @@ function scanStop() {
   if (scanCur) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); scanCur = null; }
 }
 function scanNext() {
-  if (modal.classList.contains("open") || ltOpen || document.hidden) { scanStop(); return; }
+  if (modal.classList.contains("open") || ltOpen || galOpen || document.hidden) { scanStop(); return; }
   const n = scanPool.length;
   if (!n) return;
   let next = null;
@@ -1059,9 +1068,12 @@ async function loadReels() {  let names = FALLBACK_REELS;
     title: reelTitle(n),
     group: is3D(n) ? (/CHECHA/i.test(n) ? "CHECHA RIFA" : "HDP ANDO BAIRES") : ""
   }));
-  const td = items.filter(i => i.group).sort((a, b) => (a.group === "HDP ANDO BAIRES" ? -1 : 1));
+  /* REGLA PERMANENTE: 3D → CHECHA Rifa siempre primera, el resto aleatorio.
+     Videoclips verticales → siempre aleatorio. Los reels nuevos entran a la mezcla. */
+  const g3 = items.filter(i => i.group);
+  const td = [...g3.filter(i => i.group === "CHECHA RIFA"), ...shuffle(g3.filter(i => i.group !== "CHECHA RIFA"))];
   buildStrip(document.getElementById("3d"), td);
-  buildStrip(document.getElementById("reels"), items.filter(i => !i.group));
+  buildStrip(document.getElementById("reels"), shuffle(items.filter(i => !i.group)));
   scanNext();
 }
 
@@ -1114,17 +1126,34 @@ function closeModal() {
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
-document.addEventListener("keydown", e => { if (e.key === "Escape") { closeModal(); closeReel(); closeLT(); } });
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (galOpen) { closeGal(); return; } closeModal(); closeReel(); closeLT(); } });
 document.getElementById("showreelBtn").addEventListener("click", () =>
   openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
 
-/* ---- LED: destacar la box de contacto ---- */
-const contactBox = document.getElementById("contactBox");
-document.getElementById("ledBtn").addEventListener("click", () => {
-  contactBox.classList.remove("lit");
-  void contactBox.offsetWidth;
-  contactBox.classList.add("lit");
-});
+/* ---- Galería 3D · la activa la flecha de contacto (overlay a pantalla completa) ---- */
+const galBox = document.getElementById("galBox");
+const galFrame = document.getElementById("galFrame");
+let galOpen = false;
+function openGal() {
+  if (galOpen) return;
+  galOpen = true; scanStop();
+  galFrame.src = "lab/vortex/";           // carga recién al abrir: cero procesos de fondo
+  galBox.classList.add("open");
+  galBox.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+function closeGal() {
+  if (!galOpen) return;
+  galOpen = false;
+  galBox.classList.remove("open");
+  galBox.setAttribute("aria-hidden", "true");
+  galFrame.src = "";                      // descarga la galería: nada sigue corriendo
+  document.body.style.overflow = ltOpen ? "hidden" : "";
+  scanNext();
+}
+window.galClose = closeGal;               // la galería (iframe) se cierra sola con Esc
+document.getElementById("ledBtn").addEventListener("click", openGal);
+document.getElementById("galX").addEventListener("click", closeGal);
 
 /* ---- ninguna preview seleccionable ni arrastrable ---- */
 document.querySelectorAll("img").forEach(i => { i.draggable = false; });

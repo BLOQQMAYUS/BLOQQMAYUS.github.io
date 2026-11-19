@@ -12,6 +12,15 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
   `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
   El pliegue "Ver los N trabajos" muestra las primeras 12 del orden mezclado.
+- **02 · 3D: CHECHA Rifa siempre primera; el resto, aleatorio en cada carga.**
+  **03 · Videoclips verticales: siempre aleatorio.** Los reels nuevos que se
+  agreguen a `assets/reels/` entran a la mezcla automáticamente.
+- **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
+  la activa el botón flecha de la sección Contacto, como overlay a pantalla
+  completa (`#galBox` + iframe a `lab/vortex/`, que se descarga al cerrar).
+  Fondo: espacio 3D con estrellas sutiles. Click en una obra → mesa de luz
+  (50% de oscuridad, vuelo al centro, autoplay sin controles; click en la
+  preview = play/pausa invisible; click afuera = volver a la galería).
 - **Toda preview respeta la relación de aspecto original del archivo**
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - Las mesas de luz del Toolbox son "mesas de ideas" por rama, con placeholders
