@@ -144,25 +144,48 @@
   .esc-links{display:flex;gap:12px;flex-wrap:wrap}
   .esc-links .btn{padding:12px 22px;font-size:.85rem}
 
-  /* ---------- vertical / social ---------- */
-  .vert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-  @media(max-width:980px){.vert-grid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:520px){.vert-grid{grid-template-columns:1fr 1fr;gap:14px}}
-  .phone{position:relative;aspect-ratio:9/16;border-radius:26px;overflow:hidden;border:3px solid #3A332B;background:var(--card);cursor:pointer;transition:transform .35s,box-shadow .35s;box-shadow:0 10px 30px rgba(0,0,0,.35)}
-  .phone:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.55)}
-  .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:34%;height:14px;background:var(--bg);border-radius:999px;z-index:3;border:1px solid rgba(244,238,227,.08)}
-  .phone img{width:100%;height:100%;object-fit:cover;transition:transform .6s;filter:saturate(.85)}
-  .phone:hover img{transform:scale(1.05)}
-  .phone::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,23,20,.3) 0%,transparent 30%,transparent 55%,rgba(26,23,20,.88) 100%);z-index:1}
-  .platform{position:absolute;top:34px;right:12px;z-index:3;width:32px;height:32px;border-radius:10px;background:rgba(26,23,20,.75);backdrop-filter:blur(6px);display:grid;place-items:center;border:1px solid var(--line)}
-  .platform svg{width:16px;height:16px;fill:var(--txt)}
-  .phone-info{position:absolute;left:14px;right:14px;bottom:14px;z-index:3}
-  .phone-info h3{font-size:.95rem;font-weight:700;line-height:1.25}
-  .views{font-family:var(--mono);font-size:.66rem;color:var(--acc);letter-spacing:.12em;margin-top:5px;display:flex;align-items:center;gap:6px;text-transform:uppercase}
-  .views svg{width:12px;height:12px;fill:var(--acc)}
-  .vert-note{margin-top:34px;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-  .vert-note i{color:var(--rosa);font-style:normal}
-  .vert-note a{color:var(--acc);border-bottom:1px solid rgba(242,165,26,.4)}
+  /* ---------- vertical · film strip interactivo ---------- */
+  .vertical{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
+  .h-916{color:var(--acc);font-size:clamp(3rem,8vw,6rem);letter-spacing:-.03em;line-height:1}
+  .strip-wrap{position:relative;margin-top:8px}
+  .strip{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;cursor:grab;touch-action:pan-y;
+    scroll-snap-type:x proximity;padding:14px 0 30px;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+  .strip::-webkit-scrollbar{display:none}
+  .strip.dragging{cursor:grabbing;scroll-snap-type:none}
+  .strip-track{display:flex;gap:26px;width:max-content;margin:0 auto;padding:0 max(24px,calc((100vw - 1200px)/2 + 24px))}
+  .reel-card{position:relative;width:min(320px,74vw);aspect-ratio:9/16;border-radius:28px;overflow:hidden;border:3px solid #3A332B;background:#12100D;flex:none;scroll-snap-align:center;cursor:pointer;
+    transition:transform .45s cubic-bezier(.2,.7,.2,1),box-shadow .45s;box-shadow:0 14px 40px rgba(0,0,0,.4)}
+  .reel-card:hover{transform:translateY(-12px) scale(1.02);box-shadow:0 30px 70px rgba(0,0,0,.6)}
+  .reel-card video{width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .7s}
+  .reel-card.ready video{opacity:1}
+  .reel-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,16,13,.4),transparent 26%,transparent 72%,rgba(18,16,13,.55));pointer-events:none;z-index:1}
+  .reel-ph{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(160deg,#26211A,#12100D);transition:opacity .6s;z-index:1}
+  .reel-ph i{width:60px;height:60px;border-radius:50%;background:var(--brasa);display:grid;place-items:center}
+  .reel-ph svg{width:20px;height:20px;fill:var(--txt);margin-left:3px}
+  .reel-ph::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 32%,rgba(244,238,227,.07) 50%,transparent 68%);transform:translateX(-100%);animation:shimmer 2.4s infinite}
+  @keyframes shimmer{to{transform:translateX(100%)}}
+  .reel-card.ready .reel-ph{opacity:0;pointer-events:none}
+  .reel-idx{position:absolute;top:16px;left:18px;z-index:2;font-family:var(--mono);font-size:.7rem;letter-spacing:.24em;color:rgba(244,238,227,.8)}
+  .reel-exp{position:absolute;top:12px;right:12px;z-index:2;width:36px;height:36px;border-radius:50%;background:rgba(18,16,13,.7);border:1px solid var(--line);display:grid;place-items:center;opacity:0;transform:scale(.8);transition:.3s}
+  .reel-card:hover .reel-exp{opacity:1;transform:scale(1)}
+  .reel-exp svg{width:14px;height:14px;stroke:var(--txt);fill:none;stroke-width:2;stroke-linecap:round}
+  .strip-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:50px;height:50px;border-radius:50%;background:rgba(26,23,20,.88);border:1px solid var(--line);color:var(--txt);display:grid;place-items:center;transition:.2s;backdrop-filter:blur(8px)}
+  .strip-arrow:hover{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+  .strip-arrow svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+  .strip-arrow.left{left:16px}
+  .strip-arrow.right{right:16px}
+  @media(max-width:700px){.strip-arrow{display:none}}
+  .strip-foot{display:flex;align-items:center;gap:22px}
+  .strip-progress{flex:1;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+  .strip-progress i{display:block;height:100%;width:0;background:var(--acc);transition:width .12s linear}
+  .strip-count{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;color:var(--mut);text-transform:uppercase;flex:none}
+  .strip-count b{color:var(--acc);font-weight:400}
+  .modal-nav{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;padding:0 10px;pointer-events:none;z-index:4}
+  .modal-nav button{pointer-events:auto;width:44px;height:44px;border-radius:50%;background:rgba(26,23,20,.85);border:1px solid var(--line);color:var(--txt);display:grid;place-items:center;transition:.2s}
+  .modal-nav button:hover{background:var(--acc);color:var(--bg)}
+  .modal-nav svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 
   /* ---------- servicios ---------- */
   .servicios{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -321,16 +344,22 @@
     </div>
   </section>
 
-  <!-- ============ 03 · VERTICAL / SOCIAL ============ -->
-  <section id="vertical">
+  <!-- ============ 03 · VERTICAL · FILM STRIP ============ -->
+  <section id="vertical" class="vertical">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="kicker">03 · Vertical first</div>
-        <h2>Contenido para redes</h2>
-        <p class="sec-desc">Reels y Shorts pensados para el scroll: hook en los primeros 2 segundos, ritmo y retención.</p>
+      <div class="sec-head reveal" style="margin-bottom:26px">
+        <div class="kicker">03 · Vertical</div>
+        <h2 class="h-916">9:16</h2>
       </div>
-      <div class="vert-grid" id="vertGrid"></div>
-      <div class="vert-note reveal"><i>✦</i> Sección en construcción — los reels llegan pronto. Mientras: <a href="https://instagram.com/bloqqmayus" target="_blank" rel="noopener">@bloqqmayus ↗</a></div>
+    </div>
+    <div class="strip-wrap reveal">
+      <button class="strip-arrow left" id="stripPrev" aria-label="Reel anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="strip" id="strip"><div class="strip-track" id="stripTrack"></div></div>
+      <button class="strip-arrow right" id="stripNext" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="wrap strip-foot">
+      <div class="strip-progress"><i id="stripBar"></i></div>
+      <div class="strip-count"><b id="stripIdx">01</b> / <span id="stripTotal">03</span> · arrastrá · click = sonido</div>
     </div>
   </section>
 
@@ -379,7 +408,7 @@
         </figure>
         <div class="about-txt reveal">
           <div class="kicker">05 · Backstage</div>
-          <h2 style="margin-bottom:22px">Profesional &amp; artista independiente</h2>
+          <h2 style="margin-bottom:22px">Audiovisual y Artista</h2>
           <p>Hace más de 12 años que edito, diseño y hago VFX — autónomo y autodidacta. Mi propuesta de valor y mayor herramienta es el <b>criterio</b>: proyecto una idea y la conecto con un boceto de la pieza final antes de tocar la cámara.</p>
           <p>Resido en el barrio de <b>Balvanera</b>, en Buenos Aires, Argentina.</p>
           <div class="stats" id="stats"></div>
@@ -475,12 +504,11 @@ const CONFIG = {
   ],
   /* ---- BLOQQ MÁYUS · Escenario ---- */
   facts: { title: "FACTS", img: "assets/real/WPE_jtKCojc.jpg", video: "https://www.youtube.com/watch?v=WPE_jtKCojc", meta: "BLOQQ MÁYUS · Videoclip oficial · 2026" },
-  /* ---- Vertical: DEMO hasta que lleguen los reels reales ---- */
+  /* ---- Vertical: reels reales (assets/reels/) ---- */
   verticals: [
-    { title: "Reel demo 01", platform: "instagram", views: "demo", img: "assets/vert-1.jpg", video: "" },
-    { title: "Reel demo 02", platform: "tiktok",    views: "demo", img: "assets/vert-2.jpg", video: "" },
-    { title: "Reel demo 03", platform: "instagram", views: "demo", img: "assets/vert-3.jpg", video: "" },
-    { title: "Reel demo 04", platform: "youtube",   views: "demo", img: "assets/vert-4.jpg", video: "" }
+    { src: "assets/reels/HDP_Juego_1_MIDI_1.mp4",            title: "HDP · Juego · MIDI" },
+    { src: "assets/reels/Promo01v2_Oscar Wilde_1.mp4",       title: "Promo · Oscar Wilde" },
+    { src: "assets/reels/SIN1ROSTRO_BLOQQ_Especial_1.mp4",   title: "Sin Rostro · Especial BLOQQ" }
   ]
 };
 /* ================= FIN DE CONFIG ================= */
@@ -549,21 +577,103 @@ function openFacts() { openModal({ ...CONFIG.facts, vert: false }); }
 document.getElementById("factsCard").addEventListener("click", openFacts);
 document.getElementById("factsBtn").addEventListener("click", openFacts);
 
-/* ---- grid vertical (demo) ---- */
-const vertGrid = document.getElementById("vertGrid");
-vertGrid.innerHTML = CONFIG.verticals.map((v, i) => `
-  <article class="phone reveal" data-i="${i}" title="${v.title}">
-    <img src="${v.img}" alt="${v.title}" loading="lazy">
-    <span class="platform">${ICONS[v.platform] || ""}</span>
-    <div class="phone-info">
-      <h3>${v.title}</h3>
-      <div class="views">${ICONS.eye} ${v.views}</div>
-    </div>
+/* ---- vertical · film strip interactivo ---- */
+const pad2 = n => String(n).padStart(2, "0");
+const strip = document.getElementById("strip");
+const stripTrack = document.getElementById("stripTrack");
+stripTrack.innerHTML = CONFIG.verticals.map((v, i) => `
+  <article class="reel-card" data-i="${i}">
+    <div class="reel-ph"><i>${ICONS.play}</i></div>
+    <video src="${v.src}" muted loop playsinline preload="metadata"></video>
+    <span class="reel-idx">${pad2(i + 1)}</span>
+    <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
   </article>`).join("");
-vertGrid.addEventListener("click", e => {
-  const p = e.target.closest(".phone"); if (!p) return;
-  const v = CONFIG.verticals[+p.dataset.i];
-  openModal({ ...v, meta: `${v.platform.toUpperCase()} · placeholder`, vert: true });
+document.getElementById("stripTotal").textContent = pad2(CONFIG.verticals.length);
+
+const reelCards = [...stripTrack.querySelectorAll(".reel-card")];
+const reelVideos = reelCards.map(c => c.querySelector("video"));
+reelVideos.forEach((v, i) => v.addEventListener("loadeddata", () => reelCards[i].classList.add("ready")));
+function syncReelPlayback() {
+  reelVideos.forEach(v => {
+    const r = v.getBoundingClientRect();
+    const visible = r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight;
+    if (visible && !modal.classList.contains("open")) v.play().catch(() => {});
+    else v.pause();
+  });
+}
+const reelIO = new IntersectionObserver(syncReelPlayback, { threshold: .25 });
+reelCards.forEach(c => reelIO.observe(c));
+addEventListener("scroll", syncReelPlayback, { passive: true });
+
+/* drag con momentum */
+let down = false, startX = 0, startScroll = 0, vel = 0, lastX = 0, lastT = 0, moved = 0, glideRaf = 0;
+strip.addEventListener("pointerdown", e => {
+  down = true; moved = 0; startX = e.clientX; startScroll = strip.scrollLeft;
+  lastX = e.clientX; lastT = performance.now(); vel = 0;
+  cancelAnimationFrame(glideRaf);
+  strip.classList.add("dragging");
+  strip.setPointerCapture(e.pointerId);
+});
+strip.addEventListener("pointermove", e => {
+  if (!down) return;
+  const dx = e.clientX - startX;
+  moved = Math.max(moved, Math.abs(dx));
+  strip.scrollLeft = startScroll - dx;
+  const now = performance.now(), dt = now - lastT || 16;
+  vel = (e.clientX - lastX) / dt;
+  lastX = e.clientX; lastT = now;
+});
+function endDrag() {
+  if (!down) return;
+  down = false;
+  strip.classList.remove("dragging");
+  const glide = () => { vel *= .94; strip.scrollLeft -= vel * 16; if (Math.abs(vel) > .05) glideRaf = requestAnimationFrame(glide); };
+  glideRaf = requestAnimationFrame(glide);
+}
+strip.addEventListener("pointerup", endDrag);
+strip.addEventListener("pointercancel", endDrag);
+strip.addEventListener("click", e => {
+  if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
+  const c = e.target.closest(".reel-card");
+  if (c) openReel(+c.dataset.i);
+}, true);
+
+/* flechas + progreso + contador */
+const step = () => (reelCards[0] ? reelCards[0].offsetWidth : 320) + 26;
+document.getElementById("stripPrev").addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
+document.getElementById("stripNext").addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
+function stripHUD() {
+  const max = strip.scrollWidth - strip.clientWidth;
+  document.getElementById("stripBar").style.width = (max > 0 ? (strip.scrollLeft / max) * 100 : 100) + "%";
+  const idx = Math.min(CONFIG.verticals.length, Math.max(1, Math.round(strip.scrollLeft / step()) + 1));
+  document.getElementById("stripIdx").textContent = pad2(idx);
+}
+strip.addEventListener("scroll", stripHUD, { passive: true });
+stripHUD();
+
+/* modal de reels: con sonido y navegación */
+let reelCur = 0;
+function openReel(i) {
+  const n = CONFIG.verticals.length;
+  reelCur = ((i % n) + n) % n;
+  const v = CONFIG.verticals[reelCur];
+  mMedia.className = "modal-media vert";
+  mMedia.innerHTML = `<video src="${v.src}" controls autoplay playsinline></video>
+    <span class="modal-nav">
+      <button data-reelnav="prev" aria-label="Reel anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button data-reelnav="next" aria-label="Reel siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </span>`;
+  document.getElementById("modalTitle").textContent = v.title;
+  document.getElementById("modalMeta").textContent = `Reel ${pad2(reelCur + 1)} / ${pad2(n)}`;
+  document.getElementById("modalHint").textContent = "";
+  document.getElementById("modalExt").hidden = true;
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
+  syncReelPlayback();
+}
+mMedia.addEventListener("click", e => {
+  const b = e.target.closest("[data-reelnav]");
+  if (b) openReel(reelCur + (b.dataset.reelnav === "next" ? 1 : -1));
 });
 
 /* ---- modal ---- */
@@ -608,6 +718,7 @@ function closeModal() {
   modal.classList.remove("open");
   mMedia.innerHTML = "";
   document.body.style.overflow = "";
+  syncReelPlayback();
 }
 document.getElementById("modalBg").addEventListener("click", closeModal);
 document.getElementById("modalX").addEventListener("click", closeModal);
