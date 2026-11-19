@@ -620,9 +620,20 @@ document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
   `<a href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
 
 /* ---- grid de videoclips + filtros ---- */
+/* REGLA PERMANENTE: el orden de muestra es SIEMPRE aleatorio — se mezcla
+   en cada carga (Fisher–Yates). CONFIG.films se mantiene en orden
+   cronológico como archivo de datos; los videos nuevos entran al pool
+   y se mezclan con el resto, sin prioridad por fecha ni antigüedad. */
 const workGrid = document.getElementById("workGrid");
-workGrid.innerHTML = CONFIG.films.map((f, i) => `
-  <article class="work-card reveal" data-cat="${f.cat}" data-i="${i}">
+const workOrder = CONFIG.films.map((_, i) => i);
+for (let i = workOrder.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [workOrder[i], workOrder[j]] = [workOrder[j], workOrder[i]];
+}
+workGrid.innerHTML = workOrder.map((fi, pos) => {
+  const f = CONFIG.films[fi];
+  return `
+  <article class="work-card reveal" data-cat="${f.cat}" data-i="${fi}" data-pos="${pos}">
     <div class="work-media">
       <img src="${f.img}" alt="${f.title} — ${f.artist}" loading="lazy">
       <span class="play"><i>${ICONS.play}</i></span>
@@ -631,7 +642,8 @@ workGrid.innerHTML = CONFIG.films.map((f, i) => `
       <h3>${f.title}</h3>
       <span class="mono">${f.artist} · ${f.year}</span>
     </div>
-  </article>`).join("");
+  </article>`;
+}).join("");
 
 const counts = {};
 CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);
@@ -639,9 +651,10 @@ const cats = ["Todos", ...Object.keys(counts).sort((a, b) => counts[b] - counts[
 const filters = document.getElementById("filters");
 filters.innerHTML = cats.map((c, i) =>
   `<button class="chip${i === 0 ? " on" : ""}" data-cat="${c}">${c}</button>`).join("");
-/* Pliegue: la grilla muestra FOLD piezas y "ver más" abre el resto —
-   el camino entro → laburo → contacto queda corto. Al filtrar por artista
-   se muestran todas sus piezas, sin pliegue. */
+/* Pliegue: la grilla muestra las primeras FOLD piezas del orden mezclado
+   y "ver más" abre el resto — el camino entro → laburo → contacto queda
+   corto y cada carga le da vidriera a piezas distintas. Al filtrar por
+   artista se muestran todas sus piezas, sin pliegue. */
 const FOLD = 12;
 let workCat = "Todos", workAll = false;
 const moreBtn = document.getElementById("moreBtn");
@@ -650,7 +663,7 @@ function applyWork() {
   workGrid.querySelectorAll(".work-card").forEach(card => {
     const off = workCat !== "Todos"
       ? card.dataset.cat !== workCat
-      : (!workAll && +card.dataset.i >= FOLD);
+      : (!workAll && +card.dataset.pos >= FOLD);
     card.classList.toggle("hidden", off);
   });
   workMore.hidden = !(workCat === "Todos" && CONFIG.films.length > FOLD);

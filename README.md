@@ -1,7 +1,23 @@
 # 🎬 Tu portfolio — Filmmaking & Contenido Vertical
 
-Sitio de una sola página, oscuro y cinematográfico, con dos secciones clave:
-**Cine & Branded Content** (16:9) y **Contenido para redes** (9:16, tipo muro de móviles).
+Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
+**entra → mira el laburo → pasa al contacto.** Cinco secciones:
+01 Trabajo (videoclips 16:9) · 02 3D (reels 9:16) · 03 Videoclips verticales ·
+04 Toolbox (mesas de ideas) · 05 Contacto.
+
+## 📌 Reglas vigentes (aplican a todo cambio futuro)
+
+- **01 · Trabajo seleccionado: orden SIEMPRE aleatorio.** La grilla se mezcla
+  en cada carga (Fisher–Yates sobre `workOrder`). Al agregar links/videos
+  nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
+  `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
+  El pliegue "Ver los N trabajos" muestra las primeras 12 del orden mezclado.
+- **Toda preview respeta la relación de aspecto original del archivo**
+  (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
+- Las mesas de luz del Toolbox son "mesas de ideas" por rama, con placeholders
+  punteados reservando lugar para imágenes futuras en formatos variados.
+- Todo lo que no sirva al objetivo portfolio → contacto se corta.
+
 
 ## 📁 Estructura
 ```
