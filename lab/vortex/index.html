@@ -296,7 +296,7 @@ stage.addEventListener("pointerdown", e => {
   if (pts.size === 1) {
     drag.down = true; moved = 0; sx = lx = e.clientX; sy = ly = e.clientY;
     lt = performance.now(); flyVel = 0; targetZ = null;
-    downCard = e.target.closest(".vcard"); downT = performance.now();
+    downCard = cardAt(e.clientX, e.clientY); downT = performance.now();
     stage.classList.add("dragging");
   } else if (pts.size === 2) {
     const [a, b] = [...pts.values()];
@@ -328,14 +328,14 @@ const release = e => {
   if (!pts.size) { drag.down = false; stage.classList.remove("dragging"); }
 };
 stage.addEventListener("pointerup", e => {
-  /* tap = abrir obra. OJO: setPointerCapture redirige el click derivado al
-     stage (closest(".vcard") daría null) → por eso se abre acá en pointerup,
-     nunca en el click. Mismo patrón que las tiras del sitio principal. */
-  const tap = downCard && pts.size === 1 && moved <= 8 && performance.now() - downT < 600;
-  const card = downCard;
+  /* tap = abrir obra. Se resuelve por proyección matemática (cardAt), nunca
+     por e.target/closest: setPointerCapture roba el click y el hit-testing 3D
+     nativo es poco fiable. Mismo criterio que las tiras del sitio principal. */
+  const tap = pts.size === 1 && moved <= 8 && performance.now() - downT < 600;
+  const card = tap ? (cardAt(e.clientX, e.clientY) || downCard) : null;
   release(e);
   downCard = null;
-  if (tap && !phase && !cineOpen) openCine(+card.dataset.i);
+  if (card && !phase && !cineOpen) openCine(+card.dataset.i);
 });
 stage.addEventListener("pointercancel", e => { release(e); downCard = null; });
 stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; targetZ = null; seen(); }, { passive: false });
@@ -357,6 +357,24 @@ addEventListener("keydown", e => {
 });
 
 /* ---------- apertura de obra: solo por tap en pointerup (ver arriba) ---------- */
+/* Hit-testing matemático: el hit-testing nativo de Chrome falla con
+   preserve-3d + perspective (elementFromPoint devuelve el contenedor, no la
+   card → la mayoría de las obras no clickean, sobre todo al moverse). Por eso
+   calculamos qué obra está bajo el pointer proyectando cada card y eligiendo
+   la más cercana. Funciona a cualquier profundidad y tras recorrer mucho. */
+function cardAt(x, y) {
+  let best = null, bestZ = -Infinity;
+  for (const c of cards) {
+    const z = c._z + camZ;
+    if (z >= 880) continue;                 // encima/detrás de la cámara
+    const r = c.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) continue;
+    if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom && z > bestZ) {
+      bestZ = z; best = c;
+    }
+  }
+  return best;
+}
 
 function fitRect(aspect) {
   /* la preview respeta el aspecto original y deja aire alrededor (mesa de luz) */

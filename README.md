@@ -27,7 +27,11 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   a `UNIQUE` en `lab/vortex/index.html`. Fondo: espacio 3D con estrellas
   sutiles. Click en una obra → mesa de luz (65% de oscuridad, vuelo al centro,
   autoplay sin controles; click en la preview = play/pausa invisible; click
-  afuera = volver a la galería).
+  afuera = volver a la galería). El click se resuelve por **proyección
+  matemática (`cardAt`)**, no por hit-testing nativo: Chrome rompe el
+  hit-testing con `preserve-3d` + `perspective` (las obras se dibujan pero no
+  clickean, sobre todo al moverse). `cardAt` proyecta cada obra y elige la más
+  cercana bajo el pointer → funciona a cualquier profundidad.
 - **Toda preview respeta la relación de aspecto original del archivo**
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - **Todas las mesas de luz / previews oscurecen el fondo al 65%**
