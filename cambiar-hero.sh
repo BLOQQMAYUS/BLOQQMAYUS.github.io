@@ -27,6 +27,12 @@ ALTS = {
  "bloqq-bg.jpg": "Personaje animado cruzando una avenida de Buenos Aires frente al Obelisco, entre cines y teatros",
 }
 alt = alt or ALTS.get(os.path.basename(new), "Imagen de portada de BLOQQ MÁYUS")
+# Cada medio tiene su encuadre: la foto anterior y la ilustración no se
+# recortan igual. Volver a un medio conocido restaura también su encuadre.
+FRAMES = {
+ "anterior.jpg": ("72% 28%", "62% 20%"),
+ "bloqq-bg.jpg": ("62% 42%", "93% 40%"),
+}
 s = open("index.html", encoding="utf-8").read()
 m = re.search(r'(<div class="hero-img">)(.*?)(</div>)', s, re.S)
 assert m, "no se encontró el bloque .hero-img"
@@ -53,8 +59,18 @@ s = s[:m.start(2)] + "".join(partes) + s[m.end(2):]
 url = "https://bloqqmayus.github.io/" + preview
 s = re.sub(r'(property="og:image" content=")[^"]*(")', lambda x: x.group(1)+url+x.group(2), s)
 s = re.sub(r'(name="twitter:image" content=")[^"]*(")', lambda x: x.group(1)+url+x.group(2), s)
+base, mob = FRAMES.get(os.path.basename(new), (None, None))
+if base:
+    s = re.sub(r'(\.hero-img img,\.hero-img video\{width:100%;height:100%;object-fit:cover;object-position:)[^;]+;',
+               lambda m: m.group(1) + base + ";", s, count=1)
+    s = re.sub(r'(@media\(max-width:760px\)\{\.hero-img img,\.hero-img video\{object-position:)[^}]+\}\}',
+               lambda m: m.group(1) + mob + "}}", s, count=1)
+    s = re.sub(r'(\n    \.hero-img img,\.hero-img video\{object-position:)[^}]+\}',
+               lambda m: m.group(1) + mob + "}", s, count=1)
 open("index.html", "w", encoding="utf-8").write(s)
 print("✓ header  →", new, "(video)" if video else "(imagen)")
+if base: print("✓ encuadre →", base, "desktop /", mob, "celu")
+else: print("· encuadre sin tocar (medio nuevo): revisá object-position si hace falta")
 print("✓ preview →", url)
 PY
 echo "· acordate: ./tests/smoke.sh (desde la raíz) y después ./deploy.sh <TOKEN> \"mensaje\""
