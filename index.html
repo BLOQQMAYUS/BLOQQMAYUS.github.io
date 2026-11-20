@@ -30,14 +30,37 @@
     --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
     --sans:"Helvetica Neue",Helvetica,Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     --rad:16px;
+    --ease:cubic-bezier(.2,.7,.2,1); --ease-io:cubic-bezier(.65,0,.15,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.6;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-kerning:normal;
+    -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
   ::selection{background:var(--acc);color:var(--bg)}
   img{display:block;max-width:100%}
   a{color:inherit;text-decoration:none}
   button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+  /* ---------- acabado pro: scrollbar de marca · foco accesible · tacto ---------- */
+  html{scrollbar-color:var(--brasa) var(--bg2);scrollbar-width:thin}
+  ::-webkit-scrollbar{width:11px;height:11px}
+  ::-webkit-scrollbar-track{background:var(--bg2)}
+  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--brasa),#8f2718);border-radius:999px;border:3px solid var(--bg2)}
+  ::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--acc),#c9820f)}
+  a:focus-visible,button:focus-visible,.chip:focus-visible,.work-card:focus-visible,.reel-card:focus-visible,
+  .strip-arrow:focus-visible,.socials a:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
+  .btn:active,.chip:active,#moreBtn:active,.socials a:active,.strip-arrow:active,.modal-open a:active{transform:scale(.97)}
+  .work-card:active .work-media{transform:scale(.99)}
+  /* saltar al contenido (teclado / lectores) */
+  .skip{position:fixed;top:-60px;left:16px;z-index:3000;background:var(--acc);color:var(--bg);font-weight:700;
+    padding:11px 20px;border-radius:0 0 12px 12px;font-size:.85rem;transition:top .25s var(--ease)}
+  .skip:focus{top:0}
+  /* las anclas no quedan tapadas por el nav fijo */
+  section{scroll-margin-top:84px}
+  /* fade-in de imágenes al cargar (sin riesgo: base visible, anima al entrar) */
+  .work-media img.ld,.lt-thumb img.ld{animation:imgIn .6s ease}
+  @keyframes imgIn{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
 
   /* ---------- grano de película ---------- */
   .grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:2000;opacity:.05;
@@ -60,8 +83,14 @@
   .nav-links{display:flex;gap:26px;align-items:center;font-family:var(--mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.12em}
   .nav-links a{color:var(--mut);transition:color .2s}
   .nav-links a:hover{color:var(--txt)}
-  .nav-links a.cta{color:var(--bg);background:var(--acc);padding:9px 18px;border-radius:999px;font-weight:700}
+  .nav-links a.active{color:var(--txt)}
+  .nav-links a:not(.cta){position:relative}
+  .nav-links a:not(.cta)::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--acc);
+    transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
+  .nav-links a:not(.cta):hover::after,.nav-links a:not(.cta).active::after{transform:scaleX(1)}
+  .nav-links a.cta{color:var(--bg);background:var(--acc);padding:9px 18px;border-radius:999px;font-weight:700;transition:background .2s,transform .2s}
   .nav-links a.cta:hover{background:#f7b83f;color:var(--bg)}
+  .nav-links a.cta:active{transform:scale(.96)}
   .burger{display:none;flex-direction:column;gap:5px;padding:8px}
   .burger span{width:22px;height:2px;background:var(--txt);transition:.3s}
   @media(max-width:880px){
@@ -95,6 +124,15 @@
   .hero-meta{position:absolute;right:24px;bottom:24px;z-index:3;font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;color:rgba(244,238,227,.55);text-transform:uppercase;text-align:right}
   .hero-meta b{color:var(--rosa);font-weight:400}
   @media(max-width:640px){.hero-meta{display:none}.hero-img img{object-position:62% 20%}}
+  /* pista de scroll: invita a bajar al laburo, se va al primer scroll */
+  .scroll-cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;
+    align-items:center;gap:9px;font-family:var(--mono);font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;
+    color:rgba(244,238,227,.5);transition:opacity .5s var(--ease);pointer-events:none}
+  .scroll-cue i{width:1px;height:34px;background:linear-gradient(rgba(244,238,227,.55),transparent);position:relative;overflow:hidden}
+  .scroll-cue i::after{content:"";position:absolute;top:-40%;left:0;width:100%;height:40%;background:var(--acc);animation:cueDrop 1.9s var(--ease-io) infinite}
+  @keyframes cueDrop{0%{top:-40%}60%,100%{top:110%}}
+  .scroll-cue.hide{opacity:0}
+  @media(max-width:880px){.scroll-cue{display:none}}
 
   /* ---------- secciones ---------- */
   section{padding:110px 0}
@@ -122,7 +160,9 @@
   #moreBtn{font-family:var(--mono);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;
     padding:13px 28px;border-radius:999px;border:1px solid var(--line);color:var(--txt);transition:.2s}
   #moreBtn:hover{border-color:var(--brasa);color:var(--brasa)}
-  .work-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+  .work-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);background:var(--card);
+    transition:border-color .35s var(--ease),box-shadow .35s var(--ease),transform .2s var(--ease)}
+  .work-card:hover .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
   .work-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.6,.2,1),filter .4s;filter:saturate(.92)}
   .work-card:hover .work-media img{transform:scale(1.06);filter:saturate(1.08)}
   .work-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(26,23,20,.6));opacity:0;transition:.35s}
@@ -396,6 +436,7 @@
 </head>
 <body>
 
+<a class="skip" href="#trabajo">Saltar al contenido</a>
 <div class="grain" aria-hidden="true"></div>
 
 <nav id="nav">
@@ -427,6 +468,7 @@
     </div>
   </div>
   <div class="hero-meta">4K · 24 FPS<br>TC <b id="tc">00:00:00:00</b></div>
+  <div class="scroll-cue" id="scrollCue" aria-hidden="true"><span>Deslizá</span><i></i></div>
 </header>
 
 <main>
@@ -676,9 +718,9 @@ const workOrder = shuffle(CONFIG.films.map((_, i) => i));
 workGrid.innerHTML = workOrder.map((fi, pos) => {
   const f = CONFIG.films[fi];
   return `
-  <article class="work-card reveal" data-cat="${f.cat}" data-i="${fi}" data-pos="${pos}">
+  <article class="work-card reveal" data-cat="${f.cat}" data-i="${fi}" data-pos="${pos}" tabindex="0" role="button" aria-label="Ver ${f.title} — ${f.artist}">
     <div class="work-media">
-      <img src="${f.img}" alt="${f.title} — ${f.artist}" loading="lazy">
+      <img src="${f.img}" alt="${f.title} — ${f.artist}" loading="lazy" decoding="async">
       <span class="play"><i>${ICONS.play}</i></span>
     </div>
     <div class="work-meta">
@@ -724,6 +766,12 @@ workGrid.addEventListener("click", e => {
   const card = e.target.closest(".work-card"); if (!card) return;
   const f = CONFIG.films[+card.dataset.i];
   openModal({ ...f, meta: `${f.lineup || f.artist} · ${f.role} · ${f.year}`, vert: false });
+});
+/* teclado: Enter / Espacio abren la pieza enfocado (accesibilidad) */
+workGrid.addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest(".work-card"); if (!card) return;
+  e.preventDefault(); card.click();
 });
 
 /* ---- reels · auto-descubrimiento + dos film strips (3D / Videoclips) ---- */
@@ -1234,10 +1282,31 @@ document.addEventListener("dragstart", e => {
 
 /* ---- nav ---- */
 const nav = document.getElementById("nav");
-addEventListener("scroll", () => nav.classList.toggle("scrolled", scrollY > 40), { passive: true });
+const scrollCue = document.getElementById("scrollCue");
+addEventListener("scroll", () => {
+  nav.classList.toggle("scrolled", scrollY > 40);
+  if (scrollCue) scrollCue.classList.toggle("hide", scrollY > 80);
+}, { passive: true });
 const navLinks = document.getElementById("navLinks");
 document.getElementById("burger").addEventListener("click", () => navLinks.classList.toggle("open"));
 navLinks.addEventListener("click", e => { if (e.target.tagName === "A") navLinks.classList.remove("open"); });
+
+/* ---- scrollspy: marca la sección activa en el nav ---- */
+const spyMap = {};
+navLinks.querySelectorAll('a[href^="#"]').forEach(a => { spyMap[a.getAttribute("href").slice(1)] = a; });
+if ("IntersectionObserver" in window) {
+  const spy = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    Object.values(spyMap).forEach(a => a.classList.remove("active"));
+    const a = spyMap[en.target.id]; if (a) a.classList.add("active");
+  }), { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+  Object.keys(spyMap).forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+}
+
+/* ---- fade-in de imágenes al cargar (fase de captura: 'load' no burbujea) ---- */
+document.addEventListener("load", e => {
+  if (e.target && e.target.tagName === "IMG") e.target.classList.add("ld");
+}, true);
 
 /* ---- reveal on scroll ---- */
 const io = new IntersectionObserver(entries => entries.forEach(en => {
