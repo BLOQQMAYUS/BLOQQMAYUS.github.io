@@ -176,7 +176,13 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   están verificadas con un test que bloquea `i.ytimg.com` y exige que las 8
   previews del pliegue se vean igual. Todas llevan `referrerpolicy="no-referrer"`.
   **Regla para el futuro: no volver a hardcodear una miniatura local como
-  fuente principal.**
+  fuente principal.** Ojo al leer la consola: **un 404 de `i.ytimg.com` es
+  normal y esperado** — no todos los videos tienen `maxresdefault` (p. ej.
+  `HAxRAyv8Ll8`), y ese 404 es justamente lo que dispara el respaldo. El tour
+  ignora esos 404 y en cambio exige que ninguna preview quede rota; cualquier
+  otro 404 sí es un defecto.
+  **La galería lleva el mismo favicon inline que el sitio**: sin él, el iframe
+  pedía `/lab/vortex/favicon.ico` y ensuciaba la consola con un 404.
 - **Toda preview respeta la relación de aspecto original del archivo**
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - **Todas las mesas de luz / previews oscurecen el fondo al 65%**
