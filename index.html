@@ -788,14 +788,18 @@ function buildStrip(sec, items) {
   });
   /* drag con momentum + TAP propio: setPointerCapture redirige el click al
      contenedor, así que la tarjeta se detecta en pointerdown y se abre en pointerup */
-  let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0;
+  let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0, wheelT = 0;
   let downCard = null, downT = 0, suppressClick = false;
+  /* snap desactivado durante drag/glide/rueda para que no pelee con el
+     momentum (era la causa del scroll "raro"); se reactiva al asentar. */
+  const snapOff = () => { strip.style.scrollSnapType = "none"; };
+  const snapOn = () => { strip.style.scrollSnapType = ""; };
   strip.addEventListener("pointerdown", e => {
     downCard = e.target.closest ? e.target.closest(".reel-card") : null;
     downT = performance.now();
     down = true; moved = 0; sx = e.clientX; ss = strip.scrollLeft;
     lx = e.clientX; lt = performance.now(); vel = 0;
-    cancelAnimationFrame(raf);
+    cancelAnimationFrame(raf); snapOff();
     strip.classList.add("dragging");
     strip.setPointerCapture(e.pointerId);
   });
@@ -811,20 +815,37 @@ function buildStrip(sec, items) {
     if (!down) return;
     down = false; strip.classList.remove("dragging");
     if (moved <= 8 && downCard && performance.now() - downT < 600) {
-      suppressClick = true;
+      suppressClick = true; snapOn();
       const c = downCard; downCard = null;
       openReel(items, +c.dataset.i, c);       // tap = previsualización limpia con sonido
       return;
     }
     downCard = null;
-    const glide = () => { vel *= .94; strip.scrollLeft -= vel * 16; if (Math.abs(vel) > .05) raf = requestAnimationFrame(glide); };
+    vel = Math.max(-2.6, Math.min(2.6, vel));  // tope de momentum (sin saltos)
+    const glide = () => {
+      vel *= .92; strip.scrollLeft -= vel * 16;
+      if (Math.abs(vel) > .04) raf = requestAnimationFrame(glide);
+      else snapOn();                           // asentó → snap suave
+    };
     raf = requestAnimationFrame(glide);
   };
   strip.addEventListener("pointerup", end);
   strip.addEventListener("pointercancel", () => {
     if (!down) return;
-    down = false; downCard = null; strip.classList.remove("dragging");
+    down = false; downCard = null; strip.classList.remove("dragging"); snapOn();
   });
+  /* rueda → scroll horizontal (PC/trackpad). Solo si hay recorrido en esa
+     dirección; en el borde deja scrollear la página verticalmente. */
+  strip.addEventListener("wheel", e => {
+    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (!d) return;
+    const max = strip.scrollWidth - strip.clientWidth;
+    const can = (d > 0 && strip.scrollLeft < max - 1) || (d < 0 && strip.scrollLeft > 1);
+    if (!can) return;
+    e.preventDefault(); snapOff();
+    strip.scrollLeft += d;
+    clearTimeout(wheelT); wheelT = setTimeout(snapOn, 160);
+  }, { passive: false });
   strip.addEventListener("click", e => {
     if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopPropagation(); return; }
     if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
@@ -903,7 +924,9 @@ const rlBg = document.getElementById("rlBg");
 const rlVideo = document.getElementById("rlVideo");
 let rlCard = null, rlPhase = null, rlTimer = 0;
 function rlFit() {
-  const vw = innerWidth, vh = innerHeight, pad = vw < 700 ? 0 : Math.min(vh * .05, 48);
+  /* margen cómodo en TODOS los lados para poder clickear afuera y volver */
+  const vw = innerWidth, vh = innerHeight;
+  const pad = Math.min(72, Math.max(32, Math.min(vw, vh) * .07));
   let h = vh - pad * 2, w = h * 9 / 16;
   if (w > vw - pad * 2) { w = vw - pad * 2; h = w * 16 / 9; }
   return { top: (vh - h) / 2, left: (vw - w) / 2, width: w, height: h };

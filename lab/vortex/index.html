@@ -219,7 +219,7 @@ function cardHTML(it, i) {
     ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
 }
 /* estrellas: puntos sutiles en el volumen del corredor, pasan con el avance */
-const STARS = 150;
+const STARS = 320;
 let stars = [];
 function buildStars() {
   let h = "";
@@ -377,11 +377,13 @@ function cardAt(x, y) {
 }
 
 function fitRect(aspect) {
-  /* la preview respeta el aspecto original y deja aire alrededor (mesa de luz) */
-  const vw = innerWidth * .94, vh = innerHeight * .92;
-  let w = vw, h = vw / aspect;
-  if (h > vh) { h = vh; w = vh * aspect; }
-  return { top: (innerHeight - h) / 2, left: (innerWidth - w) / 2, width: w, height: h };
+  /* margen cómodo en TODOS los lados (≥32px) para clickear afuera y volver */
+  const vw = innerWidth, vh = innerHeight;
+  const pad = Math.min(72, Math.max(32, Math.min(vw, vh) * .07));
+  const aw = vw - pad * 2, ah = vh - pad * 2;
+  let w = aw, h = aw / aspect;
+  if (h > ah) { h = ah; w = ah * aspect; }
+  return { top: (vh - h) / 2, left: (vw - w) / 2, width: w, height: h };
 }
 function setRect(el, r) {
   el.style.top = r.top + "px"; el.style.left = r.left + "px";
