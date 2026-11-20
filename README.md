@@ -66,8 +66,10 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   rapero con micrófono). Los rellenos usan la clase **`.solid`**
   (`fill: var(--acc)`), no `currentColor` — que resolvería al hueso del texto.
   **PENDIENTE: el ícono de "Lo viejo" es todavía pantalla+play; hay que
-  cambiarlo por la Torino con el fondo removido, en ámbar, cuando llegue la
-  imagen.**
+  cambiarlo por la Torino con el fondo removido, en ámbar.** La imagen se
+  anunció en `/assets/uploads/Torino.png` pero **no está en el repo** (revisado
+  el árbol completo de `main`): ese commit no se guardó. Hay que subirla de
+  nuevo o pasarla por el chat.
 - **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
   la activa el **cartel de neón 3D titilante "GALERÍA 3D"** de la sección
   Contacto (`#ledBtn`), como overlay a pantalla completa (`#galBox` + iframe
@@ -89,8 +91,25 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - **Todas las mesas de luz / previews oscurecen el fondo al 65%**
   (rgba(10,8,6,.65)): reels, mesas del Toolbox, modal y Galería 3D.
-- Las mesas de luz del Toolbox son "mesas de ideas" por rama, con placeholders
-  punteados reservando lugar para imágenes futuras en formatos variados.
+- **04 · Toolbox: las mesas de luz están APAGADAS a propósito** (falta preparar
+  el contenido de cada rama). El interruptor es **`const LIGHTTABLES_ON = false`**
+  en `index.html`: ponerlo en `true` reactiva TODO solo — el click de las 4
+  tarjetas, las mesas y el `(Clickeá una)` del h2. No hay nada que reescribir.
+  Apagado, el h2 queda en **"Mis herramientas, a tu disposición."** y las
+  tarjetas son informativas: conservan el **"+" y el hover como anticipo**,
+  pero salen del orden de tabulación (`tabIndex = -1`), se anuncian
+  `aria-disabled` y no muestran cursor de mano. **No empujan historial**: el
+  botón atrás nunca queda atrapado en una capa fantasma.
+  Se conserva intacto `LIGHTTABLES`, `openLT/closeLT` y `#ltBox` (mesas de
+  ideas por rama, con placeholders punteados para imágenes futuras en formatos
+  variados). El smoke corre el sitio **dos veces**: tal cual (apagado) y con el
+  interruptor prendido (`LT=1 node tests/shim.js`), para que la función dormida
+  no se pudra mientras espera.
+- **`.reveal.in{transform:none}` pisa los hover de igual especificidad** que
+  estén antes en la hoja. Por eso el hover de las tarjetas del Toolbox es
+  `.serv-grid .serv:hover` (una clase extra). Si se agrega un hover con
+  transform a un elemento que también lleva `.reveal`, hay que subirle la
+  especificidad o no va a levantar nunca.
 - Todo lo que no sirva al objetivo portfolio → contacto se corta.
 
 

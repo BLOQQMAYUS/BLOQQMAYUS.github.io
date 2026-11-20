@@ -270,8 +270,11 @@
   .serv{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;
     background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:26px 14px 20px;
     cursor:pointer;font-family:var(--sans);color:var(--txt);transition:transform .3s,border-color .3s}
-  .serv:hover{transform:translateY(-5px);border-color:rgba(242,165,26,.55)}
+  /* .serv-grid adelante a propósito: .reveal.in{transform:none} viene después
+     en la hoja y con la misma especificidad pisaba el hover de la tarjeta. */
+  .serv-grid .serv:hover{transform:translateY(-5px);border-color:rgba(242,165,26,.55)}
   .serv:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+  .serv-off{cursor:default}
   .serv-plus{position:absolute;top:8px;right:12px;font:400 1rem/1 var(--mono);color:var(--mut);transition:.3s}
   .serv:hover .serv-plus{color:var(--acc);transform:rotate(90deg)}
   .serv-ico{width:84px;height:84px;border-radius:22px;background:rgba(242,165,26,.1);border:1px solid rgba(242,165,26,.35);display:grid;place-items:center;transition:.3s}
@@ -1053,6 +1056,15 @@ addEventListener("resize", () => { if (rlPhase === "open" || rlPhase === "in") r
 /* ---- mesas de luz del Toolbox: una superficie clara por categoría.
    Tipos soportados: yt (YouTube), video (MP4 propio), img, doc.
    Para sumar piezas: agregar entradas acá (o pasame los links y las cargo). ---- */
+/* ---- MESAS DE IDEAS DEL TOOLBOX ------------------------------------------
+   Función terminada pero APAGADA a propósito: falta preparar el contenido de
+   cada rama. Para reactivarla alcanza con poner este valor en true — vuelven
+   solos el "(Clickeá una)" del h2, el click de las 4 tarjetas y las mesas.
+   Apagada: las tarjetas quedan informativas, conservan el "+" y el hover como
+   anticipo, salen del orden de tabulación y se anuncian deshabilitadas.
+   NO se borra nada: LIGHTTABLES, openLT/closeLT y #ltBox siguen intactos. */
+const LIGHTTABLES_ON = false;
+
 const LIGHTTABLES = {
   direccion: { title: "Dirección creativa", acc: "#F2A51A",
     desc: "Mesa de ideas · del concepto al set: tratamiento visual, frames de rodaje y detrás de escena.",
@@ -1168,7 +1180,17 @@ ltGrid.addEventListener("click", e => {
     window.open(it.src || it.href, "_blank", "noopener");
   }
 });
-document.querySelectorAll(".serv").forEach(c => c.addEventListener("click", () => openLT(c.dataset.lt)));
+document.querySelectorAll(".serv").forEach(c => {
+  if (!LIGHTTABLES_ON) {
+    c.setAttribute("aria-disabled", "true");
+    c.tabIndex = -1;
+    c.classList.add("serv-off");
+    return;
+  }
+  c.addEventListener("click", () => openLT(c.dataset.lt));
+});
+const servHint = document.querySelector("#servicios .h2-hint");
+if (servHint) servHint.style.display = LIGHTTABLES_ON ? "" : "none";
 
 /* ---- Seguridad: los nombres de reel vienen de la API de GitHub (dato externo).
    Se aceptan SOLO nombres de archivo .mp4 simples: sin rutas ni traversal y sin
