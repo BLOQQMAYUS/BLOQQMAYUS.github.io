@@ -12,7 +12,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
   `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
   El pliegue muestra las primeras **8** del orden mezclado (`FOLD = 8`).
-  El botón **"¿Buscás más? En la galería ↓"** ya NO despliega la grilla:
+  El botón **"¿Más? Galería ↓"** ya NO despliega la grilla:
   lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.

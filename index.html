@@ -322,7 +322,7 @@
     0%,100%{opacity:1}8%{opacity:1}9%{opacity:.32}9.5%{opacity:1}10%{opacity:.5}10.5%{opacity:1}
     52%{opacity:1}53%{opacity:.22}54%{opacity:.9}55%{opacity:.4}56%{opacity:1}
     80%{opacity:1}81%{opacity:.6}82%{opacity:1}}
-  /* ===== .attn: el cartel "pide el click" cuando venís desde "¿Buscás más?" =====
+  /* ===== .attn: el cartel "pide el click" cuando venís desde "¿Más?" =====
      Una sola pasada de 2.4 s, SOLO transform + opacity (GPU). Se dispara una
      vez por click, se limpia en animationend y no corre si el usuario pidió
      menos movimiento. El glow sigue siendo el del propio neón (sin bloom nuevo). */
@@ -499,7 +499,7 @@
       </div>
       <div class="filters reveal" id="filters"></div>
       <div class="work-grid" id="workGrid"></div>
-      <div class="work-more" id="workMore"><button type="button" id="moreBtn" aria-label="Ir a Contacto y abrir la Galería 3D">¿Buscás más? En la galería ↓</button></div>
+      <div class="work-more" id="workMore"><button type="button" id="moreBtn" aria-label="Ir a Contacto y abrir la Galería 3D">¿Más? Galería ↓</button></div>
     </div>
   </section>
 
@@ -762,7 +762,7 @@ const FOLD = 8;
 let workCat = "Todos";
 const moreBtn = document.getElementById("moreBtn");
 const workMore = document.getElementById("workMore");
-const MORE_LABEL = "¿Buscás más? En la galería ↓";
+const MORE_LABEL = "¿Más? Galería ↓";
 function applyWork() {
   workGrid.querySelectorAll(".work-card").forEach(card => {
     const off = workCat !== "Todos"
@@ -779,7 +779,7 @@ filters.addEventListener("click", e => {
   workCat = b.dataset.cat;
   applyWork();
 });
-/* "¿Buscás más?" → 05 · Contacto + el cartel neón pide el click */
+/* "¿Más?" → 05 · Contacto + el cartel neón pide el click */
 moreBtn.addEventListener("click", () => {
   const destino = document.getElementById("contacto");
   const cartel = document.getElementById("ledBtn");
