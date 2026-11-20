@@ -277,6 +277,26 @@ function computeRecycle() {
   }
 }
 
+/* ---------- botón "atrás" del celular ----------
+   La mesa de luz empuja una entrada al historial: al volver atrás se cierra
+   y la galería queda EXACTAMENTE donde estaba (camZ no se toca, no recarga).
+   El iframe comparte el historial con el sitio, así que el atrás del teléfono
+   cierra primero la mesa de luz y recién después la galería. */
+const layers = [];
+let layerSync = 0;
+function layerPush(closeFn) { layers.push(closeFn); history.pushState({ bloqqGal: layers.length }, ""); }
+function layerDrop() {
+  if (!layers.length) return;
+  layers.pop(); layerSync++; history.back();
+}
+addEventListener("popstate", () => {
+  if (layerSync > 0) { layerSync--; return; }
+  const fn = layers.pop();
+  if (fn) fn(true);
+});
+/* el sitio consulta cuántas capas quedaron abiertas al cerrar la galería */
+window.__bloqqLayers = () => layers.length;
+
 /* ---------- loop ---------- */
 function tick(t) {
   raf = requestAnimationFrame(tick);
@@ -430,6 +450,7 @@ function openCine(i) {
   fly.style.transition = "";
   setRect(fly, fitRect(cineAspect));
   phase = "in";
+  layerPush(closeCine);
   setTimeout(() => { if (phase === "in") land(); }, 850);
 }
 fly.addEventListener("transitionend", e => {
@@ -467,8 +488,9 @@ cine.addEventListener("click", e => {
   if (phase === "open" && (e.target === cine || e.target === cineMedia)) closeCine();
 });
 
-function closeCine() {
+function closeCine(fromPop) {
   if (phase !== "open") return;
+  if (!fromPop) layerDrop();
   cineMedia.innerHTML = "";                  // corta reproducción ya
   phase = "out";
   fly.classList.remove("gone");

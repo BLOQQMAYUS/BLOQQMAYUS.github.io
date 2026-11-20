@@ -25,9 +25,49 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
   email); el link sigue siendo `tel:` — si se quiere que abra WhatsApp,
   hay que cambiar el `href` a `https://wa.me/5491159754088`.
-- **02 · 3D: CHECHA Rifa siempre primera; el resto, aleatorio en cada carga.**
-  **03 · Videoclips verticales: siempre aleatorio.** Los reels nuevos que se
-  agreguen a `assets/reels/` entran a la mezcla automáticamente.
+- **02 y 03 están FUSIONADAS en una sola sección `#vertical`** — kicker
+  `02 · Proyectos 2D / 3D — últimos trabajos`, título **"Contenido vertical"**.
+  No existen `#3d` ni `#reels`; el nav es **Obras / Vertical / Servicios /
+  Contacto** (4 links, 4 secciones).
+- **La rueda 3D reemplazó al slider.** Los **8 verticales** orbitan un cilindro
+  alrededor del eje Y (`rotateY(i·360/n) translateZ(R)` + `backface-visibility:
+  hidden`): la pieza del frente se ve **grande y centrada**, las demás se
+  alejan en profundidad. Gira sola, **despacio** (`WHEEL_DEG = 7.5` °/s ≈ 48 s
+  por vuelta) y se frena cuando hay una capa abierta, cuando la sección no
+  está a la vista (IO) o cuando la pestaña está oculta. **CHECHA Rifa siempre
+  primera (al frente); el resto, aleatorio en cada carga.** Los reels nuevos
+  que se agreguen a `assets/reels/` entran a la mezcla automáticamente.
+  La rueda usa **solo posters** (`assets/posters/`): cero decode de video
+  mientras gira. **Cualquier preview es clickeable en cualquier momento** →
+  mesa de luz limpia (`openReel`). El click se resuelve por **proyección
+  (`wheelCardAt`, elige el mayor coseno = la más al frente)**, nunca por
+  hit-testing nativo (Chrome lo rompe con `preserve-3d`). Arrastrar hace
+  girar la rueda; un tap (≤8 px, <600 ms) abre la pieza.
+  **La rueda del mouse NO mueve la rueda: scrollea la página** (no hay
+  `wheel` listener; en celular `touch-action: pan-y` deja scrollear normal).
+  Sin números `.reel-idx` sobre las previews.
+- **Botón ATRÁS (Android / navegador) cierra la capa de arriba, nada más.**
+  Cada capa abierta empuja una entrada de historial (`layerPush`) y el
+  `popstate` cierra solo la última: mesa de luz de reel, mesa del Toolbox,
+  modal y Galería 3D en el sitio; mesa de luz dentro de la galería. Cerrar
+  desde la UI consume su propia entrada (`layerDrop` + `history.go`) para que
+  el historial no quede sucio. Escape hace lo mismo que atrás. Al cerrar la
+  galería se descuentan las capas que quedaron abiertas adentro del iframe
+  (`__bloqqLayers()`). **Atrás nunca recarga el sitio**: la galería vuelve
+  exactamente al mismo lugar (`camZ` intacto). El iframe se carga y se
+  descarga con `contentWindow.location.replace()` — asignar `.src` metería
+  entradas extra en el historial conjunto.
+- **Footer: `.foot-ind` con LED rojo titilante + "INDUSTRIA ARGENTINA".**
+- **Toolbox (textos e íconos vigentes)**: *Dirección creativa* (claqueta) ·
+  *Post, Color & VFX* (línea de tiempo con playhead; etiquetas `Edición ·
+  Color · VFX · Mograph · 2D · 3D`) · *Lo viejo funciona, Juan* ("Team
+  horizontal for ever: narrativa y formato largo."; `16:9 · BLOGS · PÓDCASTS ·
+  YOUTUBE`) · *Estrategia Vertical* (celular con la silueta rellena de un
+  rapero con micrófono). Los rellenos usan la clase **`.solid`**
+  (`fill: var(--acc)`), no `currentColor` — que resolvería al hueso del texto.
+  **PENDIENTE: el ícono de "Lo viejo" es todavía pantalla+play; hay que
+  cambiarlo por la Torino con el fondo removido, en ámbar, cuando llegue la
+  imagen.**
 - **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
   la activa el **cartel de neón 3D titilante "GALERÍA 3D"** de la sección
   Contacto (`#ledBtn`), como overlay a pantalla completa (`#galBox` + iframe

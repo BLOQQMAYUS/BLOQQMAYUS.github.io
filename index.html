@@ -236,6 +236,32 @@
   section.acid .strip-count b{color:var(--acid)}
   section.acid .strip-arrow:hover{background:var(--acid);border-color:var(--acid)}
 
+  /* ---------- rueda 3D de contenido vertical ----------
+     Carrusel en profundidad: las previews orbitan en el eje Z alrededor del
+     centro, siempre hay UNA grande al frente y todas van pasando por el medio
+     al girar despacio. Las de atrás se ocultan (backface) para no verse
+     espejadas. La rueda del mouse NO la mueve: scrollea la página. */
+  .wheel-wrap{position:relative}
+  .wheel-stage{position:relative;height:min(78vh,640px);perspective:1400px;perspective-origin:50% 50%;
+    overflow:hidden;touch-action:pan-y;cursor:grab;-webkit-tap-highlight-color:transparent}
+  .wheel-stage.dragging{cursor:grabbing}
+  .wheel-rotor{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+  .wheel-card{position:absolute;left:0;top:0;width:var(--cw,230px);height:var(--ch,409px);aspect-ratio:auto;
+    margin:calc(var(--ch,409px) / -2) 0 0 calc(var(--cw,230px) / -2);
+    transform:var(--tf);backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    transition:border-color .3s,box-shadow .3s;will-change:opacity}
+  .wheel-card:hover{transform:var(--tf);border-color:var(--acc);box-shadow:0 30px 70px rgba(0,0,0,.62)}
+  .wheel-card:focus-visible{transform:var(--tf);outline:2px solid var(--acc);outline-offset:4px}
+  .wheel-card .reel-ph{opacity:.9}
+  .wheel-card:hover .reel-ph{opacity:1}
+  .wheel-foot{display:flex;justify-content:center;margin-top:6px}
+  .wheel-hint{font-family:var(--mono);font-size:.64rem;letter-spacing:.2em;color:var(--mut);text-transform:uppercase}
+  @media(max-width:760px){
+    .wheel-stage{height:min(70vh,520px);perspective:1000px}
+    .wheel-hint{font-size:.58rem;letter-spacing:.16em}
+  }
+  @media(prefers-reduced-motion:reduce){.wheel-stage{cursor:default}}
+
   /* ---------- servicios: íconos de programa clickeables → mesa de luz ---------- */
   .servicios{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .h2-hint{font-size:.42em;font-weight:400;color:var(--mut);letter-spacing:.02em;white-space:nowrap}
@@ -251,6 +277,7 @@
   .serv-ico{width:84px;height:84px;border-radius:22px;background:rgba(242,165,26,.1);border:1px solid rgba(242,165,26,.35);display:grid;place-items:center;transition:.3s}
   .serv:hover .serv-ico{background:rgba(242,165,26,.18);border-color:var(--acc)}
   .serv-ico svg{width:42px;height:42px;stroke:var(--acc);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .serv-ico svg .solid{fill:var(--acc);stroke:none}
   .serv h3{font-size:1rem;font-weight:700;line-height:1.2}
   .serv p{color:var(--mut);font-size:.78rem;line-height:1.45;margin:0}
   .serv-line{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);line-height:1.7}
@@ -360,6 +387,9 @@
   .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
   .foot i{color:var(--acc);font-style:normal}
   .foot b{color:var(--brasa);font-weight:400}
+  /* LED rec pulsante, igual que el del header */
+  .foot-ind{display:inline-flex;align-items:center;gap:9px}
+  .foot-ind i{width:9px;height:9px;border-radius:50%;background:var(--brasa);flex:none;animation:blink 1.2s infinite}
 
   /* ---------- modal ---------- */
   .modal{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(10,8,6,.65)}
@@ -463,9 +493,8 @@
     <a class="logo" href="#top" aria-label="Volver arriba"><span class="key">⇪</span></a>
     <button class="burger" id="burger" aria-label="Menú"><span></span><span></span><span></span></button>
     <div class="nav-links" id="navLinks">
-      <a href="#trabajo">Videoclips</a>
-      <a href="#3d">3D</a>
-      <a href="#reels">Reels</a>
+      <a href="#trabajo">Obras</a>
+      <a href="#vertical">Vertical</a>
       <a href="#servicios">Servicios</a>
       <a href="#contacto" class="cta">Contacto</a>
     </div>
@@ -506,40 +535,20 @@
   </section>
 
   <!-- ============ 02 · 3D · HDP ANDO BAIRES + CHECHA RIFA ============ -->
-  <section id="3d" class="vertical acid">
+  <section id="vertical" class="vertical">
     <div class="wrap">
       <div class="sec-head reveal" style="margin-bottom:26px">
-        <div class="kicker">02 · 3D — últimos trabajos</div>
-        <h2 class="h-916">3D</h2>
+        <div class="kicker">02 · Proyectos 2D / 3D — últimos trabajos</div>
+        <h2 class="h-big">Contenido vertical</h2>
       </div>
     </div>
-    <div class="strip-wrap reveal">
-      <button class="strip-arrow left" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="strip"><div class="strip-track"></div></div>
-      <button class="strip-arrow right" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    </div>
-    <div class="wrap strip-foot">
-      <div class="strip-progress"><i></i></div>
-      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · click = ver con sonido</div>
-    </div>
-  </section>
-
-  <!-- ============ 03 · VIDEOCLIPS EN VERTICAL ============ -->
-  <section id="reels" class="vertical">
-    <div class="wrap">
-      <div class="sec-head reveal" style="margin-bottom:26px">
-        <div class="kicker">03 · Videoclips — en vertical</div>
-        <h2 class="h-big">Videoclips</h2>
+    <div class="wheel-wrap reveal">
+      <div class="wheel-stage" id="wheelStage">
+        <div class="wheel-rotor" id="wheelRotor"></div>
       </div>
     </div>
-    <div class="strip-wrap reveal">
-      <button class="strip-arrow left" aria-label="Anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-      <div class="strip"><div class="strip-track"></div></div>
-      <button class="strip-arrow right" aria-label="Siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-    </div>
-    <div class="wrap strip-foot">
-      <div class="strip-progress"><i></i></div>
-      <div class="strip-count"><b>01</b> / <span class="strip-total">00</span> · click = ver con sonido</div>
+    <div class="wrap wheel-foot">
+      <span class="wheel-hint">click en una preview = ver con sonido</span>
     </div>
   </section>
 
@@ -553,28 +562,28 @@
       <div class="serv-grid">
         <button type="button" class="serv reveal" data-lt="direccion">
           <span class="serv-plus">+</span>
-          <span class="serv-ico"><svg viewBox="0 0 24 24"><path d="M2 8l14-4 1 4-14 4zM3 12h18v8H3zM16 4l2 4M11 5.5l2 4M6 7l2 4"/></svg></span>
-          <h3>Dirección &amp; Rodaje</h3>
-          <p>Concepto, guion, dirección y cámara con look de cine.</p>
+          <span class="serv-ico"><svg viewBox="0 0 24 24"><path d="M20.2 6.4 3.8 9.1 3.1 5.6l16.4-2.7z"/><path d="M3.8 9.1h16.4v9.4a2 2 0 0 1-2 2H5.8a2 2 0 0 1-2-2z"/><path d="m7.5 4.4 1.1 3.6m3.7-4.3 1.1 3.6m3.7-4.3 1.1 3.6"/></svg></span>
+          <h3>Dirección creativa</h3>
+          <p>Concepto, guion, dirección, del brief a la entrega final.</p>
           <span class="serv-line">Tratamiento · Fotografía · Sonido · Rodaje</span>
         </button>
         <button type="button" class="serv reveal" data-lt="post">
           <span class="serv-plus">+</span>
-          <span class="serv-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.5 6.5M12 12L5.5 18.5M12 12l8-3"/></svg></span>
+          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><rect x="5.2" y="8.4" width="6.6" height="2.8" rx="1.4"/><rect x="5.2" y="13" width="10.4" height="2.8" rx="1.4"/><path d="M18 6.6v10.8"/><path d="M16.5 6.6h3l-1.5 2z"/></svg></span>
           <h3>Post, Color &amp; VFX</h3>
-          <p>Edición, etalonaje, VFX y motion hasta la pieza final.</p>
-          <span class="serv-line">Edición · Color · VFX · Motion · 3D</span>
+          <p>Edición, etalonaje, VFX y mograph hasta la pieza final.</p>
+          <span class="serv-line">Edición · Color · VFX · Mograph · 2D · 3D</span>
         </button>
         <button type="button" class="serv reveal" data-lt="viejo">
           <span class="serv-plus">+</span>
           <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M10 8v5l4.5-2.5zM12 17v4M8 21h8"/></svg></span>
-          <h3>Lo viejo funciona</h3>
-          <p>El horizontal no pasó de moda: narrativa y oficio en 16:9.</p>
-          <span class="serv-line">Videoclips · Spots · Guión · 16:9</span>
+          <h3>Lo viejo funciona, Juan</h3>
+          <p>Team horizontal for ever: narrativa y formato largo.</p>
+          <span class="serv-line">16:9 · BLOGS · PÓDCASTS · YOUTUBE</span>
         </button>
         <button type="button" class="serv reveal" data-lt="vertical">
           <span class="serv-plus">+</span>
-          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M10 5h4M4 14l3-3 3 2 4-5 3 3"/></svg></span>
+          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="6.5" y="2" width="11" height="20" rx="2.5"/><path d="M10.6 4.7h2.8"/><circle class="solid" cx="11" cy="9.3" r="2.1"/><path class="solid" d="M7.5 18.6c0-3.1 1.55-5 3.5-5s3.5 1.9 3.5 5z"/><path d="M13.5 14.4 15.2 11.6" stroke-width="1.4"/><circle class="solid" cx="15.6" cy="10.7" r="1.35"/></svg></span>
           <h3>Estrategia Vertical</h3>
           <p>Paquetes 9:16 para Reels, TikTok y Shorts.</p>
           <span class="serv-line">Ideación · Hooks · Batch · Métricas</span>
@@ -615,7 +624,7 @@
 <footer>
   <div class="wrap foot">
     <span>© 2026 <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">CABA, Buenos Aires</span></span>
-    <span>videoclips · VFX · vertical <b>●</b> hecho en Balvanera</span>
+    <span class="foot-ind"><i></i> INDUSTRIA ARGENTINA</span>
   </div>
 </footer>
 
@@ -836,173 +845,132 @@ function reelTitle(n) {
 }
 /* Click-to-play: ningún video descarga ni reproduce hasta que se clickea.
    Un solo video inline activo a la vez (registro global) → cero decoders simultáneos. */
-const reelVideos = [];
-const pauseAllReels = () => reelVideos.forEach(v => { if (!v.paused) v.pause(); });
-const pauseAllReelsExcept = keep => reelVideos.forEach(v => { if (v !== keep && !v.paused) v.pause(); });
-function buildStrip(sec, items) {
-  const strip = sec.querySelector(".strip");
-  const track = sec.querySelector(".strip-track");
-  const bar = sec.querySelector(".strip-progress i");
-  const idxEl = sec.querySelector(".strip-count b");
-  sec.querySelector(".strip-total").textContent = pad2(items.length);
-  track.innerHTML = items.map((v, i) => `
-    <article class="reel-card" data-i="${i}">
-      <div class="reel-ph"><i>${ICONS.play}</i></div>
-      <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" draggable="false">
-      <video src="${v.xs || v.lo || v.src}" muted loop playsinline preload="none"></video>
-      <span class="reel-idx">${pad2(i + 1)}</span>
-      ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
-      <span class="reel-exp"><svg viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6"/></svg></span>
-    </article>`).join("");
-  const cards = [...track.querySelectorAll(".reel-card")];
-  const videos = cards.map(c => c.querySelector("video"));
-  videos.forEach((v, i) => {
-    reelVideos.push(v);
-    scanPool.push({ v, card: cards[i] });
-    v.draggable = false;
-    v.addEventListener("playing", () => {
-      /* arranque tardío fuera de turno → se pausa solo (nada de desorden) */
-      if (modal.classList.contains("open") || (scanCur && scanCur.v !== v)) { v.pause(); return; }
-      cards[i].classList.add("ready", "playing");
-      pauseAllReelsExcept(v);
-    });
-    v.addEventListener("pause", () => cards[i].classList.remove("playing"));
+/* ---- RUEDA 3D de contenido vertical ----
+   Posters en la rueda (nada de video decodeando mientras gira): el video
+   arranca recién al clickear, en la mesa de luz. Giro lento y continuo,
+   clickeable en cualquier momento. Se frena sola fuera de vista, con la
+   pestaña oculta, con foco de teclado o con cualquier capa abierta.
+   La rueda del mouse NO la mueve: scrollea la página (pedido expreso). */
+const wheelStage = document.getElementById("wheelStage");
+const wheelRotor = document.getElementById("wheelRotor");
+let wheelItems = [], wheelCards = [], wheelAngle = 0, wheelVel = 0;
+let wheelRaf = 0, wheelLast = 0, wheelVisible = false, wheelFocus = false;
+const WHEEL_DEG = 7.5;                    // ≈48 s por vuelta: despacio
+const wheelPaused = () => modal.classList.contains("open") || ltOpen || galOpen ||
+  document.hidden || !wheelVisible || wheelFocus || rlPhase !== null;
+
+function wheelGeom() {
+  const small = innerWidth <= 760;
+  const cw = small ? 170 : 230, ch = Math.round(cw * 16 / 9);
+  const n = Math.max(1, wheelCards.length);
+  const R = Math.min(small ? 330 : 460, (cw * .5 / Math.tan(Math.PI / n)) * 1.45);
+  wheelStage.style.setProperty("--cw", cw + "px");
+  wheelStage.style.setProperty("--ch", ch + "px");
+  wheelCards.forEach((c, i) => {
+    c._a = i * (360 / n);
+    c.style.setProperty("--tf", `rotateY(${c._a}deg) translateZ(${R}px)`);
   });
-  cards.forEach(c => {
+}
+function wheelPaint() {
+  wheelRotor.style.transform = `rotateY(${wheelAngle}deg)`;
+  for (const c of wheelCards) {
+    const k = Math.cos((wheelAngle + c._a) * Math.PI / 180);
+    c.style.opacity = k <= 0 ? "0" : (0.42 + 0.58 * k).toFixed(3);
+  }
+}
+function wheelTick(t) {
+  wheelRaf = requestAnimationFrame(wheelTick);
+  const dt = Math.min((t - wheelLast) / 1000, .05) || .016;
+  wheelLast = t;
+  if (wheelPaused()) return;
+  wheelAngle += (WHEEL_DEG + wheelVel) * dt;
+  wheelVel *= Math.pow(.05, dt);
+  if (wheelAngle >= 360 || wheelAngle <= -360) wheelAngle %= 360;
+  wheelPaint();
+}
+/* hit-test por proyección: con preserve-3d el hit-testing nativo de Chrome
+   devuelve el contenedor, así que se resuelve por rect + profundidad real.
+   Gana la más cercana al frente; las de atrás no se clickean. */
+function wheelCardAt(x, y) {
+  let best = null, bestK = -Infinity;
+  for (const c of wheelCards) {
+    const r = c.getBoundingClientRect();
+    if (x < r.left || x > r.right || y < r.top || y > r.bottom) continue;
+    const k = Math.cos((wheelAngle + c._a) * Math.PI / 180);
+    if (k <= .05) continue;
+    if (k > bestK) { bestK = k; best = c; }
+  }
+  return best;
+}
+function buildWheel(items) {
+  wheelItems = items;
+  wheelRotor.innerHTML = items.map((v, i) => `
+    <article class="reel-card wheel-card" data-i="${i}" tabindex="0" role="button" aria-label="Ver ${v.title}">
+      <div class="reel-ph"><i>${ICONS.play}</i></div>
+      <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" decoding="async" draggable="false">
+      ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
+    </article>`).join("");
+  wheelCards = [...wheelRotor.querySelectorAll(".wheel-card")];
+  wheelCards.forEach(c => {
     const p = c.querySelector(".reel-poster");
     if (!p) return;
     const mark = () => c.classList.add("has-poster");
     if (p.complete && p.naturalWidth) mark(); else p.addEventListener("load", mark);
   });
-  /* drag con momentum + TAP propio: setPointerCapture redirige el click al
-     contenedor, así que la tarjeta se detecta en pointerdown y se abre en pointerup */
-  let down = false, sx = 0, ss = 0, vel = 0, lx = 0, lt = 0, moved = 0, raf = 0, wheelT = 0;
-  let downCard = null, downT = 0, suppressClick = false;
-  /* snap desactivado durante drag/glide/rueda para que no pelee con el
-     momentum (era la causa del scroll "raro"); se reactiva al asentar. */
-  const snapOff = () => { strip.style.scrollSnapType = "none"; };
-  const snapOn = () => { strip.style.scrollSnapType = ""; };
-  strip.addEventListener("pointerdown", e => {
-    downCard = e.target.closest ? e.target.closest(".reel-card") : null;
-    downT = performance.now();
-    down = true; moved = 0; sx = e.clientX; ss = strip.scrollLeft;
-    lx = e.clientX; lt = performance.now(); vel = 0;
-    cancelAnimationFrame(raf); snapOff();
-    strip.classList.add("dragging");
-    strip.setPointerCapture(e.pointerId);
+  wheelGeom(); wheelPaint();
+
+  /* arrastrar para girar + TAP propio (setPointerCapture redirige el click) */
+  let down = false, sx = 0, sa = 0, lx = 0, lt = 0, moved = 0, downT = 0, downCard = null;
+  wheelStage.addEventListener("pointerdown", e => {
+    down = true; moved = 0; sx = e.clientX; sa = wheelAngle;
+    lx = e.clientX; lt = performance.now(); downT = lt; wheelVel = 0;
+    downCard = wheelCardAt(e.clientX, e.clientY);
+    wheelStage.classList.add("dragging");
+    wheelStage.setPointerCapture(e.pointerId);
   });
-  strip.addEventListener("pointermove", e => {
+  wheelStage.addEventListener("pointermove", e => {
     if (!down) return;
     const dx = e.clientX - sx;
     moved = Math.max(moved, Math.abs(dx));
-    strip.scrollLeft = ss - dx;
+    wheelAngle = sa + dx * .22;
     const now = performance.now(), dt = now - lt || 16;
-    vel = (e.clientX - lx) / dt; lx = e.clientX; lt = now;
+    wheelVel = ((e.clientX - lx) / dt) * 1000 * .22;
+    lx = e.clientX; lt = now;
+    wheelPaint();
   });
-  const end = () => {
+  wheelStage.addEventListener("pointerup", e => {
     if (!down) return;
-    down = false; strip.classList.remove("dragging");
-    if (moved <= 8 && downCard && performance.now() - downT < 600) {
-      suppressClick = true; snapOn();
-      const c = downCard; downCard = null;
-      openReel(items, +c.dataset.i, c);       // tap = previsualización limpia con sonido
+    down = false; wheelStage.classList.remove("dragging");
+    if (moved <= 8 && performance.now() - downT < 600) {
+      const c = downCard || wheelCardAt(e.clientX, e.clientY);
+      downCard = null; wheelVel = 0;
+      if (c) openReel(wheelItems, +c.dataset.i, c);
       return;
     }
     downCard = null;
-    vel = Math.max(-2.6, Math.min(2.6, vel));  // tope de momentum (sin saltos)
-    const glide = () => {
-      vel *= .92; strip.scrollLeft -= vel * 16;
-      if (Math.abs(vel) > .04) raf = requestAnimationFrame(glide);
-      else snapOn();                           // asentó → snap suave
-    };
-    raf = requestAnimationFrame(glide);
-  };
-  strip.addEventListener("pointerup", end);
-  strip.addEventListener("pointercancel", () => {
-    if (!down) return;
-    down = false; downCard = null; strip.classList.remove("dragging"); snapOn();
+    wheelVel = Math.max(-90, Math.min(90, wheelVel));
   });
-  /* rueda → scroll horizontal (PC/trackpad). Solo si hay recorrido en esa
-     dirección; en el borde deja scrollear la página verticalmente. */
-  strip.addEventListener("wheel", e => {
-    const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (!d) return;
-    const max = strip.scrollWidth - strip.clientWidth;
-    const can = (d > 0 && strip.scrollLeft < max - 1) || (d < 0 && strip.scrollLeft > 1);
-    if (!can) return;
-    e.preventDefault(); snapOff();
-    strip.scrollLeft += d;
-    clearTimeout(wheelT); wheelT = setTimeout(snapOn, 160);
-  }, { passive: false });
-  strip.addEventListener("click", e => {
-    if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopPropagation(); return; }
-    if (moved > 8) { e.preventDefault(); e.stopPropagation(); return; }
-    const c = e.target.closest(".reel-card");
-    if (c) openReel(items, +c.dataset.i, c);  // fallback (teclado / lectores)
-  }, true);
-  strip.addEventListener("dragstart", e => e.preventDefault());
-  const step = () => (cards[0] ? cards[0].offsetWidth : 320) + 26;
-  sec.querySelector(".strip-arrow.left").addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
-  sec.querySelector(".strip-arrow.right").addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
-  const hud = () => {
-    const max = strip.scrollWidth - strip.clientWidth;
-    bar.style.width = (max > 0 ? (strip.scrollLeft / max) * 100 : 100) + "%";
-    idxEl.textContent = pad2(Math.min(items.length, Math.max(1, Math.round(strip.scrollLeft / step()) + 1)));
-  };
-  strip.addEventListener("scroll", hud, { passive: true });
-  hud();
+  wheelStage.addEventListener("pointercancel", () => {
+    down = false; downCard = null; wheelStage.classList.remove("dragging");
+  });
+  wheelStage.addEventListener("dragstart", e => e.preventDefault());
+  wheelStage.addEventListener("keydown", e => {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const c = e.target.closest(".wheel-card"); if (!c) return;
+    e.preventDefault(); openReel(wheelItems, +c.dataset.i, c);
+  });
+  wheelStage.addEventListener("focusin", () => { wheelFocus = true; });
+  wheelStage.addEventListener("focusout", () => { wheelFocus = false; });
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => es.forEach(en => { wheelVisible = en.isIntersecting; }),
+      { threshold: .05 }).observe(wheelStage);
+  } else wheelVisible = true;
+  if (!wheelRaf) { wheelLast = performance.now(); wheelRaf = requestAnimationFrame(wheelTick); }
 }
-/* ---- scanner: UNA preview a la vez · 2 s REALES de reproducción · izq → der ----
-   El corte cuenta desde que el video arranca de verdad ('playing'), no desde
-   que se pide. Si una pieza no arranca en 6 s se saltea y el orden sigue.
-   Se frena con modal abierto o pestaña oculta; reanuda al cerrar/volver. */
-const scanPool = [];
-let scanI = -1, scanCur = null, scanTimer = 0, scanWait = 0;
-const onScreen = el => {
-  const r = el.getBoundingClientRect();
-  return r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
-};
-function scanStop() {
-  clearTimeout(scanTimer); clearTimeout(scanWait);
-  if (scanCur) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); scanCur = null; }
-}
-function scanNext() {
-  if (modal.classList.contains("open") || ltOpen || galOpen || document.hidden) { scanStop(); return; }
-  const n = scanPool.length;
-  if (!n) return;
-  let next = null;
-  for (let k = 1; k <= n; k++) {
-    const j = (scanI + k) % n, cand = scanPool[j];
-    if (onScreen(cand.card)) { next = cand; scanI = j; break; }
-  }
-  if (!next) { scanStop(); return; }
-  clearTimeout(scanTimer); clearTimeout(scanWait);
-  if (scanCur && scanCur !== next) { scanCur.v.pause(); scanCur.card.classList.remove("playing"); }
-  scanCur = next;
-  next.v.preload = "auto";
-  const after = scanPool[(scanI + 1) % n];   // pre-buffer de la siguiente
-  if (after && after !== next) after.v.preload = "auto";
-  const advance = () => {
-    if (scanCur !== next) return;
-    next.v.pause(); next.card.classList.remove("playing"); scanCur = null;
-    scanNext();
-  };
-  const arm = () => { clearTimeout(scanWait); scanTimer = setTimeout(advance, 2000); };
-  if (!next.v.paused && next.v.readyState >= 2) { arm(); return; }
-  const onPlaying = () => {
-    next.v.removeEventListener("playing", onPlaying);
-    if (scanCur === next) arm();
-  };
-  next.v.addEventListener("playing", onPlaying);
-  next.v.play().catch(() => {});
-  scanWait = setTimeout(() => {
-    next.v.removeEventListener("playing", onPlaying);
-    if (scanCur === next) { scanCur = null; scanNext(); }
-  }, 6000);
-}
+addEventListener("resize", () => { wheelGeom(); wheelPaint(); });
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) { scanStop(); if (rlPhase === "open") rlVideo.pause(); }
-  else { scanNext(); if (rlPhase === "open") rlVideo.play().catch(() => {}); }
+  if (document.hidden) { if (rlPhase === "open") rlVideo.pause(); }
+  else if (rlPhase === "open") rlVideo.play().catch(() => {});
 });
 
 /* ---- previsualización limpia: fondo 65%, vuelo al centro YA reproduciendo,
@@ -1027,7 +995,7 @@ function openReel(list, i, card) {
   if (rlPhase) return;
   const v = list[((i % list.length) + list.length) % list.length];
   rlCard = card || null;
-  pauseAllReels(); scanStop();
+  wheelVel = 0;
   rlVideo.src = v.lo || v.src;
   rlVideo.poster = v.poster || "";
   rlVideo.muted = true;                 // arranca mudo durante el vuelo (dentro del gesto)…
@@ -1043,6 +1011,7 @@ function openReel(list, i, card) {
   document.body.style.overflow = "hidden";
   rlVideo.play().catch(() => {});
   rlPhase = "in";
+  layerPush("rl", closeReel);
   clearTimeout(rlTimer);
   rlTimer = setTimeout(rlLand, 700);
 }
@@ -1056,9 +1025,10 @@ rlVideo.addEventListener("transitionend", e => {
   if (rlPhase === "in") rlLand();
   else if (rlPhase === "out") rlFinish();
 });
-function closeReel() {
+function closeReel(fromPop) {
   if (rlPhase !== "open") return;
   rlPhase = "out";
+  if (!fromPop) layerDrop("rl");
   rlBox.classList.remove("on");
   rlVideo.style.transition = "none";
   rlSetRect(rlFit());
@@ -1076,16 +1046,15 @@ function rlFinish() {
   rlVideo.removeAttribute("src"); rlVideo.load();
   rlBox.classList.remove("open", "on");
   document.body.style.overflow = ltOpen ? "hidden" : "";
-  scanNext();
 }
-rlBg.addEventListener("click", closeReel);
+rlBg.addEventListener("click", () => closeReel());
 addEventListener("resize", () => { if (rlPhase === "open" || rlPhase === "in") rlSetRect(rlFit()); });
 
 /* ---- mesas de luz del Toolbox: una superficie clara por categoría.
    Tipos soportados: yt (YouTube), video (MP4 propio), img, doc.
    Para sumar piezas: agregar entradas acá (o pasame los links y las cargo). ---- */
 const LIGHTTABLES = {
-  direccion: { title: "Dirección & Rodaje", acc: "#F2A51A",
+  direccion: { title: "Dirección creativa", acc: "#F2A51A",
     desc: "Mesa de ideas · del concepto al set: tratamiento visual, frames de rodaje y detrás de escena.",
     items: [
     { t: "yt", id: "Csj207PWog0", title: "Showreel 2026", sub: "dirección · reel" },
@@ -1109,7 +1078,7 @@ const LIGHTTABLES = {
     { t: "yt", id: "oxOTVVbyYFA", title: "Luna Nueva", sub: "Lihuel Yair ft. El Soud · VFX + lyric" },
     { t: "yt", id: "HAxRAyv8Ll8", title: "Tai Chi & Full Contact", sub: "iQ.NO1" }
   ]},
-  viejo: { title: "Lo viejo funciona", acc: "#D9737F",
+  viejo: { title: "Lo viejo funciona, Juan", acc: "#D9737F",
     desc: "Mesa de ideas · archivo 2020–2023 que sigue vigente: VFX, animación 2D/3D y montaje con oficio.",
     items: [
     { t: "yt", id: "bIVLTBuUCj8", title: "En tu camino", sub: "Sello De Luna ft. Nakko FG · 2020 · animación 2D/3D" },
@@ -1145,7 +1114,7 @@ function openLT(cat) {
   const tb = LIGHTTABLES[cat];
   if (!tb || ltOpen) return;
   ltCat = cat; ltOpen = true;
-  scanStop();
+  layerPush("lt", closeLT);
   ltPanel.style.setProperty("--lt-acc", tb.acc);
   document.getElementById("ltTitle").textContent = tb.title;
   const real = tb.items.filter(i => i.t !== "ph").length;
@@ -1174,16 +1143,16 @@ function openLT(cat) {
   ltBox.classList.add("on");
   document.body.style.overflow = "hidden";
 }
-function closeLT() {
+function closeLT(fromPop) {
   if (!ltOpen) return;
   ltOpen = false;
+  if (!fromPop) layerDrop("lt");
   ltBox.classList.remove("on");
   setTimeout(() => { if (!ltOpen) { ltBox.classList.remove("open"); ltGrid.innerHTML = ""; } }, 380);
   document.body.style.overflow = (modal.classList.contains("open") || rlPhase) ? "hidden" : "";
-  scanNext();
 }
-ltBg.addEventListener("click", closeLT);
-document.getElementById("ltX").addEventListener("click", closeLT);
+ltBg.addEventListener("click", () => closeLT());
+document.getElementById("ltX").addEventListener("click", () => closeLT());
 ltGrid.addEventListener("click", e => {
   const b = e.target.closest(".lt-item");
   if (!b || !ltCat) return;
@@ -1231,11 +1200,8 @@ async function loadReels() {  let names = FALLBACK_REELS;
   }));
   /* REGLA PERMANENTE: 3D → CHECHA Rifa siempre primera, el resto aleatorio.
      Videoclips verticales → siempre aleatorio. Los reels nuevos entran a la mezcla. */
-  const g3 = items.filter(i => i.group);
-  const td = [...g3.filter(i => i.group === "CHECHA RIFA"), ...shuffle(g3.filter(i => i.group !== "CHECHA RIFA"))];
-  buildStrip(document.getElementById("3d"), td);
-  buildStrip(document.getElementById("reels"), shuffle(items.filter(i => !i.group)));
-  scanNext();
+  const esChecha = i => /CHECHA/i.test(i.group || "");
+  buildWheel([...items.filter(esChecha), ...shuffle(items.filter(i => !esChecha(i)))]);
 }
 
 /* ---- modal ---- */
@@ -1275,19 +1241,18 @@ function openModal(item) {
     "✦ Placeholder — cuando llegue el reel real, se reproduce acá.");
   modal.classList.add("open");
   document.body.style.overflow = "hidden";
-  pauseAllReels();
-  scanStop();
+  layerPush("modal", closeModal);
 }
-function closeModal() {
+function closeModal(fromPop) {
+  if (!modal.classList.contains("open")) return;
+  if (!fromPop) layerDrop("modal");
   modal.classList.remove("open");
   mMedia.innerHTML = "";
   document.body.style.overflow = ltOpen ? "hidden" : "";
-  pauseAllReels();
-  scanNext();
 }
-document.getElementById("modalBg").addEventListener("click", closeModal);
-document.getElementById("modalX").addEventListener("click", closeModal);
-document.addEventListener("keydown", e => { if (e.key === "Escape") { if (galOpen) { closeGal(); return; } closeModal(); closeReel(); closeLT(); } });
+document.getElementById("modalBg").addEventListener("click", () => closeModal());
+document.getElementById("modalX").addEventListener("click", () => closeModal());
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeTopLayer(); });
 document.getElementById("showreelBtn").addEventListener("click", () =>
   openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
 
@@ -1297,24 +1262,31 @@ const galFrame = document.getElementById("galFrame");
 let galOpen = false;
 function openGal() {
   if (galOpen) return;
-  galOpen = true; scanStop();
-  galFrame.src = "lab/vortex/";           // carga recién al abrir: cero procesos de fondo
+  galOpen = true;
+  layerPush("gal", closeGal);
+  /* location.replace: carga el iframe SIN agregar entradas al historial */
+  galFrame.contentWindow.location.replace("lab/vortex/");
   galBox.classList.add("open");
   galBox.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
 }
-function closeGal() {
+function closeGal(fromPop) {
   if (!galOpen) return;
   galOpen = false;
+  if (!fromPop) {
+    /* si adentro quedó una mesa de luz abierta, se consumen sus entradas también */
+    let extra = 0;
+    try { extra = galFrame.contentWindow.__bloqqLayers ? galFrame.contentWindow.__bloqqLayers() : 0; } catch (e) {}
+    layerDrop("gal", extra);
+  }
   galBox.classList.remove("open");
   galBox.setAttribute("aria-hidden", "true");
-  galFrame.src = "";                      // descarga la galería: nada sigue corriendo
+  galFrame.contentWindow.location.replace("about:blank");   // descarga sin ensuciar el historial
   document.body.style.overflow = ltOpen ? "hidden" : "";
-  scanNext();
 }
 window.galClose = closeGal;               // la galería (iframe) se cierra sola con Esc
 document.getElementById("ledBtn").addEventListener("click", openGal);
-document.getElementById("galX").addEventListener("click", closeGal);
+document.getElementById("galX").addEventListener("click", () => closeGal());
 /* el neón titila solo cuando está a la vista → cero costo de animación fuera de pantalla */
 const neonSign = document.getElementById("ledBtn");
 if ("IntersectionObserver" in window) {
@@ -1330,6 +1302,33 @@ neonSign.addEventListener("animationend", e => {
 document.querySelectorAll("img").forEach(i => { i.draggable = false; });
 document.addEventListener("dragstart", e => {
   if (e.target.closest && e.target.closest(".film,.reel-card")) e.preventDefault();
+});
+
+/* ---- botón "atrás" del celular / gestos: cierra la capa de arriba y te
+   deja exactamente donde estabas, en vez de recargar o salir del sitio.
+   Cada capa abierta empuja una entrada; al volver atrás se cierra sola.
+   El cierre por UI consume su propia entrada (layerSync evita el doble). ---- */
+const layerStack = [];
+let layerSync = 0;
+function layerPush(name, closeFn) {
+  layerStack.push({ name, closeFn });
+  history.pushState({ bloqq: layerStack.length }, "");
+}
+function layerDrop(name, extra) {
+  const i = layerStack.findIndex(l => l.name === name);
+  if (i < 0) return;
+  layerStack.splice(i, 1);
+  layerSync++;
+  history.go(-(1 + (extra || 0)));
+}
+function closeTopLayer() {
+  const top = layerStack[layerStack.length - 1];
+  if (top) top.closeFn(false);
+}
+addEventListener("popstate", () => {
+  if (layerSync > 0) { layerSync--; return; }
+  const top = layerStack.pop();
+  if (top) top.closeFn(true);
 });
 
 /* ---- nav ---- */
