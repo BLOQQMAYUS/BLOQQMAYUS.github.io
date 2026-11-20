@@ -52,16 +52,19 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   huecos, no uno solo.
 - **El h1 del hero es un CARTEL DE NEÓN 3D**, mismo lenguaje que el de Galería
   3D (placa, tornillos, `rotateX`, tubo con núcleo blanco + halo). Texto:
-  **"activá el BLOQQ MÁYUS. de minúsculas, MAYÚSCULAS."** — las **minúsculas
+  **"activá el BLOQQ MÁYUS. de minúsculas, a MAYÚSCULAS"** (texto exacto: la
+  "a" va en minúsculas y el segundo renglón NO lleva punto final) — las **minúsculas
   también son tubo**: núcleo gris + halo gris (`.hn-low`) y **son LAS QUE
   TITILAN** (`hnBlink`, cortes secos a apagado, dos duraciones desfasadas por
   renglón). Las **mayúsculas NO titilan**: `BLOQQ MÁYUS.` **ámbar** y
-  `MAYÚSCULAS.` **ácido**, siempre prendidas y sin animación. Las únicas
+  `MAYÚSCULAS` **ácido**, siempre prendidas y sin animación. Las únicas
   palabras en mayúscula son esas dos. Titila solo a la vista (`.lit` por IO),
   solo opacidad, y se apaga con `prefers-reduced-motion`. **No es un botón.**
-  La placa es **`width:fit-content` + `max-width:100%`** con padding horizontal
-  corto (18px, 12px en celu): queda ajustada al texto, sin aire vacío a los
-  costados. **Nunca dimensionarla en `vw`**: el contenedor tiene padding y una
+  La placa es **`width:fit-content` + `max-width:100%`** con **padding horizontal
+  amplio (46px, 24px en celu)**: tiene que haber aire de verdad entre las letras
+  y el borde. *(Esto da vuelta el pedido anterior de "placa ajustada, sin aire":
+  ahora el aire es el pedido.)* Sigue siendo fit-content, nunca un bloque de
+  ancho completo. **Nunca dimensionarla en `vw`**: el contenedor tiene padding y una
   placa en vw se desborda y queda descentrada en celu.
   `.hn-tube`/`.hn-low` llevan `white-space:nowrap`, así en mobile cada bloque
   baja entero y el cartel queda en 3 renglones.
@@ -80,18 +83,25 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   `.vertical`, `.servicios` y `.contact` pasaron a **`background:transparent`**
   (antes `--bg2`); si se agrega una sección nueva, no ponerle fondo opaco o
   tapará las estrellas. `--bg2` sigue existiendo para la scrollbar.
-- **Campo de estrellas en todo el sitio, desde "01 · MONTAJE | EDICIÓN | VFX"
-  hacia abajo** (`#starfield`, canvas fijo `z-index:0`, `aria-hidden`). El hero
-  queda limpio: el dibujo se **recorta** a partir del borde superior de
-  `#trabajo`, así nunca se pinta sobre la foto. Velocidad = **60% de la de la
+- **Campo de estrellas en todo el sitio** (`#starfield`, canvas fijo
+  `z-index:0`, `aria-hidden`). **Arranca en la BANDA DE FUNDIDO del header**,
+  no en el borde de 01: el recorte es `top(#trabajo) − banda`, con
+  `banda = min(45% del alto, 420px)`, y dentro de la banda las estrellas entran
+  con rampa de alpha y un piso de .45 para que se vean de verdad. La mitad de
+  arriba del hero sigue limpia. *(Antes el corte era exacto en 01 y el fundido
+  del header quedaba sin estrellas: se notaba el corte de la imagen.)* Velocidad = **60% de la de la
   galería** (`AUTO 80 × 0.6`, pedido: 40% más lento). Presupuesto de rendimiento
   (importante, ya costó un test entero): **30 fps** con throttle, **dpr acotado
-  a 1.5**, ~100–200 puntos según área, **ni un frame** cuando solo el hero está
-  en pantalla, cuando la pestaña está oculta o **cuando hay una capa abierta**
+  a 1.5**, **190–340 puntos** según área (subió desde 110: con menos, la banda
+  del header quedaba casi vacía porque la proyección amontona las estrellas
+  cerca del punto de fuga; además el nacimiento se sesga un poco hacia cerca,
+  `z = NEAR + (FAR−NEAR)·random^1.35`, para que se repartan por la pantalla),
+  **ni un frame** cuando ni el fundido está en pantalla, cuando la pestaña está
+  oculta o **cuando hay una capa abierta**
   (`body.style.overflow === "hidden"` → la galería ya tiene sus estrellas).
   El corte es por REGIÓN, no por sección: observar solo `#trabajo` con IO haría
   que las estrellas se paren al llegar a Servicios.
-  **La galería lleva 416 estrellas** (320 +30%), a la misma velocidad de siempre.
+  **La galería lleva 620 estrellas**, a la misma velocidad de siempre.
 - **Sin chip "Todos" en 01**: solo nombres de artista, en orden aleatorio. El
   estado por defecto sigue siendo el pliegue mezclado, y **volver a tocar el
   artista activo lo deselecciona** y devuelve al pliegue (si no, no habría forma
@@ -329,6 +339,44 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
   paseo se colgaba. El radio medio de TODOS los píxeles no sirve como criterio
   (las que salen del cuadro renacen lejos, cerca del centro, y arrastran el
   promedio hacia abajo): hay que seguir estrellas de una a otra.
+
+### Medio del header y vista previa para compartir (REGLA PERMANENTE)
+
+- **Cada vez que se cambia la imagen/video del header, se cambia también la
+  imagen de la vista previa del link** (`og:image` y `twitter:image` del
+  `<head>`): es la miniatura que se ve al mandar el sitio por **WhatsApp**,
+  Telegram, LinkedIn, X, etc. Si no, se comparte una portada vieja.
+  **Lo hace cumplir un test**: `tests/hero-sync.py` corre dentro de
+  `./tests/smoke.sh` y falla si el medio del header y los dos metas no apuntan
+  al mismo archivo (o si el archivo no existe).
+- **Cambiarlo es un comando**: `cd portfolio && ./cambiar-hero.sh <archivo> [alt]`
+  actualiza el medio **y** los dos metas juntos.
+  - volver a la imagen anterior: `./cambiar-hero.sh assets/hero/anterior.jpg`
+  - imagen nueva: copiá el archivo a `assets/hero/` y pasáselo al script
+  - video: `./cambiar-hero.sh assets/hero/clip.mp4` → pone `<video autoplay muted
+    loop playsinline>` con **poster** (el poster es lo que se comparte: WhatsApp
+    no hace preview de video).
+- Los medios viven en **`assets/hero/`**: `bloqq-bg.jpg` (el actual, ilustración
+  del personaje cruzando la avenida con el Obelisco) y `anterior.jpg` (la foto
+  anterior, guardada para volver en un segundo).
+- **El zoom suave en loop lo pone la CSS** (`.hero-img img,.hero-img video` +
+  `@keyframes slowzoom`, 24 s alternate, `will-change:transform` para que corra
+  en el compositor), **no el archivo**: cambiar el medio no toca la animación.
+- Encuadre: `object-position:62% 42%` en desktop y **93% 40%** en celu (≤760px y
+  ≤640px) para que en el angosto se vea el personaje y no pura calle.
+  ⚠️ hay **dos** reglas de `object-position` para el hero: la de ≤640px pisa a
+  la de ≤760px, así que hay que cambiar las dos.
+- **El fundido con el fondo es una MÁSCARA, no un degradado opaco encima.**
+  `.hero-img` lleva `mask-image` (y `-webkit-`) que se va a transparente abajo;
+  la máscara afecta también al `::after`, así que imagen y scrim se desvanecen
+  juntos y **dejan ver el fondo del sitio con sus estrellas**. Antes el
+  degradado terminaba en `rgba(...,.95)` y se veía el corte del borde inferior.
+
+### Contenido vertical
+
+- **Las previews de la rueda NO llevan etiquetas**: se sacó el `.reel-tag` con
+  el nombre del artista (y su CSS). Quedan solo el poster y el play de
+  placeholder; el título sigue en el `aria-label` para lectores de pantalla.
 
 ### Navegación, logo y fondo (vigente)
 

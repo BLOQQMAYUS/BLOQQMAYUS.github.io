@@ -11,12 +11,12 @@
 <meta property="og:url" content="https://bloqqmayus.github.io/">
 <meta property="og:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical">
 <meta property="og:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO. Buenos Aires, Argentina.">
-<meta property="og:image" content="https://bloqqmayus.github.io/assets/showreel.jpg">
+<meta property="og:image" content="https://bloqqmayus.github.io/assets/hero/bloqq-bg.jpg">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker">
 <meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO.">
-<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/showreel.jpg">
+<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/bloqq-bg.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
 <style>
   /* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
@@ -117,12 +117,32 @@
 
   /* ---------- hero ---------- */
   .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
-  .hero-img{position:absolute;inset:0}
-  .hero-img img{width:100%;height:100%;object-fit:cover;object-position:72% 28%;transform:scale(1.05);animation:slowzoom 24s ease-in-out infinite alternate}
+  /* La imagen se DESVANECE ella misma (máscara), no se tapa con un degradado
+     opaco: así el fondo del sitio —que ya tiene estrellas— se ve a través del
+     fundido y la imagen se mezcla en vez de cortarse en el borde inferior.
+     La máscara afecta también al ::after, o sea que imagen y scrim se van
+     juntos. El último tramo es transparente sobre el mismo #1A1714 del body. */
+  .hero-img{position:absolute;inset:0;
+    -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.85) 58%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.12) 88%,transparent 95%);
+    mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.85) 58%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.12) 88%,transparent 95%)}
+  /* el zoom suave en loop lo pone esta regla, no el archivo: sirve igual para
+     <img> y para <video>, así que cambiar el medio no toca la animación */
+  .hero-img img,.hero-img video{width:100%;height:100%;object-fit:cover;object-position:62% 42%;
+    transform:scale(1.05);animation:slowzoom 24s ease-in-out infinite alternate;
+    will-change:transform}   /* el zoom corre en el compositor, no repinta la imagen */
   @keyframes slowzoom{from{transform:scale(1.05)}to{transform:scale(1.13)}}
+  /* en celu el encuadre es angosto: se corre hacia el personaje para que la
+     ilustración no quede en pura calle vacía */
+  @media(max-width:760px){.hero-img img,.hero-img video{object-position:93% 40%}}
+  /* Fundido con el fondo de estrellas: arranca arriba, se abre al medio y
+     ABAJO llega al color exacto del sitio (#1A1714) al 100%, opaco. Antes
+     quedaba en .95 y se veía el corte del borde inferior de la imagen.
+     La banda de abajo es larga (~45%) y ahí ya entran las estrellas, así que
+     imagen y fondo se mezclan en vez de cortarse. */
   .hero-img::after{content:"";position:absolute;inset:0;background:
-    linear-gradient(180deg,rgba(26,23,20,.6) 0%,rgba(26,23,20,.18) 40%,rgba(26,23,20,.95) 100%),
-    linear-gradient(90deg,rgba(26,23,20,.88) 0%,rgba(26,23,20,.45) 50%,rgba(26,23,20,.15) 100%)}
+    linear-gradient(180deg,rgba(26,23,20,.62) 0%,rgba(26,23,20,.2) 32%,rgba(26,23,20,.34) 55%,
+      rgba(26,23,20,.62) 72%,rgba(26,23,20,.86) 85%,rgba(26,23,20,.97) 94%,#1A1714 100%),
+    linear-gradient(90deg,rgba(26,23,20,.86) 0%,rgba(26,23,20,.44) 52%,rgba(26,23,20,.16) 100%)}
   .hero-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:150px 24px 90px;text-align:center}
   /* ---------- interfaz de cámara: marco ámbar sutil + REC + timecode ----------
      PURAMENTE decorativa (aria-hidden). Cuatro escuadras finas y dos hairlines
@@ -145,7 +165,7 @@
      ácido. Titila solo cuando está a la vista (.lit por IntersectionObserver) y
      únicamente opacidad → sin costo. No es clickeable: es un cartel, no un botón. */
   .hero-neon{margin:0;perspective:1000px;line-height:1;font-size:inherit;letter-spacing:0}
-  .hn-box{position:relative;display:block;width:fit-content;max-width:100%;margin:0 auto;padding:28px 18px 24px;
+  .hn-box{position:relative;display:block;width:fit-content;max-width:100%;margin:0 auto;padding:28px 46px 24px;
     background:linear-gradient(160deg,#1d1915,#0e0c0a 72%);
     border:2px solid #34291e;border-radius:16px;
     transform:rotateX(var(--hn-tilt,8deg));transform-style:preserve-3d;
@@ -177,7 +197,7 @@
     34%{opacity:1}34.5%{opacity:.1}35.4%{opacity:1}
     52%{opacity:1}52.4%{opacity:.28}52.9%{opacity:1}53.6%{opacity:.14}54.3%{opacity:1}
     78%{opacity:1}78.5%{opacity:.16}79.2%{opacity:1}}
-  @media(max-width:560px){.hn-box{padding:22px 12px 20px;--hn-tilt:5deg;border-radius:13px}}
+  @media(max-width:560px){.hn-box{padding:22px 24px 20px;--hn-tilt:5deg;border-radius:13px}}
   @media(prefers-reduced-motion:reduce){.hn-low{animation:none;opacity:1}}
   h1 em{font-style:normal;color:var(--acc)}
   h1 .min{color:var(--mut)}
@@ -194,7 +214,7 @@
     background:linear-gradient(270deg,rgba(242,165,26,.5),transparent)}
   .hero-meta b{color:var(--rosa);font-weight:400}
   @media(max-width:640px){
-    .hero-img img{object-position:62% 20%}
+    .hero-img img,.hero-img video{object-position:93% 40%}
     .hero-in{padding:132px 20px 84px}
     .cam{left:12px;right:12px;top:74px;bottom:12px}
     .cam-c{width:18px;height:18px}
@@ -307,7 +327,6 @@
   .modal-nav button:hover{background:var(--acc);color:var(--bg)}
   .modal-nav svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
   .h-big{font-size:clamp(2.4rem,6vw,4.6rem);letter-spacing:-.03em;line-height:1}
-  .reel-tag{position:absolute;left:16px;bottom:14px;z-index:2;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;color:var(--acid);text-transform:uppercase}
   #reels{border-top:0}
   section.acid .reel-card{width:min(360px,78vw)}
   section.acid .reel-card:hover{border-color:rgba(181,230,29,.55)}
@@ -611,7 +630,20 @@
 </nav>
 
 <header class="hero" id="top">
-  <div class="hero-img"><img src="assets/showreel.jpg" alt="Francisco Benítez mirando a cámara a través de sus dedos"></div>
+  <!-- ══════════ MEDIO DEL HEADER (imagen o video) ══════════════════════════
+       Cambiarlo es UNA línea: el src de acá abajo. Atajo:  ./cambiar-hero.sh
+       que actualiza esto Y la miniatura de WhatsApp/redes al mismo tiempo.
+         · volver a la anterior:  assets/hero/anterior.jpg
+         · imagen nueva:          copiá el archivo a assets/hero/ y usá su nombre
+         · video:                 descomentá el <video> de abajo y borrá el <img>
+       El zoom suave en loop lo pone la CSS (.hero-img img/video), no el archivo.
+       ⚠️ REGLA: si cambia el medio del header, cambia también og:image y
+       twitter:image del <head> — es la vista previa al compartir el link.
+       ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="hero-img">
+    <img src="assets/hero/bloqq-bg.jpg" alt="Personaje animado cruzando una avenida de Buenos Aires frente al Obelisco, entre cines y teatros">
+    <!-- <video src="assets/hero/clip.mp4" poster="assets/hero/bloqq-bg.jpg" autoplay muted loop playsinline></video> -->
+  </div>
   <div class="cam" aria-hidden="true"><span class="cam-c tl"></span><span class="cam-c tr"></span><span class="cam-c bl"></span><span class="cam-c br"></span></div>
   <div class="rec"><i></i> REC · FRANCISCO BENÍTEZ · CABA</div>
   <div class="hero-in">
@@ -619,7 +651,7 @@
       <span class="hn-box">
         <span class="hn-screw tl"></span><span class="hn-screw tr"></span><span class="hn-screw bl"></span><span class="hn-screw br"></span>
         <span class="hn-row"><span class="hn-low">activá el</span> <span class="hn-tube hn-amber">BLOQQ MÁYUS.</span></span>
-        <span class="hn-row"><span class="hn-low">de minúsculas,</span> <span class="hn-tube hn-acid">MAYÚSCULAS.</span></span>
+        <span class="hn-row"><span class="hn-low">de minúsculas, a</span> <span class="hn-tube hn-acid">MAYÚSCULAS</span></span>
       </span>
     </h1>
     <p class="hero-sub">Realizador audiovisual con <b>+10 años de experiencia</b> en coordinación, producción y postproducción para marcas y productoras en entornos digitales. Combino criterio narrativo y método para llevar cada proyecto del brief a la entrega, manteniendo el estándar visual y cumpliendo plazos y presupuestos. Apuesto a construir vínculos de trabajo duraderos, aportando solidez técnica, mirada de producto y agilidad operativa.</p>
@@ -927,7 +959,7 @@ function armThumb(img) {
   const rnd = (a, b) => a + Math.random() * (b - a);
   function born(p, far) {
     p.x = rnd(-spread, spread); p.y = rnd(-spread, spread);
-    p.z = far ? FAR : rnd(NEAR, FAR);
+    p.z = far ? FAR : NEAR + (FAR - NEAR) * Math.pow(Math.random(), 1.35);  // algo más de cerca → se reparten, no se amontonan en el centro
     p.r = rnd(0.5, 1.5); p.o = rnd(0.25, 0.7);
     return p;
   }
@@ -938,7 +970,7 @@ function armThumb(img) {
     spread = Math.max(W, H) * 0.95;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const n = Math.round(Math.min(210, Math.max(110, (W * H) / 10000)));
+    const n = Math.round(Math.min(340, Math.max(190, (W * H) / 6000)));
     pts = Array.from({ length: n }, () => born({}, false));
   }
   function frame(t) {
@@ -954,9 +986,14 @@ function armThumb(img) {
     const dt = paint ? Math.min((t - paint) / 1000, 0.06) : 0;
     paint = t;
     const top = desde.getBoundingClientRect().top;   // 01 respecto del viewport
+    /* Las estrellas arrancan en la BANDA DE FUNDIDO del header, no en el borde
+       de 01: así la imagen y el fondo se mezclan y no se ve el corte. En la
+       banda entran de a poco (rampa de alpha) y desde 01 van plenas. */
+    const band = Math.min(H * 0.45, 420);
+    const cut = Math.max(0, top - band);
     g.clearRect(0, 0, W, H);
-    if (top >= H) { stop(); return; }   // solo el hero a la vista: ni un frame más
-    g.save(); g.beginPath(); g.rect(0, Math.max(0, top), W, H - Math.max(0, top)); g.clip();
+    if (cut >= H) { stop(); return; }   // ni el fundido a la vista: ni un frame más
+    g.save(); g.beginPath(); g.rect(0, cut, W, H - cut); g.clip();
     /* de ATRÁS hacia ADELANTE: la profundidad baja, la estrella se agranda y
        se abre desde el centro, igual que el corredor de la galería */
     g.fillStyle = "#F4EEE3";
@@ -968,6 +1005,10 @@ function armThumb(img) {
       if (x < -8 || x > W + 8 || y < -8 || y > H + 8) { if (p.z < FAR * 0.35) born(p, true); continue; }
       let a = p.o * Math.min(1, k * 1.7);
       if (p.z < NEAR * 3) a *= (p.z - NEAR) / (NEAR * 2);   // se apaga al pasar
+      /* En la banda de fundido del header las estrellas se ven de verdad: sin
+         este piso quedarían tapadas por lo que resta de imagen y el corte se
+         seguiría notando. Entran con rampa y desde 01 van como siempre. */
+      if (y < top) a = Math.max(a, 0.45) * Math.max(0, Math.min(1, (y - cut) / (band * 0.6)));
       g.globalAlpha = Math.max(0, Math.min(1, a));
       g.beginPath(); g.arc(x, y, Math.min(2.4, p.r * k * 0.85 + 0.25), 0, 6.283); g.fill();
     }
@@ -1238,7 +1279,6 @@ function buildWheel(items) {
     <article class="reel-card wheel-card" data-i="${i}" tabindex="0" role="button" aria-label="Ver ${v.title}">
       <div class="reel-ph"><i>${ICONS.play}</i></div>
       <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" decoding="async" draggable="false">
-      ${v.group ? `<span class="reel-tag">${v.group}</span>` : ""}
     </article>`).join("");
   wheelCards = [...wheelRotor.querySelectorAll(".wheel-card")];
   wheelCards.forEach(c => {
