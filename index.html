@@ -1642,7 +1642,12 @@ function precargarGaleria() {
   galFrame.dataset.cargada = "1";
   galFrame.contentWindow.location.replace("lab/vortex/?preload=1");
 }
+/* Se espera al `load` para no competir con las imágenes del sitio, pero con un
+   TECHO: en una conexión lenta el load puede tardar muchísimo y la galería
+   quedaría sin precargar justo cuando más falta hace. Lo que pase primero. */
+const preloadTecho = setTimeout(precargarGaleria, 3500);
 addEventListener("load", () => {
+  clearTimeout(preloadTecho);
   if ("requestIdleCallback" in window) requestIdleCallback(precargarGaleria, { timeout: 2500 });
   else setTimeout(precargarGaleria, 1200);
 });
