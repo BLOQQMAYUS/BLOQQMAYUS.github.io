@@ -22,7 +22,11 @@
   #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
   /* ---------- espacio 3D: estrellas sutiles que pasan con el avance ---------- */
   .star{position:absolute;left:50%;top:50%;background:var(--hueso);border-radius:50%;
-    pointer-events:none;will-change:transform}
+    pointer-events:none}
+  /* SIN will-change en las estrellas: son 620 y cada una promovida sería una
+     capa compuesta propia (620 capas viviendo toda la sesión desde que la
+     galería se precarga). No hace falta: se mueven con #world, que ya tiene
+     la suya, y solo se reescribe su transform al reciclar. */
 
   /* obras: siempre derechas, en las paredes del corredor */
   .vcard{
@@ -45,10 +49,7 @@
     font:700 .78rem/1.25 var(--sans);pointer-events:none}
   .vcard .cap em{display:block;font:400 .58rem/1.4 var(--mono);font-style:normal;color:var(--mut);
     letter-spacing:.14em;text-transform:uppercase;margin-top:2px;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .vcard .yr{position:absolute;top:7px;left:8px;font:400 .56rem/1 var(--mono);letter-spacing:.12em;
-    color:var(--ambar);background:rgba(18,16,13,.78);padding:3px 6px;border-radius:2px;pointer-events:none}
-  .vcard .demo{position:absolute;top:7px;right:8px;font:400 .52rem/1 var(--mono);letter-spacing:.1em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}  .vcard .demo{position:absolute;top:7px;right:8px;font:400 .52rem/1 var(--mono);letter-spacing:.1em;
     color:var(--mut);background:rgba(18,16,13,.78);padding:3px 6px;border-radius:2px;pointer-events:none}
 
   /* celda de film tipográfica para reels sin poster */
@@ -70,42 +71,24 @@
   .vcard.reel.is3d .pl svg{fill:var(--carbon)}
 
   /* niebla: el fondo del corredor se funde a hollín */
+  /* cometas: tres cruces lentos y bien espaciados, CSS puro (cero frames de JS).
+     Suman variabilidad al patrón sin invadir: pasan cada 17/23/29 s. */
+  #comets{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+  #comets i{position:absolute;top:-8vh;left:-20vw;width:150px;height:1.2px;border-radius:2px;
+    background:linear-gradient(90deg,rgba(242,165,26,0),rgba(244,238,227,.7) 55%,rgba(242,165,26,.9));
+    opacity:0;transform:rotate(18deg);animation:comet 17s linear 3s infinite}
+  #comets i:nth-child(2){top:14vh;width:110px;animation-duration:23s;animation-delay:11s}
+  #comets i:nth-child(3){top:40vh;width:180px;animation-duration:29s;animation-delay:19s}
+  @keyframes comet{
+    0%{opacity:0;transform:translate3d(0,0,0) rotate(18deg)}
+    2%,9%{opacity:.85}
+    14%,100%{opacity:0;transform:translate3d(115vw,26vh,0) rotate(18deg)}
+  }
+  @media(prefers-reduced-motion:reduce){#comets{display:none}}
   #fog{position:fixed;inset:0;z-index:2;pointer-events:none;
     background:
       radial-gradient(circle at 50% 50%, rgba(26,23,20,.97) 0%, rgba(26,23,20,.85) 7%, rgba(26,23,20,.38) 19%, rgba(26,23,20,0) 42%),
-      radial-gradient(circle at 50% 50%, transparent 60%, rgba(18,16,13,.55) 100%)}
-  #hub{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;pointer-events:none;text-align:center;opacity:.32}
-  #hub b{display:block;font:700 2.6rem/1 var(--sans)}
-  #hub b i{font-style:normal;color:var(--acid)}
-  #hub span{display:block;margin-top:5px;font:400 .52rem/1 var(--mono);letter-spacing:.34em;color:var(--mut);text-transform:uppercase}
-
-  /* ---------- HUD ---------- */
-  #hud{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;gap:12px;
-    padding:14px 18px;pointer-events:none;flex-wrap:wrap}
-  #hud .brand{font:700 .95rem/1 var(--sans)}
-  #hud .brand i{font-style:normal;color:var(--acid)}
-  #hud .brand em{font-style:normal;color:var(--mut);font-weight:400}
-  #hud .tag{font:400 .56rem/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;
-    color:var(--acid);border:1px solid rgba(181,230,29,.4);padding:5px 8px;border-radius:2px}
-  #hud .right{margin-left:auto;display:flex;align-items:center;gap:12px;pointer-events:auto}
-  #count{font:400 .62rem/1 var(--mono);letter-spacing:.14em;color:var(--ambar);text-transform:uppercase}
-  #back{font:400 .58rem/1 var(--mono);letter-spacing:.12em;color:var(--hueso);text-decoration:none;
-    text-transform:uppercase;border:1px solid rgba(244,238,227,.25);padding:7px 10px;border-radius:2px;background:rgba(18,16,13,.6)}
-  #back:hover{border-color:var(--ambar);color:var(--ambar)}
-
-  /* ---------- navegación intuitiva ---------- */
-  #navUI{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:10;
-    display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
-  .navrow{display:flex;gap:14px;pointer-events:auto}
-  .navrow button{width:56px;height:56px;border-radius:50%;cursor:pointer;
-    border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.78);color:var(--hueso);
-    display:grid;place-items:center;transition:.25s;backdrop-filter:blur(4px)}
-  .navrow button svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .navrow button:hover{background:var(--brasa);border-color:var(--brasa)}
-  .navrow button:active{transform:scale(.92)}
-  #nextBtn{border-color:rgba(181,230,29,.5);color:var(--acid)}
-  #nextBtn:hover{background:var(--acid);color:var(--carbon);border-color:var(--acid)}
-
+      radial-gradient(circle at 50% 50%, transparent 60%, rgba(18,16,13,.55) 100%)}  #count{font:400 .62rem/1 var(--mono);letter-spacing:.14em;color:var(--ambar);text-transform:uppercase}
   /* ---------- mesa de luz: 65% de oscuridad + preview al centro, sin controles ---------- */
   #dim{position:fixed;inset:0;z-index:40;background:rgba(10,8,6,.65);opacity:0;pointer-events:none;transition:opacity .55s}
   #dim.on{opacity:1}
@@ -118,21 +101,11 @@
   #cineMedia{position:absolute;inset:0;display:grid;place-items:center}
   #cineMedia video{border-radius:3px;background:#000;box-shadow:0 30px 90px rgba(0,0,0,.6);cursor:pointer}
   #cineMedia iframe{border:0;border-radius:3px;box-shadow:0 30px 90px rgba(0,0,0,.6)}
-  /* embebida en el portfolio: la ✕ del overlay reemplaza al link "portfolio" */
-  body.embedded #back{display:none}
-
   @media(max-width:700px){
     .vcard.yt{--w:238px;--h:134px}
     .vcard.reel{--w:156px;--h:277px}
     .vcard.reel .n{font-size:2.3rem}
-    .vcard .cap{font-size:.66rem}
-    #hud .tag{display:none}
-    /* la ✕ del overlay va centrada arriba: en celu el sufijo del brand se
-       corre para que no se le superponga */
-    body.embedded #hud .brand em{display:none}
-    #hub b{font-size:1.9rem}
-    .navrow button{width:52px;height:52px}
-  }
+    .vcard .cap{font-size:.66rem}  }
 </style>
 </head>
 <body>
@@ -141,21 +114,7 @@
   <div id="world"></div>
 </div>
 <div id="fog"></div>
-<div id="hub"><span>galería 3d</span></div>
-
-<header id="hud">
-  <div class="brand">BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
-  <div class="right">
-    <a id="back" href="https://bloqqmayus.github.io/">← portfolio</a>
-  </div>
-</header>
-
-<div id="navUI">
-  <div class="navrow">
-    <button id="prevBtn" aria-label="Obra anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
-    <button id="nextBtn" aria-label="Obra siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-  </div>
-</div>
+<div id="comets"><i></i><i></i><i></i></div>
 
 <div id="dim"></div>
 <div id="fly" class="vcard fly" style="display:none"></div>
@@ -227,7 +186,6 @@ function armThumb(img) {
 }
 function cardHTML(it, i) {
   const demo = it.copy ? '<span class="demo">copia</span>' : "";
-  const yr = `<span class="yr">${it.year}</span>`;
   const img = posterOf(it);
   const ytid = it.kind === "yt" ? it.yt : ytIdIn(it.poster);
   const local = ytid ? "../../assets/real/" + ytid + ".jpg" : "";
@@ -235,23 +193,30 @@ function cardHTML(it, i) {
     return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
       <span class="n">${pad2(i + 1)}</span><span class="t">${it.title}</span>
       <span class="g">${it.group} · reel${it.is3d ? " · 3D" : ""}</span>
-      ${yr}${demo}<i class="pl">${PLAY}</i></article>`;
+      ${demo}<i class="pl">${PLAY}</i></article>`;
   }
   return `<article class="vcard ${it.kind} poster${it.is3d ? " is3d" : ""}" data-i="${i}">
     <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${img}" data-yt="${ytid}" data-local="${local}" alt="" draggable="false">
-    ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
+    ${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
 }
 /* estrellas: puntos sutiles en el volumen del corredor, pasan con el avance */
-const STARS = 416;   // +30% (pedido), misma velocidad de paseo
+const STARS = 620;   // pedido: más estrellas, misma velocidad de paseo
+/* El volumen de estrellas es más corto que el del corredor (SD < D): si se
+   repartieran en toda la profundidad, la mayoría quedaría a 12.000 px y se
+   vería como polvo subpíxel. Además el tamaño se compensa por perspectiva con
+   un tope de 2.5×: así en pantalla miden SIEMPRE entre .8 y 2.4 px (nunca
+   manchas) y las lejanas siguen siendo puntos visibles en vez de nada. */
+const SD = 3600, STAR_PERSP = 900;   // STAR_PERSP = perspective de #stage
 let stars = [];
 function buildStars() {
   let h = "";
   for (let i = 0; i < STARS; i++) {
-    const sz = (Math.random() * 1.6 + .8).toFixed(1);
-    const op = (Math.random() * .5 + .15).toFixed(2);
-    const x = Math.round((Math.random() * 2 - 1) * 1500);
-    const y = Math.round((Math.random() * 2 - 1) * 900);
-    const z = Math.round(-Math.random() * D);
+    const z = Math.round(-Math.random() * SD);
+    const comp = Math.min(2.5, (STAR_PERSP - z) / STAR_PERSP);
+    const sz = ((Math.random() * 1.6 + .8) * comp).toFixed(1);
+    const op = (Math.random() * .5 + .2).toFixed(2);
+    const x = Math.round((Math.random() * 2 - 1) * 1100);
+    const y = Math.round((Math.random() * 2 - 1) * 700);
     h += `<i class="star" data-s="${i}" data-x="${x}" data-y="${y}" data-z="${z}"
       style="width:${sz}px;height:${sz}px;opacity:${op};transform:translate3d(${x}px,${y}px,${z}px)"></i>`;
   }
@@ -348,8 +313,8 @@ function tick(t) {
   }
   for (const s of stars) {
     const z = +s.dataset.z + camZ;
-    if (z > 620 || z < 620 - D) {
-      s.dataset.z = z > 620 ? +s.dataset.z - D : +s.dataset.z + D;
+    if (z > 620 || z < 620 - SD) {
+      s.dataset.z = z > 620 ? +s.dataset.z - SD : +s.dataset.z + SD;
       s.style.transform = `translate3d(${s.dataset.x}px,${s.dataset.y}px,${s.dataset.z}px)`;
     }
   }
@@ -415,8 +380,6 @@ function step(d) {
   targetZ = (d > 0 ? Math.floor(camZ / G) + 1 : Math.ceil(camZ / G) - 1) * G;
   flyVel = 0; seen();
 }
-$("nextBtn").addEventListener("click", () => step(1));
-$("prevBtn").addEventListener("click", () => step(-1));
 addEventListener("keydown", e => {
   if (cineOpen) {
     if (e.key === "Escape") closeCine();
@@ -554,7 +517,30 @@ addEventListener("resize", () => {
 /* embebida en el portfolio (iframe): la ✕ del overlay cierra; Esc también */
 if (window.parent && window.parent !== window) document.body.classList.add("embedded");
 build();
-raf = requestAnimationFrame(t => { lastT = t; tick(t); });
+
+/* ---------- dormir / despertar: la galería se PRECARGA ----------
+   Armada pero quieta: ni un frame hasta que se abra. Al cerrar no se descarga,
+   así que volver a entrar es instantáneo. Same-origin, sin postMessage. */
+function __wake() {
+  if (raf) return;
+  lastT = 0;
+  raf = requestAnimationFrame(t => { lastT = t; tick(t); });
+}
+function __sleep() {
+  if (raf) { cancelAnimationFrame(raf); raf = 0; }
+  if (cineOpen) closeCine(true);
+}
+window.__bloqqWake = __wake;
+window.__bloqqSleep = __sleep;
+
+/* Si el overlay ya está abierto al arrancar, arranca despierta (carrera cubierta
+   en los dos sentidos); si viene con ?preload=1 y está cerrado, duerme. */
+const abiertoYa = (() => {
+  try { return window.parent.document.getElementById("galBox").classList.contains("open"); }
+  catch (e) { return false; }
+})();
+const precargando = /[?&]preload=1/.test(location.search) && !abiertoYa;
+if (!precargando) __wake();
 </script>
 </body>
 </html>

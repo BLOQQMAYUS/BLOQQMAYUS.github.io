@@ -310,11 +310,82 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
   `target="_blank"` sin `noopener`, sin `postMessage` sin control de origen,
   embeds en `youtube-nocookie`, sin contenido mixto `http://` y
   **ningún token filtrado en los archivos publicables**.
-- `tour.js` — 41 checks en navegador real (texto vigente, 8 previews, botón
-  que lleva a Contacto y hace que el neón pida el click, márgenes clickeables
-  de todas las previews, scroll horizontal, galería con 320 estrellas).
+- `tour.js` — **175 checks** en navegador real (texto vigente, pliegue 8/5,
+  botón que lleva a Contacto y hace que el neón pida el click, márgenes
+  clickeables de todas las previews, scroll horizontal, nav centrado y sin
+  hamburguesa, tap del logo, precarga de la galería, galería con 620 estrellas
+  y 3 cometas y sin textos sueltos).
   Las esperas van por **estado** (`rlPhase`, centrado del rect), no por reloj:
   en móviles emulados la transición visual tarda más que el timer.
+- `starflow.js` — **dirección del campo de estrellas**: sigue estrellas
+  individuales entre dos frames y exige que se alejen del centro (atrás →
+  adelante). Va **separado del tour a propósito**: el `getImageData` del canvas
+  fuerza readback y en render por software deja al renderer tan lento que el
+  paseo se colgaba. El radio medio de TODOS los píxeles no sirve como criterio
+  (las que salen del cuadro renacen lejos, cerca del centro, y arrastran el
+  promedio hacia abajo): hay que seguir estrellas de una a otra.
+
+### Navegación, logo y fondo (vigente)
+
+- **Los links del nav están centrados en el viewport y SIEMPRE visibles**,
+  también en celular: `.nav-links` va `position:absolute; left:50%;
+  transform:translateX(-50%)` dentro de `.nav-in` (que es `position:relative`
+  y de ancho completo). **No hay hamburguesa ni menú desplegable** — se
+  eliminaron `.burger` y sus dos listeners. En ≤880px y ≤430px solo se
+  achican tipografía, gaps y paddings para que entren los cuatro.
+- **El logo ⇪ va al extremo izquierdo** con aire (`.nav-in` sin `max-width`,
+  padding 28px en desktop / 16 / 12). En celular queda igual de izquierda.
+- **Tap del logo: la tecla outlined se RELLENA de ámbar y crece 25%.**
+  `.key.tap` + transición `.26s cubic-bezier(.4,0,.2,1)` (easy ease).
+  **Se suelta cuando el navegador ya lo pintó, no cuando lo dice el reloj:**
+  un `requestAnimationFrame` vigila el `background-color` computado y recién
+  150 ms después de verlo lleno quita la clase (con techo de 2.5 s).
+  Motivo: si el equipo está ocupado (galería precargando, celular modesto)
+  los frames vienen muy espaciados y una animación por tiempo **se saltea
+  entera sin verse nunca**. Pasó en los tests: el `document.timeline` saltaba
+  de 1785 a 3402 ms y la animación nacía y moría entre dos frames.
+- **Campo de estrellas del sitio: de ATRÁS hacia ADELANTE**, no hacia abajo.
+  Proyección por profundidad (`FOCAL=340, FAR=1500, NEAR=45`), `p.z -= 48·dt`
+  (60% del AUTO de la galería = 40% más lento), pantalla `W/2 + p.x·k` con
+  `k = FOCAL/p.z`; crecen y se abren desde el centro, se apagan al pasar
+  (`z < NEAR·3`) y renacen en FAR. 30 fps, dpr ≤1.5, 110–210 puntos, recortado
+  desde el tope de `#trabajo` (sobre el hero, cero píxeles).
+  **Cometas**: uno cada 7–16 s, dura 1.0–1.5 s, cola en degradado hueso → ámbar
+  → transparente, alpha máx .55. En la galería son 3 `<i>` con CSS puro
+  (`#comets`, 17/23/29 s con delays 3/11/19 s) — sin costo de frames.
+  Si la región entra en pantalla **sin** evento de scroll (resize, fuentes,
+  imágenes que acomodan el layout) un `setInterval` de 600 ms la arranca igual;
+  solo corre mientras el campo está frenado.
+
+### Precarga de la galería (contrato)
+
+- Al `load` del sitio, en `requestIdleCallback` (o `setTimeout` 1200 ms),
+  `precargarGaleria()` hace `contentWindow.location.replace("lab/vortex/?preload=1")`.
+  Se usa `replace` para **no ensuciar el historial conjunto**.
+- La galería arma DOM y posters pero **no corre ni un frame** mientras duerme:
+  `__bloqqWake()` al abrir, `__bloqqSleep()` al cerrar (cancela el rAF y cierra
+  la mesa de luz). **Nunca se descarga**, así que reabrir es instantáneo.
+  Si al arrancar ve `parent #galBox.open`, arranca despierta (carrera cubierta
+  en los dos sentidos). Todo same-origin, **sin `postMessage`**.
+- **`#galBox` cerrado va `visibility:hidden`, no solo `opacity:0`.** Con la
+  galería precargada, `opacity:0` sola deja el iframe **pintándose invisible
+  toda la sesión** (35 obras + 620 estrellas en un mundo 3D, a dpr 2 en celu):
+  era tanto costo que el renderer se colgaba. `visibility:hidden` saltea el
+  pintado sin descargar nada. El `transition:visibility 0s .45s` deja terminar
+  el fundido de salida; al abrir se hace visible en el acto.
+- **Las estrellas de la galería NO llevan `will-change:transform`**: son 620 y
+  cada una promovida sería una capa compuesta propia viviendo toda la sesión.
+  Se mueven con `#world`, que ya tiene la suya.
+- **620 estrellas** (antes 416) y ahora **se ven**: el volumen es más corto que
+  el del corredor (`SD = 3600`, no `D = 11900`) y el tamaño se compensa por
+  perspectiva con tope 2.5×, así en pantalla miden siempre .8–2.4 px (nunca
+  manchas) y las lejanas siguen siendo puntos en vez de polvo subpíxel.
+  Resultado medido: **593 de 620 en cuadro**, media 1.27 px.
+- **Sin textos sueltos**: se quitaron `#hub` (marca de agua), `#hud`
+  (encabezado), los años `.yr` y las flechas `#navUI` ‹ ›, con sus listeners y
+  26 reglas CSS muertas. Quedan **solo los captions de las previews** (título +
+  artista), el campo de estrellas, los cometas y la ✕ centrada. Se navega con
+  drag / rueda / pellizco y el AUTO.
 
 ### Galería 3D · ajustes vigentes
 
