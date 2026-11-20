@@ -7,11 +7,16 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 
 ## 📌 Reglas vigentes (aplican a todo cambio futuro)
 
-- **01 · Trabajo seleccionado: orden SIEMPRE aleatorio.** La grilla se mezcla
+- **01 · MONTAJE | EDICIÓN | VFX: orden SIEMPRE aleatorio.** La grilla se mezcla
   en cada carga (Fisher–Yates sobre `workOrder`). Al agregar links/videos
   nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
   `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
-  El pliegue "Ver los N trabajos" muestra las primeras 12 del orden mezclado.
+  El pliegue muestra las primeras **8** del orden mezclado (`FOLD = 8`).
+  El botón **"¿Buscás más? En la galería ↓"** ya NO despliega la grilla:
+  lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
+  (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
+  para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
+  Al filtrar por artista se muestran todas sus piezas, sin pliegue.
 - **02 · 3D: CHECHA Rifa siempre primera; el resto, aleatorio en cada carga.**
   **03 · Videoclips verticales: siempre aleatorio.** Los reels nuevos que se
   agreguen a `assets/reels/` entran a la mezcla automáticamente.
@@ -101,3 +106,24 @@ Versiones para descargar:
 - `portfolio_BLOQQ_MAYUS.zip` — el sitio completo (index.html + assets/). Descomprimir y abrir index.html.
 - `Portfolio_BLOQQ_MAYUS.html` — versión de un solo archivo con las 18 imágenes embebidas (~9 MB). Funciona con doble click, sin carpeta assets.
 
+## ✅ Checks antes de cada push (en `../tests/`)
+
+```bash
+./tests/smoke.sh                              # conducta del sitio + galería + SEGURIDAD
+NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desktop + mobile)
+```
+
+- `shim.js` / `lab-shim.js` — conducta sin navegador (scanner, mesas, shuffle,
+  pliegue 8, botón → Contacto + `.attn`, galería abrir/cerrar/descargar).
+- **`security.js`** — la única entrada de datos externos es la API de GitHub
+  (`REEL_OK`: sólo nombres `.mp4` simples, sin rutas/traversal ni caracteres
+  con significado en HTML; las rutas viajan con `encodeURIComponent`).
+  Además verifica: sin `eval`/`new Function`/`document.write`, sin
+  `target="_blank"` sin `noopener`, sin `postMessage` sin control de origen,
+  embeds en `youtube-nocookie`, sin contenido mixto `http://` y
+  **ningún token filtrado en los archivos publicables**.
+- `tour.js` — 41 checks en navegador real (texto vigente, 8 previews, botón
+  que lleva a Contacto y hace que el neón pida el click, márgenes clickeables
+  de todas las previews, scroll horizontal, galería con 320 estrellas).
+  Las esperas van por **estado** (`rlPhase`, centrado del rect), no por reloj:
+  en móviles emulados la transición visual tarda más que el timer.
