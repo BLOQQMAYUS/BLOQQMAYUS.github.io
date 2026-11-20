@@ -347,6 +347,15 @@
     font-size:clamp(1.9rem,6vw,2.6rem);line-height:1;letter-spacing:0;text-align:center;
     color:#fff;transform:translateZ(22px);animation:neonFlicker 7s linear infinite;animation-play-state:paused;will-change:opacity;
     text-shadow:0 0 2px #fff,0 0 6px #fff,0 0 14px var(--acc),0 0 26px var(--acc),0 0 48px var(--acc),0 0 92px rgba(242,165,26,.55)}
+  /* el círculo LED del logo (.key::after), llevado a la flecha del cartel:
+     mismo ácido, mismo parpadeo, escalado con el tamaño del neón */
+  .neon-cap{position:relative;display:inline-block;font-style:normal}
+  .neon-cap::after{content:"";position:absolute;top:.05em;right:-.02em;width:.2em;height:.2em;border-radius:50%;
+    background:var(--acid);box-shadow:0 0 6px var(--acid),0 0 16px rgba(181,230,29,.55);
+    animation:blink 2.2s infinite;animation-play-state:paused}
+  .neon.lit .neon-cap::after{animation-play-state:running}
+  .neon:hover .neon-cap::after,.neon:focus-visible .neon-cap::after{animation-play-state:paused;opacity:1}
+  @media(prefers-reduced-motion:reduce){.neon-cap::after{animation:none}}
   .neon.lit .neon-tube,.neon.lit .neon-buzz,.neon.lit .neon-sub{animation-play-state:running}
   .neon:hover .neon-box,.neon:focus-visible .neon-box{transform:rotateX(4deg) translateZ(12px);
     border-color:#4a3c2a;box-shadow:inset 0 1px 0 rgba(244,238,227,.12),inset 0 -16px 32px rgba(0,0,0,.5),0 34px 64px rgba(0,0,0,.6),0 3px 0 #0a0806}
@@ -478,10 +487,12 @@
   #galBox{position:fixed;inset:0;z-index:400;background:var(--hollin);opacity:0;pointer-events:none;transition:opacity .45s}
   #galBox.open{opacity:1;pointer-events:auto}
   #galFrame{width:100%;height:100%;border:0;display:block}
-  #galX{position:fixed;top:12px;right:12px;z-index:410;width:44px;height:44px;border-radius:50%;
-    border:1px solid var(--line);background:rgba(18,16,13,.8);color:var(--txt);display:grid;place-items:center;transition:.2s}
-  #galX:hover{background:var(--brasa);border-color:var(--brasa)}
-  #galX svg{width:16px;height:16px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
+  /* centrada arriba: es la ÚNICA salida de la galería, tiene que verse */
+  #galX{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:410;width:52px;height:52px;border-radius:50%;
+    border:1.5px solid var(--acc);background:rgba(18,16,13,.92);color:var(--acc);display:grid;place-items:center;
+    box-shadow:0 6px 26px rgba(0,0,0,.6);transition:background .2s,border-color .2s,color .2s}
+  #galX:hover{background:var(--brasa);border-color:var(--brasa);color:var(--hueso)}
+  #galX svg{width:20px;height:20px;stroke:currentColor;stroke-width:2.2;fill:none;stroke-linecap:round}
   .led-cap{display:none}
 
   /* ---------- reveal ---------- */
@@ -608,7 +619,7 @@
           <span class="neon-screw tl"></span><span class="neon-screw tr"></span>
           <span class="neon-screw bl"></span><span class="neon-screw br"></span>
           <span class="neon-tube"><span class="neon-word">GALER<span class="neon-buzz">Í</span>A</span><span class="neon-3d">3D</span></span>
-          <span class="neon-sub" aria-hidden="true">⇪</span>
+          <span class="neon-sub" aria-hidden="true"><i class="neon-cap">⇪</i></span>
         </span>
       </button>
       <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
@@ -754,6 +765,39 @@ document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]
 document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
   `<a href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
 
+/* ---- MINIATURAS DE YOUTUBE: AUTO-ACTUALIZABLES ---------------------------
+   REGLA PERMANENTE: las previews de YouTube NUNCA se congelan. Se piden
+   directo a i.ytimg.com con un "bucket" diario (?d=YYYYMMDD): la caché del
+   navegador se renueva sola cada día, así que si cambiás una miniatura en
+   YouTube el sitio la toma sin tocar código ni volver a bajar archivos.
+   Cadena de respaldo: maxres → sd → hq → copia local de assets/real.
+   La copia local es un seguro para offline / file://, nunca la fuente
+   principal: por eso el sitio no vuelve a quedar viejo aunque no se toque. */
+const THUMB_DAY = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+const YT_THUMB_Q = ["maxresdefault", "sddefault", "hqdefault"];
+function ytThumb(id, q) {
+  return "https://i.ytimg.com/vi/" + id + "/" + (q || YT_THUMB_Q[0]) + ".jpg?d=" + THUMB_DAY;
+}
+function ytIdOf(url) {
+  const m = String(url || "").match(/(?:watch\?v=|youtu\.be\/|shorts\/)([\w-]{6,})/);
+  return m ? m[1] : null;
+}
+/* engancha la cadena de respaldo a una <img> ya insertada */
+function armThumb(img) {
+  const id = img.dataset.yt, local = img.dataset.local;
+  if (!id) return;
+  let k = 0, settled = false;
+  const next = () => {
+    if (settled) return;
+    if (k < YT_THUMB_Q.length - 1) { img.src = ytThumb(id, YT_THUMB_Q[++k]); return; }
+    settled = true;
+    if (local) img.src = local;          // último recurso: copia local
+  };
+  img.addEventListener("error", next);
+  /* YouTube a veces contesta un placeholder chico en vez de un 404 */
+  img.addEventListener("load", () => { if (img.naturalWidth > 0 && img.naturalWidth <= 120) next(); });
+}
+
 /* ---- grid de videoclips + filtros ---- */
 /* REGLA PERMANENTE: el orden es SIEMPRE aleatorio en cada carga, pero el
    PLIEGUE (lo que se ve al entrar) cumple tres reglas:
@@ -811,7 +855,7 @@ workGrid.innerHTML = workOrder.map((fi, pos) => {
   return `
   <article class="work-card reveal" data-cat="${f.cat}" data-i="${fi}" data-pos="${pos}" tabindex="0" role="button" aria-label="Ver ${f.title} — ${f.artist}">
     <div class="work-media">
-      <img src="${f.img}" alt="${f.title} — ${f.artist}" loading="lazy" decoding="async">
+      <img src="${ytIdOf(f.video) ? ytThumb(ytIdOf(f.video)) : f.img}" data-yt="${ytIdOf(f.video) || ""}" data-local="${f.img}" referrerpolicy="no-referrer" alt="${f.title} — ${f.artist}" loading="lazy" decoding="async">
       <span class="play"><i>${ICONS.play}</i></span>
     </div>
     <div class="work-meta">
@@ -820,6 +864,7 @@ workGrid.innerHTML = workOrder.map((fi, pos) => {
     </div>
   </article>`;
 }).join("");
+workGrid.querySelectorAll("img[data-yt]").forEach(armThumb);
 
 const counts = {};
 CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);

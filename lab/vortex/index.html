@@ -119,7 +119,6 @@
   #cineMedia iframe{border:0;border-radius:3px;box-shadow:0 30px 90px rgba(0,0,0,.6)}
   /* embebida en el portfolio: la ✕ del overlay reemplaza al link "portfolio" */
   body.embedded #back{display:none}
-  body.embedded #hud{padding-right:64px}
 
   @media(max-width:700px){
     .vcard.yt{--w:238px;--h:134px}
@@ -127,6 +126,9 @@
     .vcard.reel .n{font-size:2.3rem}
     .vcard .cap{font-size:.66rem}
     #hud .tag{display:none}
+    /* la ✕ del overlay va centrada arriba: en celu el sufijo del brand se
+       corre para que no se le superponga */
+    body.embedded #hud .brand em{display:none}
     #hub b{font-size:1.9rem}
     .navrow button{width:52px;height:52px}
   }
@@ -138,7 +140,7 @@
   <div id="world"></div>
 </div>
 <div id="fog"></div>
-<div id="hub"><b>⇪<i>.</i></b><span>galería 3d</span></div>
+<div id="hub"><span>galería 3d</span></div>
 
 <header id="hud">
   <div class="brand">BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
@@ -194,14 +196,40 @@ let cineOpen = false, phase = null, idx = 0, cineCard = null, cineAspect = 16 / 
 let raf = 0, lastT = 0;
 
 /* ---------- construcción ---------- */
+/* ---- MINIATURAS AUTO-ACTUALIZABLES (misma regla que el sitio) -------------
+   Se piden a i.ytimg.com con bucket diario (?d=YYYYMMDD) para que la caché
+   del navegador se renueve sola: cambiás la miniatura en YouTube y acá se
+   actualiza sin tocar nada. sddefault alcanza para el tamaño de las paredes
+   y es mucho más liviano que maxres. Respaldo: sd → hq → mq → copia local. */
+const THUMB_DAY = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+const YT_THUMB_Q = ["sddefault", "hqdefault", "mqdefault"];
+const ytThumb = (id, q) => `https://i.ytimg.com/vi/${id}/${q || YT_THUMB_Q[0]}.jpg?d=${THUMB_DAY}`;
+const ytIdIn = u => (String(u || "").match(/i\.ytimg\.com\/vi\/([\w-]+)/) || [])[1] || "";
 /* toda obra muestra imagen: los reels derivan su poster de assets/posters/ */
-const posterOf = it => it.poster || (it.kind === "reel"
-  ? it.src.replace("/assets/reels/", "/assets/posters/").replace(/\.mp4$/i, ".jpg")
-  : `https://i.ytimg.com/vi/${it.yt}/hqdefault.jpg`);
+const posterOf = it => it.poster
+  ? (ytIdIn(it.poster) ? ytThumb(ytIdIn(it.poster)) : it.poster)
+  : (it.kind === "reel"
+    ? it.src.replace("/assets/reels/", "/assets/posters/").replace(/\.mp4$/i, ".jpg")
+    : ytThumb(it.yt));
+function armThumb(img) {
+  const id = img.dataset.yt, local = img.dataset.local;
+  if (!id) return;
+  let k = 0, settled = false;
+  const next = () => {
+    if (settled) return;
+    if (k < YT_THUMB_Q.length - 1) { img.src = ytThumb(id, YT_THUMB_Q[++k]); return; }
+    settled = true;
+    if (local) img.src = local;
+  };
+  img.addEventListener("error", next);
+  img.addEventListener("load", () => { if (img.naturalWidth > 0 && img.naturalWidth <= 120) next(); });
+}
 function cardHTML(it, i) {
   const demo = it.copy ? '<span class="demo">copia</span>' : "";
   const yr = `<span class="yr">${it.year}</span>`;
   const img = posterOf(it);
+  const ytid = it.kind === "yt" ? it.yt : ytIdIn(it.poster);
+  const local = ytid ? "../../assets/real/" + ytid + ".jpg" : "";
   if (it.kind === "reel" && !img) {
     return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
       <span class="n">${pad2(i + 1)}</span><span class="t">${it.title}</span>
@@ -209,7 +237,7 @@ function cardHTML(it, i) {
       ${yr}${demo}<i class="pl">${PLAY}</i></article>`;
   }
   return `<article class="vcard ${it.kind} poster${it.is3d ? " is3d" : ""}" data-i="${i}">
-    <img loading="lazy" decoding="async" src="${img}" alt="" draggable="false">
+    <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${img}" data-yt="${ytid}" data-local="${local}" alt="" draggable="false">
     ${yr}${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
 }
 /* estrellas: puntos sutiles en el volumen del corredor, pasan con el avance */
@@ -236,6 +264,7 @@ function build() {
   buildStars();
   world.insertAdjacentHTML("beforeend", pool.map(cardHTML).join(""));
   cards = [...world.querySelectorAll(".vcard")];
+  world.querySelectorAll("img[data-yt]").forEach(armThumb);
   layout();
 }
 function setTF(c) {

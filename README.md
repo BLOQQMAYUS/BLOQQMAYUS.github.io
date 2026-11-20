@@ -31,7 +31,10 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
   El subtítulo del cartel es **solo la flecha ⇪, grande y en neón ámbar**
-  (mismo lenguaje que el tubo: núcleo blanco + halo del color del sitio).
+  (mismo lenguaje que el tubo: núcleo blanco + halo del color del sitio),
+  **con el mismo círculo LED ácido que el logo** (`.neon-cap::after`, espejo de
+  `.key::after`): parpadea con `blink`, se frena cuando el cartel no está a la
+  vista o se lo está hovereando, y se apaga con `prefers-reduced-motion`.
   Al filtrar por artista se muestran todas sus piezas, sin pliegue.
 - **Contacto: email y teléfono apilados** (email primero). El botón del
   teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
@@ -106,6 +109,11 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   a `lab/vortex/`, que se descarga al cerrar). El neón titila solo cuando está
   a la vista (IntersectionObserver) y anima únicamente opacidad → sin costo
   de rendimiento; se apaga con `prefers-reduced-motion`.
+  **La ✕ que cierra la galería va CENTRADA arriba** (`#galX`, 52px, anillo
+  ámbar): es la única salida hacia el sitio, tiene que verse. En celu el
+  sufijo "· GALERÍA 3D" del header de la galería se oculta cuando está
+  embebida, para que no se le superponga. **El ⇪ con LED del centro de la
+  galería (`#hub b`) se eliminó**; queda solo la marca de agua "galería 3d".
   La galería contiene **las 36 piezas únicas del sitio** (27 videoclips +
   showreel + 8 reels), una sola vez por vuelta — sin copias y sin contador.
   `N` y `D` se derivan de `UNIQUE.length`, así que agregar piezas recalcula
@@ -119,6 +127,21 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   hit-testing con `preserve-3d` + `perspective` (las obras se dibujan pero no
   clickean, sobre todo al moverse). `cardAt` proyecta cada obra y elige la más
   cercana bajo el pointer → funciona a cualquier profundidad.
+- **Las miniaturas de YouTube se actualizan SOLAS, para siempre.** Ninguna
+  preview de YouTube se sirve desde una copia congelada: se piden directo a
+  `i.ytimg.com` con un **bucket diario** (`?d=YYYYMMDD`, `THUMB_DAY`), así la
+  caché del navegador se renueve por día y una miniatura cambiada en YouTube
+  aparece en el sitio sin tocar código ni volver a bajar archivos.
+  Cadena de respaldo: sitio `maxres → sd → hq → copia local de assets/real`;
+  galería `sd → hq → mq → copia local`. Además se detecta el **placeholder
+  chico** que YouTube devuelve a veces en lugar de un 404 (`naturalWidth ≤ 120`)
+  y se baja al siguiente escalón. `armThumb()` corta la cadena al llegar al
+  respaldo local: nunca reintenta en bucle. Las copias de `assets/real/` siguen
+  en el repo **solo como seguro** para offline / `file://` / caída del CDN —
+  están verificadas con un test que bloquea `i.ytimg.com` y exige que las 8
+  previews del pliegue se vean igual. Todas llevan `referrerpolicy="no-referrer"`.
+  **Regla para el futuro: no volver a hardcodear una miniatura local como
+  fuente principal.**
 - **Toda preview respeta la relación de aspecto original del archivo**
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - **Todas las mesas de luz / previews oscurecen el fondo al 65%**
