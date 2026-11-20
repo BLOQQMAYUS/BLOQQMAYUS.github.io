@@ -52,12 +52,17 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   huecos, no uno solo.
 - **El h1 del hero es un CARTEL DE NEÓN 3D**, mismo lenguaje que el de Galería
   3D (placa, tornillos, `rotateX`, tubo con núcleo blanco + halo). Texto:
-  **"activá el BLOQQ. de minúsculas, A MAYÚSCULAS."** — las **minúsculas en gris**
-  (`.hn-low`, `var(--mut)`, sin glow) y las **mayúsculas en tubo**: `BLOQQ.`
-  **ámbar**, `A MAYÚSCULAS.` **ácido**. Titila solo a la vista (`.lit` por IO) y
-  solo opacidad; se apaga con `prefers-reduced-motion`. **No es un botón.**
-  El ancho de la placa es `min(880px, 100%)` — **nunca en `vw`**: el contenedor
-  tiene padding y una placa en vw se desborda y queda descentrada en celu.
+  **"activá el BLOQQ MÁYUS. de minúsculas, MAYÚSCULAS."** — las **minúsculas
+  también son tubo**: núcleo gris + halo gris (`.hn-low`) y **son LAS QUE
+  TITILAN** (`hnBlink`, cortes secos a apagado, dos duraciones desfasadas por
+  renglón). Las **mayúsculas NO titilan**: `BLOQQ MÁYUS.` **ámbar** y
+  `MAYÚSCULAS.` **ácido**, siempre prendidas y sin animación. Las únicas
+  palabras en mayúscula son esas dos. Titila solo a la vista (`.lit` por IO),
+  solo opacidad, y se apaga con `prefers-reduced-motion`. **No es un botón.**
+  La placa es **`width:fit-content` + `max-width:100%`** con padding horizontal
+  corto (18px, 12px en celu): queda ajustada al texto, sin aire vacío a los
+  costados. **Nunca dimensionarla en `vw`**: el contenedor tiene padding y una
+  placa en vw se desborda y queda descentrada en celu.
   `.hn-tube`/`.hn-low` llevan `white-space:nowrap`, así en mobile cada bloque
   baja entero y el cartel queda en 3 renglones.
 - **Todo el header va CENTRADO** (cartel, párrafo y "Ver showreel"), **menos
@@ -71,6 +76,26 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - **CHEESY FUCK (`s0pRkDDI57Y`) está FUERA del sitio**: YouTube lo marcó como
   contenido +18 y rompe la visualización. No volver a agregarlo. El catálogo
   son **26 videoclips** y la galería **35 piezas únicas**.
+- **Fondo del sitio = el de la Galería 3D**: hollín `#1A1714` plano y único.
+  `.vertical`, `.servicios` y `.contact` pasaron a **`background:transparent`**
+  (antes `--bg2`); si se agrega una sección nueva, no ponerle fondo opaco o
+  tapará las estrellas. `--bg2` sigue existiendo para la scrollbar.
+- **Campo de estrellas en todo el sitio, desde "01 · MONTAJE | EDICIÓN | VFX"
+  hacia abajo** (`#starfield`, canvas fijo `z-index:0`, `aria-hidden`). El hero
+  queda limpio: el dibujo se **recorta** a partir del borde superior de
+  `#trabajo`, así nunca se pinta sobre la foto. Velocidad = **60% de la de la
+  galería** (`AUTO 80 × 0.6`, pedido: 40% más lento). Presupuesto de rendimiento
+  (importante, ya costó un test entero): **30 fps** con throttle, **dpr acotado
+  a 1.5**, ~100–200 puntos según área, **ni un frame** cuando solo el hero está
+  en pantalla, cuando la pestaña está oculta o **cuando hay una capa abierta**
+  (`body.style.overflow === "hidden"` → la galería ya tiene sus estrellas).
+  El corte es por REGIÓN, no por sección: observar solo `#trabajo` con IO haría
+  que las estrellas se paren al llegar a Servicios.
+  **La galería lleva 416 estrellas** (320 +30%), a la misma velocidad de siempre.
+- **Sin chip "Todos" en 01**: solo nombres de artista, en orden aleatorio. El
+  estado por defecto sigue siendo el pliegue mezclado, y **volver a tocar el
+  artista activo lo deselecciona** y devuelve al pliegue (si no, no habría forma
+  de volver). `workCat` sigue usando `"Todos"` internamente como estado.
 - **Contacto: email y teléfono apilados** (email primero). El botón del
   teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
   email); el link sigue siendo `tel:` — si se quiere que abra WhatsApp,
