@@ -36,6 +36,20 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   `.key::after`): parpadea con `blink`, se frena cuando el cartel no está a la
   vista o se lo está hovereando, y se apaga con `prefers-reduced-motion`.
   Al filtrar por artista se muestran todas sus piezas, sin pliegue.
+- **La recarga SIEMPRE arranca desde el inicio.** `history.scrollRestoration =
+  "manual"` + `startAtTop()` en `load` y `pageshow`. Un link profundo (`#contacto`)
+  se respeta al entrar por primera vez, pero **al recargar se limpia el hash**
+  y se salta al tope — antes el navegador restauraba a medias el scroll y la
+  recarga se veía rara.
+- **Textos vigentes de 04 y 05**: h2 de 04 **"El sistema que devuelve
+  resultados"**; Post **"Edición, etalonaje, VFX, animación 2D/3D y mograph son
+  la materia prima."**; Vertical **"La ola de contenido nunca frena. Paquetes
+  9:16 para Reels, TikTok y Shorts."**; Contacto **"Contame tu proyecto — de tu
+  idea pasamos al brief, y mi sistema devuelve RESULTADOS."**. El párrafo de
+  Contacto lleva `margin:36px auto` → **36px de aire arriba y abajo** (el
+  margen inferior del neón colapsa con el superior del párrafo: por eso 36 y
+  no 30). Si se toca algún margen de esa zona, hay que volver a medir los dos
+  huecos, no uno solo.
 - **Contacto: email y teléfono apilados** (email primero). El botón del
   teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
   email); el link sigue siendo `tel:` — si se quiere que abra WhatsApp,

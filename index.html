@@ -315,7 +315,7 @@
   .contact .kicker::before{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
   .contact h2{font-size:clamp(2.3rem,6.5vw,4.6rem)}
   .contact h2 em{font-style:normal;color:var(--acc)}
-  .contact p{color:var(--mut);max-width:48ch;margin:18px auto 36px}
+  .contact p{color:var(--mut);max-width:48ch;margin:36px auto}
   /* botón flecha con LED: al apretarlo se destaca toda la box de contacto */
   /* ===== Cartel NEÓN 3D titilante · Galería 3D (evento acid + rosa) =====
      Rendimiento: el glow (text-shadow) se pinta una sola vez; el titileo
@@ -578,7 +578,7 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="kicker">04 · Toolbox — servicios</div>
-        <h2>Mis herramientas, a tu disposición. <span class="h2-hint tip">(Clickeá una)</span></h2>
+        <h2>El sistema que devuelve resultados <span class="h2-hint tip">(Clickeá una)</span></h2>
       </div>
       <div class="serv-grid">
         <button type="button" class="serv reveal" data-lt="direccion">
@@ -591,7 +591,7 @@
           <span class="serv-plus">+</span>
           <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><rect x="5.2" y="8.4" width="6.6" height="2.8" rx="1.4"/><rect x="5.2" y="13" width="10.4" height="2.8" rx="1.4"/><path d="M18 6.6v10.8"/><path d="M16.5 6.6h3l-1.5 2z"/></svg></span>
           <h3>Post, Color &amp; VFX</h3>
-          <p>Edición, etalonaje, VFX y mograph hasta la pieza final.</p>
+          <p>Edición, etalonaje, VFX, animación 2D/3D y mograph son la materia prima.</p>
         </button>
         <button type="button" class="serv reveal" data-lt="viejo">
           <span class="serv-plus">+</span>
@@ -603,7 +603,7 @@
           <span class="serv-plus">+</span>
           <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="6.6" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M8.05 8.6h1.4" stroke-width="1.15"/><rect x="12.8" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M14.25 8.6h1.4" stroke-width="1.15"/><rect x="19.0" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M20.45 8.6h1.4" stroke-width="1.15"/><path class="solid" d="M3.2,6.6 Q3.68,8.32 5.4,8.8 Q3.68,9.28 3.2,11 Q2.72,9.28 1,8.8 Q2.72,8.32 3.2,6.6 Z"/><path class="solid" d="M2.2,12.8 Q2.51,13.89 3.6,14.2 Q2.51,14.51 2.2,15.6 Q1.89,14.51 0.8,14.2 Q1.89,13.89 2.2,12.8 Z"/></svg></span>
           <h3>Estrategia Vertical</h3>
-          <p>Paquetes 9:16 para Reels, TikTok y Shorts.</p>
+          <p>La ola de contenido nunca frena. Paquetes 9:16 para Reels, TikTok y Shorts.</p>
         </button>
       </div>
     </div>
@@ -622,7 +622,7 @@
           <span class="neon-sub" aria-hidden="true"><i class="neon-cap">⇪</i></span>
         </span>
       </button>
-      <p>Contame tu proyecto — un videoclip, una pieza para tu marca o un mes entero de contenido vertical. Respondo en menos de 24 h.</p>
+      <p>Contame tu proyecto — de tu idea pasamos al brief, y mi sistema devuelve RESULTADOS.</p>
       <div class="contact-cta">
         <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
@@ -689,6 +689,23 @@
    Nada se borra: cada una lleva la clase .tip y vive en el DOM. Para volver a
    mostrarlas, poner TIPS_ON en true (o prender solo alguna quitándole .tip).
    La Galería 3D ya no tiene ninguna línea de instrucción. */
+/* ---- LA RECARGA SIEMPRE ARRANCA DESDE EL INICIO --------------------------
+   El navegador restaura a medias el scroll anterior (y con un #hash vuelve a
+   saltar), así que la recarga se veía rara. scrollRestoration manual + salto
+   al tope en load/pageshow. Un link profundo (#contacto) se respeta al entrar
+   por primera vez; al RECARGAR se limpia el hash y se arranca arriba. */
+const NAV_TYPE = (performance.getEntriesByType &&
+  (performance.getEntriesByType("navigation")[0] || {}).type) || "";
+if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+function startAtTop() {
+  if (location.hash && NAV_TYPE !== "reload") return;
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  window.scrollTo(0, 0);
+}
+startAtTop();
+addEventListener("load", startAtTop);
+addEventListener("pageshow", e => { if (e.persisted) startAtTop(); });
+
 const TIPS_ON = false;
 document.body.classList.toggle("no-tips", !TIPS_ON);
 
