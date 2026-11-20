@@ -95,10 +95,6 @@
   /* ---------- navegación intuitiva ---------- */
   #navUI{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:10;
     display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
-  #hint{font:400 .6rem/1.5 var(--mono);letter-spacing:.12em;color:var(--mut);text-transform:uppercase;
-    text-align:center;transition:opacity .6s;max-width:88vw}
-  #hint.seen{opacity:.45}
-  #hint b{color:var(--hueso);font-weight:400}
   .navrow{display:flex;gap:14px;pointer-events:auto}
   .navrow button{width:56px;height:56px;border-radius:50%;cursor:pointer;
     border:1px solid rgba(244,238,227,.3);background:rgba(18,16,13,.78);color:var(--hueso);
@@ -132,7 +128,6 @@
     .vcard .cap{font-size:.66rem}
     #hud .tag{display:none}
     #hub b{font-size:1.9rem}
-    #hint{font-size:.53rem}
     .navrow button{width:52px;height:52px}
   }
 </style>
@@ -146,14 +141,13 @@
 <div id="hub"><b>⇪<i>.</i></b><span>galería 3d</span></div>
 
 <header id="hud">
-  <div class="brand">⇪ BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
+  <div class="brand">BLOQQ MÁYUS <em>· GALERÍA 3D</em></div>
   <div class="right">
     <a id="back" href="https://bloqqmayus.github.io/">← portfolio</a>
   </div>
 </header>
 
 <div id="navUI">
-  <div id="hint">deslizá <b>hacia arriba</b> para caminar · <b>click en una obra</b> = mesa de luz · <b>click afuera</b> = volver</div>
   <div class="navrow">
     <button id="prevBtn" aria-label="Obra anterior"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
     <button id="nextBtn" aria-label="Obra siguiente"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
@@ -255,6 +249,32 @@ function layout() {
     c._z = -i * G;
     setTF(c);
   });
+  computeRecycle();
+}
+
+/* ---------- umbral de reciclado por geometría ----------
+   Antes era un z fijo (620): en monitores anchos las obras más anchas (las
+   de YouTube, 340px) TODAVÍA estaban en cuadro a ese z, así que el reciclado
+   las teletransportaba y desaparecían de golpe antes de salir de pantalla.
+   Las verticales (216px) salían antes y no se notaba; en celu, con paredes
+   más juntas y obras más chicas, tampoco pasaba.
+   Ahora se calcula el z exacto en el que cada obra termina de salir del
+   encuadre, según el ancho del viewport, la pared, su ancho y el giro:
+     x_borde_interior · P / (P − z_borde) = ancho/2
+   Se recicla recién ahí (+ margen), nunca antes. Sin lecturas de layout por
+   frame: se calcula una vez y se recalcula al redimensionar. */
+const PERSP = 900;                          // debe coincidir con #stage{perspective}
+const recycleZ = new Map();
+function computeRecycle() {
+  const half = Math.max(1, innerWidth / 2);
+  const rad = TILT * Math.PI / 180, cos = Math.cos(rad), sin = Math.sin(rad);
+  for (const c of cards) {
+    const w = c.offsetWidth || 340;
+    const xIn = WALL - (w / 2) * cos;       // borde más cercano al pasillo
+    const dz = (w / 2) * sin;               // ese borde queda más cerca de cámara
+    const sale = xIn > 0 ? PERSP + dz - (xIn * PERSP) / half : 620;
+    recycleZ.set(c, Math.min(870, Math.max(620, sale + 40)));
+  }
 }
 
 /* ---------- loop ---------- */
@@ -272,8 +292,9 @@ function tick(t) {
   }
   for (const c of cards) {
     const z = c._z + camZ;
-    if (z > 620) { c._z -= D; setTF(c); }
-    else if (z < 620 - D) { c._z += D; setTF(c); }
+    const T = recycleZ.get(c) || 620;
+    if (z > T) { c._z -= D; setTF(c); }
+    else if (z < T - D) { c._z += D; setTF(c); }
   }
   for (const s of stars) {
     const z = +s.dataset.z + camZ;
@@ -290,7 +311,7 @@ const drag = { down: false };
 const pts = new Map();
 let sx = 0, sy = 0, lx = 0, ly = 0, lt = 0, moved = 0, pinchD = 0;
 let downCard = null, downT = 0;
-const seen = () => $("hint").classList.add("seen");
+const seen = () => {};   /* el texto informativo se quitó por pedido */
 stage.addEventListener("pointerdown", e => {
   pts.set(e.pointerId, e);
   if (pts.size === 1) {
@@ -469,6 +490,7 @@ function finishClose() {
   cineOpen = false;                          // el paseo se reanuda solo
 }
 addEventListener("resize", () => {
+  computeRecycle();                         // el encuadre cambió → nuevo umbral
   if (phase === "in" || phase === "out") setRect(fly, fitRect(cineAspect));
   if (phase === "open") {
     const m = cineMedia.firstElementChild;

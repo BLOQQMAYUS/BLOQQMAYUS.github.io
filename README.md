@@ -11,12 +11,20 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   en cada carga (Fisher–Yates sobre `workOrder`). Al agregar links/videos
   nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
   `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
-  El pliegue muestra las primeras **8** del orden mezclado (`FOLD = 8`).
+  El pliegue muestra **8** en computadora y **5 en celular** (`FOLD = 8`,
+  `FOLD_SM = 5`, breakpoint 760px — en celu la grilla es de una columna y la
+  sección se haría larguísima). Se recalcula solo al cambiar el breakpoint.
   El botón **"¿Más? Galería ↓"** ya NO despliega la grilla:
   lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
+  El subtítulo del cartel es **solo la flecha ⇪, grande y en neón ámbar**
+  (mismo lenguaje que el tubo: núcleo blanco + halo del color del sitio).
   Al filtrar por artista se muestran todas sus piezas, sin pliegue.
+- **Contacto: email y teléfono apilados** (email primero). El botón del
+  teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
+  email); el link sigue siendo `tel:` — si se quiere que abra WhatsApp,
+  hay que cambiar el `href` a `https://wa.me/5491159754088`.
 - **02 · 3D: CHECHA Rifa siempre primera; el resto, aleatorio en cada carga.**
   **03 · Videoclips verticales: siempre aleatorio.** Los reels nuevos que se
   agreguen a `assets/reels/` entran a la mezcla automáticamente.
@@ -127,3 +135,22 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
   de todas las previews, scroll horizontal, galería con 320 estrellas).
   Las esperas van por **estado** (`rlPhase`, centrado del rect), no por reloj:
   en móviles emulados la transición visual tarda más que el timer.
+
+### Galería 3D · ajustes vigentes
+
+- Sin el ⇪ junto a "BLOQQ MÁYUS" en el encabezado y **sin la línea de texto
+  informativo** de abajo (se quitó `#hint`; `seen()` quedó como no-op).
+- **Reciclado por geometría, no por z fijo.** Antes se reciclaba a `z > 620`:
+  en monitores anchos las obras más anchas (YouTube, 340px) seguían en cuadro
+  a ese z y desaparecían de golpe antes de salir de pantalla; las verticales
+  (216px) salían antes y en celu no pasaba. Ahora `computeRecycle()` calcula
+  el z exacto en que cada obra termina de salir del encuadre:
+  `z = P + dz − x_interior·P/(ancho/2)`, con `P = 900` (perspective), `dz` y
+  `x_interior` derivados del ancho de la obra y el giro de 16°. Se recicla
+  ahí +40 de margen (piso 620, techo 870) y se recalcula en `resize`.
+  Sin lecturas de layout por frame.
+- Regresión cubierta por **`tests/gallery-recycle.js`**: mide el salto de la
+  posición propia de cada obra (`_z`, que la cámara no altera) y exige que
+  ninguna obra perceptible se recicle estando en pantalla, hacia adelante y
+  hacia atrás, en 1920 / 1280 / 390. `FORCE_OLD=1` reproduce el bug viejo
+  para probar que el test lo detecta de verdad.
