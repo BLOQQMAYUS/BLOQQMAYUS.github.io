@@ -24,8 +24,8 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   ni tope** — las reglas son solo para la vista "Todos".
   **Los botones de artista salen en orden ALEATORIO en cada visita**
   (`shuffle(Object.keys(counts))`); "Todos" queda primero por ser el filtro
-  por defecto. El catálogo son **27 videoclips** (los 3 de BLOQQ MÁYUS —
-  CHEESY FUCK, FACE DE FURRO y FACTS — entraron en noviembre).
+  por defecto. El catálogo son **26 videoclips** (FACE DE FURRO y FACTS, de BLOQQ MÁYUS,
+  entraron en noviembre; CHEESY FUCK se retiró por el bloqueo +18).
   El botón **"¿Más? Galería ↓"** ya NO despliega la grilla:
   lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
@@ -50,6 +50,27 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   margen inferior del neón colapsa con el superior del párrafo: por eso 36 y
   no 30). Si se toca algún margen de esa zona, hay que volver a medir los dos
   huecos, no uno solo.
+- **El h1 del hero es un CARTEL DE NEÓN 3D**, mismo lenguaje que el de Galería
+  3D (placa, tornillos, `rotateX`, tubo con núcleo blanco + halo). Texto:
+  **"activá el BLOQQ. de minúsculas, A MAYÚSCULAS."** — las **minúsculas en gris**
+  (`.hn-low`, `var(--mut)`, sin glow) y las **mayúsculas en tubo**: `BLOQQ.`
+  **ámbar**, `A MAYÚSCULAS.` **ácido**. Titila solo a la vista (`.lit` por IO) y
+  solo opacidad; se apaga con `prefers-reduced-motion`. **No es un botón.**
+  El ancho de la placa es `min(880px, 100%)` — **nunca en `vw`**: el contenedor
+  tiene padding y una placa en vw se desborda y queda descentrada en celu.
+  `.hn-tube`/`.hn-low` llevan `white-space:nowrap`, así en mobile cada bloque
+  baja entero y el cartel queda en 3 renglones.
+- **Todo el header va CENTRADO** (cartel, párrafo y "Ver showreel"), **menos
+  "REC · FRANCISCO BENÍTEZ · CABA", que queda SIEMPRE a la izquierda.**
+- **Interfaz de cámara grabando** (decorativa, `aria-hidden`): cuatro escuadras
+  ámbar finas (`.cam-c`, 1px al 34%) más dos hairlines ámbar — una detrás del
+  REC y otra sobre el timecode. El marco arranca **debajo del nav** (`top:84px`,
+  74px en celu) para no pelearse con el logo. **El timecode "4K · 24 FPS / TC"
+  ahora se ve también en mobile** (antes se ocultaba bajo 640px). Sin glow y sin
+  loops JS: el único movimiento es el LED rojo del REC y el contador `#tc`.
+- **CHEESY FUCK (`s0pRkDDI57Y`) está FUERA del sitio**: YouTube lo marcó como
+  contenido +18 y rompe la visualización. No volver a agregarlo. El catálogo
+  son **26 videoclips** y la galería **35 piezas únicas**.
 - **Contacto: email y teléfono apilados** (email primero). El botón del
   teléfono usa el **ícono de WhatsApp** en outline (mismo estilo que el del
   email); el link sigue siendo `tel:` — si se quiere que abra WhatsApp,
@@ -128,7 +149,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   sufijo "· GALERÍA 3D" del header de la galería se oculta cuando está
   embebida, para que no se le superponga. **El ⇪ con LED del centro de la
   galería (`#hub b`) se eliminó**; queda solo la marca de agua "galería 3d".
-  La galería contiene **las 36 piezas únicas del sitio** (27 videoclips +
+  La galería contiene **las 35 piezas únicas del sitio** (26 videoclips +
   showreel + 8 reels), una sola vez por vuelta — sin copias y sin contador.
   `N` y `D` se derivan de `UNIQUE.length`, así que agregar piezas recalcula
   todo solo. **FACTS figura una sola vez como videoclip de YouTube**; el reel
