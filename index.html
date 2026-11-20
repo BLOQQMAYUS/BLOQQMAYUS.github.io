@@ -264,6 +264,9 @@
 
   /* ---------- servicios: íconos de programa clickeables → mesa de luz ---------- */
   .servicios{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  /* Pistas/instrucciones: todas apagadas por el interruptor TIPS_ON.
+     Se conservan en el DOM para poder volver a prender alguna. */
+  .no-tips .tip{display:none!important}
   .h2-hint{font-size:.42em;font-weight:400;color:var(--mut);letter-spacing:.02em;white-space:nowrap}
   .serv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
   @media(max-width:860px){.serv-grid{grid-template-columns:repeat(2,1fr)}}
@@ -281,6 +284,11 @@
   .serv:hover .serv-ico{background:rgba(242,165,26,.18);border-color:var(--acc)}
   .serv-ico svg{width:42px;height:42px;stroke:var(--acc);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
   .serv-ico svg .solid{fill:var(--acc);stroke:none}
+  /* la Torino entra como MÁSCARA: el PNG ya tiene el fondo removido, así que
+     se pinta con el ámbar de la marca y acompaña el hover como los demás. */
+  .serv-ico .torino{width:62px;height:44px;background:var(--acc);
+    -webkit-mask:url("assets/torino.png") center/contain no-repeat;
+    mask:url("assets/torino.png") center/contain no-repeat}
   .serv h3{font-size:1rem;font-weight:700;line-height:1.2}
   .serv p{color:var(--mut);font-size:.78rem;line-height:1.45;margin:0}
   .serv-line{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);line-height:1.7}
@@ -486,7 +494,7 @@
   }
 </style>
 </head>
-<body>
+<body class="no-tips">
 
 <a class="skip" href="#trabajo">Saltar al contenido</a>
 <div class="grain" aria-hidden="true"></div>
@@ -515,11 +523,10 @@
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         Ver showreel
       </button>
-      <a class="btn btn-ghost" href="#trabajo">Ver videoclips</a>
     </div>
   </div>
   <div class="hero-meta">4K · 24 FPS<br>TC <b id="tc">00:00:00:00</b></div>
-  <div class="scroll-cue" id="scrollCue" aria-hidden="true"><span>Deslizá</span><i></i></div>
+  <div class="scroll-cue tip" id="scrollCue" aria-hidden="true"><span>Deslizá</span><i></i></div>
 </header>
 
 <main>
@@ -551,7 +558,7 @@
       </div>
     </div>
     <div class="wrap wheel-foot">
-      <span class="wheel-hint">click en una preview = ver con sonido</span>
+      <span class="wheel-hint tip">click en una preview = ver con sonido</span>
     </div>
   </section>
 
@@ -560,7 +567,7 @@
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="kicker">04 · Toolbox — servicios</div>
-        <h2>Mis herramientas, a tu disposición. <span class="h2-hint">(Clickeá una)</span></h2>
+        <h2>Mis herramientas, a tu disposición. <span class="h2-hint tip">(Clickeá una)</span></h2>
       </div>
       <div class="serv-grid">
         <button type="button" class="serv reveal" data-lt="direccion">
@@ -568,28 +575,24 @@
           <span class="serv-ico"><svg viewBox="0 0 24 24"><path d="M20.2 6.4 3.8 9.1 3.1 5.6l16.4-2.7z"/><path d="M3.8 9.1h16.4v9.4a2 2 0 0 1-2 2H5.8a2 2 0 0 1-2-2z"/><path d="m7.5 4.4 1.1 3.6m3.7-4.3 1.1 3.6m3.7-4.3 1.1 3.6"/></svg></span>
           <h3>Dirección creativa</h3>
           <p>Concepto, guion, dirección, del brief a la entrega final.</p>
-          <span class="serv-line">Tratamiento · Fotografía · Sonido · Rodaje</span>
         </button>
         <button type="button" class="serv reveal" data-lt="post">
           <span class="serv-plus">+</span>
           <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2"/><rect x="5.2" y="8.4" width="6.6" height="2.8" rx="1.4"/><rect x="5.2" y="13" width="10.4" height="2.8" rx="1.4"/><path d="M18 6.6v10.8"/><path d="M16.5 6.6h3l-1.5 2z"/></svg></span>
           <h3>Post, Color &amp; VFX</h3>
           <p>Edición, etalonaje, VFX y mograph hasta la pieza final.</p>
-          <span class="serv-line">Edición · Color · VFX · Mograph · 2D · 3D</span>
         </button>
         <button type="button" class="serv reveal" data-lt="viejo">
           <span class="serv-plus">+</span>
-          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M10 8v5l4.5-2.5zM12 17v4M8 21h8"/></svg></span>
+          <span class="serv-ico"><i class="torino" role="img" aria-label="Torino"></i></span>
           <h3>Lo viejo funciona, Juan</h3>
           <p>Team horizontal for ever: narrativa y formato largo.</p>
-          <span class="serv-line">16:9 · BLOGS · PÓDCASTS · YOUTUBE</span>
         </button>
         <button type="button" class="serv reveal" data-lt="vertical">
           <span class="serv-plus">+</span>
-          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="6.5" y="2" width="11" height="20" rx="2.5"/><path d="M10.6 4.7h2.8"/><circle class="solid" cx="11" cy="9.3" r="2.1"/><path class="solid" d="M7.5 18.6c0-3.1 1.55-5 3.5-5s3.5 1.9 3.5 5z"/><path d="M13.5 14.4 15.2 11.6" stroke-width="1.4"/><circle class="solid" cx="15.6" cy="10.7" r="1.35"/></svg></span>
+          <span class="serv-ico"><svg viewBox="0 0 24 24"><rect x="6.6" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M8.05 8.6h1.4" stroke-width="1.15"/><rect x="12.8" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M14.25 8.6h1.4" stroke-width="1.15"/><rect x="19.0" y="6.8" width="4.3" height="10.4" rx="1.2" stroke-width="1.15"/><path d="M20.45 8.6h1.4" stroke-width="1.15"/><path class="solid" d="M3.2,6.6 Q3.68,8.32 5.4,8.8 Q3.68,9.28 3.2,11 Q2.72,9.28 1,8.8 Q2.72,8.32 3.2,6.6 Z"/><path class="solid" d="M2.2,12.8 Q2.51,13.89 3.6,14.2 Q2.51,14.51 2.2,15.6 Q1.89,14.51 0.8,14.2 Q1.89,13.89 2.2,12.8 Z"/></svg></span>
           <h3>Estrategia Vertical</h3>
           <p>Paquetes 9:16 para Reels, TikTok y Shorts.</p>
-          <span class="serv-line">Ideación · Hooks · Batch · Métricas</span>
         </button>
       </div>
     </div>
@@ -664,11 +667,20 @@
     <button class="modal-x" id="modalX" aria-label="Cerrar">✕</button>
     <div class="modal-media" id="modalMedia"></div>
     <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener" hidden>Ver en YouTube ↗</a></div>
-    <div class="modal-hint" id="modalHint"></div>
+    <div class="modal-hint tip" id="modalHint"></div>
   </div>
 </div>
 
 <script>
+/* ---- PISTAS / INSTRUCCIONES ----------------------------------------------
+   Todas apagadas por pedido: "Deslizá" del hero, "click en una preview = ver
+   con sonido" de la rueda, "(Clickeá una)" del Toolbox y las notas del modal.
+   Nada se borra: cada una lleva la clase .tip y vive en el DOM. Para volver a
+   mostrarlas, poner TIPS_ON en true (o prender solo alguna quitándole .tip).
+   La Galería 3D ya no tiene ninguna línea de instrucción. */
+const TIPS_ON = false;
+document.body.classList.toggle("no-tips", !TIPS_ON);
+
 /* ================================================================
    ✏️  CONFIG — EDITA SOLO ESTE BLOQUE
    · img:   miniatura (las de /assets/real son las oficiales de YouTube)
@@ -701,6 +713,8 @@ const CONFIG = {
     { title: "Esto No Se Acaba",     cat: "MARTOCHA", artist: "Martocha × Dinámica", year: "2026", role: "Videoclip oficial", img: "assets/real/6Y9qKhXRRI8.jpg", video: "https://www.youtube.com/watch?v=6Y9qKhXRRI8" },
     { title: "Caramelos de Colores", cat: "MUSHER", artist: "Musher ft. H de Perra",  year: "2026", role: "Videoclip oficial", img: "assets/real/KyrM4OIZuv0.jpg", video: "https://www.youtube.com/watch?v=KyrM4OIZuv0" },
     { title: "Ser el Uno",         cat: "MUSHER", artist: "Musher ft. El Mortedor", year: "2026", role: "Videoclip oficial", img: "assets/real/MrM7xpynHyo.jpg", video: "https://www.youtube.com/watch?v=MrM7xpynHyo" },
+    { title: "FACE DE FURRO",            cat: "BLOQQ MÁYUS", artist: "BLOQQ MÁYUS", year: "2026", role: "Videoclip oficial", img: "assets/real/x5HF8rj4PC4.jpg", video: "https://www.youtube.com/watch?v=x5HF8rj4PC4" },
+    { title: "FACTS",                    cat: "BLOQQ MÁYUS", artist: "BLOQQ MÁYUS", year: "2026", role: "Videoclip oficial", img: "assets/real/WPE_jtKCojc.jpg", video: "https://www.youtube.com/watch?v=WPE_jtKCojc" },
     { title: "Sopa de Papa",       cat: "MUSHER", artist: "Musher",                 year: "2025", role: "Videoclip oficial", img: "assets/real/ngeHU0vpw_Q.jpg", video: "https://www.youtube.com/watch?v=ngeHU0vpw_Q" },
     { title: "Rumpología",         cat: "MUSHER", artist: "Musher ft. Low",         year: "2025", role: "Videoclip oficial", img: "assets/real/MV9vqqJxSEM.jpg", video: "https://www.youtube.com/watch?v=MV9vqqJxSEM" },
     { title: "Freestyle Navideño", cat: "MUSHER", artist: "Musher",                 year: "2025", role: "Videoclip oficial", img: "assets/real/WE_XicUvCmA.jpg", video: "https://www.youtube.com/watch?v=WE_XicUvCmA" },
@@ -709,6 +723,7 @@ const CONFIG = {
     { title: "Escorpio",             cat: "MAYOR R", artist: "Mayor R", year: "2025", role: "Videoclip oficial", img: "assets/real/SsO6Or59bhY.jpg", video: "https://www.youtube.com/watch?v=SsO6Or59bhY" },
     { title: "LA CALETA",            cat: "B13X", artist: "B13X & Conde Rodriguez", year: "2025", role: "Videoclip oficial", img: "assets/real/19N7eMg5DHg.jpg", video: "https://www.youtube.com/watch?v=19N7eMg5DHg" },
     { title: "Tabla Esmeralda",      cat: "B13X", artist: "B13X & Lasistta", year: "2023", role: "Videoclip oficial", img: "assets/real/hTIK3eSvI3M.jpg", video: "https://www.youtube.com/watch?v=hTIK3eSvI3M" },
+    { title: "CHEESY FUCK",              cat: "BLOQQ MÁYUS", artist: "BLOQQ MÁYUS", year: "2023", role: "Videoclip oficial", img: "assets/real/s0pRkDDI57Y.jpg", video: "https://www.youtube.com/watch?v=s0pRkDDI57Y" },
     { title: "Siento que corone",    cat: "SEAL G", artist: "Seal G", year: "2021", role: "Videoclip oficial", img: "assets/real/GZgUjji0K-o.jpg", video: "https://www.youtube.com/watch?v=GZgUjji0K-o" },
     { title: "Mahfackas",            cat: "DELNI", artist: "Delni", year: "2021", role: "Videoclip oficial", img: "assets/real/DcKFx7KnNSk.jpg", video: "https://www.youtube.com/watch?v=DcKFx7KnNSk" },
     { title: "Si me hago viral",     cat: "SEAL G", artist: "Seal G", year: "2020", role: "Videoclip oficial", img: "assets/real/PyPTavYcGUQ.jpg", video: "https://www.youtube.com/watch?v=PyPTavYcGUQ" },
@@ -740,12 +755,57 @@ document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
   `<a href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
 
 /* ---- grid de videoclips + filtros ---- */
-/* REGLA PERMANENTE: el orden de muestra es SIEMPRE aleatorio — se mezcla
-   en cada carga (Fisher–Yates). CONFIG.films se mantiene en orden
-   cronológico como archivo de datos; los videos nuevos entran al pool
-   y se mezclan con el resto, sin prioridad por fecha ni antigüedad. */
+/* REGLA PERMANENTE: el orden es SIEMPRE aleatorio en cada carga, pero el
+   PLIEGUE (lo que se ve al entrar) cumple tres reglas:
+     · nunca más de MAX_PER_CAT piezas del mismo artista;
+     · siempre al menos una de MUSHER, una de TIERRAS RARAS y una de
+       BLOQQ MÁYUS;
+     · vale para los dos pliegues (8 en computadora, 5 en celular), así que se
+       arma un prefijo que cumple en ambos tamaños y se mezcla después.
+   Al filtrar por artista se muestran TODAS sus piezas, sin pliegue ni tope.
+   CONFIG.films queda en orden cronológico como archivo de datos: los videos
+   nuevos entran al pool y se mezclan, sin prioridad por fecha. */
 const workGrid = document.getElementById("workGrid");
-const workOrder = shuffle(CONFIG.films.map((_, i) => i));
+const FOLD = 8, FOLD_SM = 5;
+const MUST_CATS = ["MUSHER", "TIERRAS RARAS", "BLOQQ MÁYUS"];
+const MAX_PER_CAT = 2;
+function buildWorkOrder() {
+  const all = CONFIG.films.map((_, i) => i);
+  const pools = {};
+  all.forEach(i => (pools[CONFIG.films[i].cat] ||= []).push(i));
+  Object.values(pools).forEach(a => shuffle(a));
+  const used = {}, taken = new Set(), head = [];
+  const room = c => (used[c] || 0) < MAX_PER_CAT && (pools[c] || []).some(i => !taken.has(i));
+  const pick = c => {
+    const p = pools[c];
+    while (p.length) {
+      const i = p.pop();
+      if (taken.has(i)) continue;
+      taken.add(i); used[c] = (used[c] || 0) + 1; head.push(i); return true;
+    }
+    return false;
+  };
+  /* primero los obligatorios, uno por artista, en orden sorteado */
+  shuffle(MUST_CATS.slice()).forEach(c => { if (pools[c] && room(c)) pick(c); });
+  /* después se completa el pliegue chico y el grande sin pasar el tope */
+  const keys = Object.keys(pools);
+  for (const target of [FOLD_SM, FOLD]) {
+    for (let guard = 0; head.length < target && guard < 500; guard++) {
+      const c = keys[Math.floor(Math.random() * keys.length)];
+      if (room(c)) pick(c);
+    }
+  }
+  /* se mezcla el frente hasta que el pliegue chico también tenga los tres */
+  const covers = a => MUST_CATS.every(c => !pools[c] ||
+    a.slice(0, FOLD_SM).some(i => CONFIG.films[i].cat === c));
+  let front = head;
+  for (let t = 0; t < 80; t++) {
+    const cand = shuffle(head.slice());
+    if (covers(cand)) { front = cand; break; }
+  }
+  return front.concat(shuffle(all.filter(i => !taken.has(i))));
+}
+const workOrder = buildWorkOrder();
 workGrid.innerHTML = workOrder.map((fi, pos) => {
   const f = CONFIG.films[fi];
   return `
@@ -763,7 +823,9 @@ workGrid.innerHTML = workOrder.map((fi, pos) => {
 
 const counts = {};
 CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);
-const cats = ["Todos", ...Object.keys(counts).sort((a, b) => counts[b] - counts[a])];
+/* REGLA PERMANENTE: los botones de artista salen en orden ALEATORIO en cada
+   visita ("Todos" queda primero por ser el filtro por defecto). */
+const cats = ["Todos", ...shuffle(Object.keys(counts))];
 const filters = document.getElementById("filters");
 filters.innerHTML = cats.map((c, i) =>
   `<button class="chip${i === 0 ? " on" : ""}" data-cat="${c}">${c}</button>`).join("");
@@ -772,8 +834,8 @@ filters.innerHTML = cats.map((c, i) =>
    la grilla, lleva a 05 · Contacto y hace que el cartel de neón llame la
    atención para que el usuario entre solo. Al filtrar por artista se
    muestran todas sus piezas, sin pliegue. */
-const FOLD = 8, FOLD_SM = 5;
-/* en celu la grilla es de una columna y la sección se hace larguísima:
+/* FOLD y FOLD_SM se declaran arriba, junto a buildWorkOrder.
+   En celu la grilla es de una columna y la sección se hace larguísima:
    ahí el pliegue muestra 5. Se recalcula solo al cambiar el breakpoint. */
 const foldMQ = matchMedia("(max-width: 760px)");
 const foldNow = () => (foldMQ.matches ? FOLD_SM : FOLD);
@@ -1199,6 +1261,32 @@ if (servHint) servHint.style.display = LIGHTTABLES_ON ? "" : "none";
 const REEL_OK = n => typeof n === "string" && n.length <= 120 &&
   /\.mp4$/i.test(n) && !/[<>"'`\\/]|\.\./.test(n);
 
+/* REGLA PERMANENTE de la rueda: CHECHA Rifa anclada al frente, el resto
+   aleatorio en cada carga y NUNCA dos piezas de la misma serie pegadas en el
+   anillo (los 4 HDP Ando Baires no pueden quedar juntos). Se sortea el orden
+   y se valida la vecindad incluyendo el cierre del anillo; si tras muchos
+   intentos no hay orden perfecto, se usa el de menos choques. */
+function wheelSeries(it) {
+  return String(it.group || it.title || "").toUpperCase().replace(/\s*·\s*\d+$/, "").trim();
+}
+function wheelCollisions(a) {
+  let n = 0;
+  for (let k = 0; k < a.length; k++)
+    if (wheelSeries(a[k]) === wheelSeries(a[(k + 1) % a.length])) n++;
+  return n;
+}
+function arrangeWheel(items) {
+  const esChecha = i => /CHECHA/i.test(i.group || "");
+  const front = items.filter(esChecha), rest = items.filter(i => !esChecha(i));
+  let best = null, bestBad = Infinity;
+  for (let t = 0; t < 400; t++) {
+    const cand = [...front, ...shuffle(rest.slice())];
+    const bad = wheelCollisions(cand);
+    if (!bad) return cand;
+    if (bad < bestBad) { bestBad = bad; best = cand; }
+  }
+  return best || items;
+}
 async function loadReels() {  let names = FALLBACK_REELS;
   try {
     const cached = JSON.parse(sessionStorage.getItem("reels-manifest") || "null");
@@ -1220,10 +1308,7 @@ async function loadReels() {  let names = FALLBACK_REELS;
     title: reelTitle(n),
     group: is3D(n) ? (/CHECHA/i.test(n) ? "CHECHA RIFA" : "HDP ANDO BAIRES") : ""
   }));
-  /* REGLA PERMANENTE: 3D → CHECHA Rifa siempre primera, el resto aleatorio.
-     Videoclips verticales → siempre aleatorio. Los reels nuevos entran a la mezcla. */
-  const esChecha = i => /CHECHA/i.test(i.group || "");
-  buildWheel([...items.filter(esChecha), ...shuffle(items.filter(i => !esChecha(i)))]);
+  buildWheel(arrangeWheel(items));
 }
 
 /* ---- modal ---- */

@@ -14,6 +14,18 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   El pliegue muestra **8** en computadora y **5 en celular** (`FOLD = 8`,
   `FOLD_SM = 5`, breakpoint 760px — en celu la grilla es de una columna y la
   sección se haría larguísima). Se recalcula solo al cambiar el breakpoint.
+  **El pliegue cumple tres reglas** (`buildWorkOrder`): **nunca más de
+  `MAX_PER_CAT = 2` piezas del mismo artista**, y **siempre al menos una de
+  MUSHER, una de TIERRAS RARAS y una de BLOQQ MÁYUS** (`MUST_CATS`). Vale para
+  los DOS pliegues: se arma un prefijo que cumple en 5 y en 8, y después se
+  mezcla el frente hasta que el de 5 también tenga los tres. El artista se
+  agrupa por `cat` (la etiqueta del filtro), así que "Musher ft. X" cuenta como
+  MUSHER. **Al filtrar por artista se muestran todas sus piezas, sin pliegue
+  ni tope** — las reglas son solo para la vista "Todos".
+  **Los botones de artista salen en orden ALEATORIO en cada visita**
+  (`shuffle(Object.keys(counts))`); "Todos" queda primero por ser el filtro
+  por defecto. El catálogo son **27 videoclips** (los 3 de BLOQQ MÁYUS —
+  CHEESY FUCK, FACE DE FURRO y FACTS — entraron en noviembre).
   El botón **"¿Más? Galería ↓"** ya NO despliega la grilla:
   lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
@@ -37,6 +49,11 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   está a la vista (IO) o cuando la pestaña está oculta. **CHECHA Rifa siempre
   primera (al frente); el resto, aleatorio en cada carga.** Los reels nuevos
   que se agreguen a `assets/reels/` entran a la mezcla automáticamente.
+  **Nunca dos piezas de la misma serie pegadas en el anillo** (`arrangeWheel`
+  + `wheelCollisions`): los 4 HDP Ando Baires no pueden quedar juntos. Se
+  sortea el orden y se valida la vecindad **incluyendo el cierre del anillo**;
+  con 4 HDP sobre 8 la solución es alternarlos, y el orden cambia en cada
+  visita. La serie sale de `group` (o del título si no tiene).
   La rueda usa **solo posters** (`assets/posters/`): cero decode de video
   mientras gira. **Cualquier preview es clickeable en cualquier momento** →
   mesa de luz limpia (`openReel`). El click se resuelve por **proyección
@@ -57,6 +74,15 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   exactamente al mismo lugar (`camZ` intacto). El iframe se carga y se
   descarga con `contentWindow.location.replace()` — asignar `.src` metería
   entradas extra en el historial conjunto.
+- **Todas las pistas / instrucciones de texto están APAGADAS** por el
+  interruptor **`const TIPS_ON = false`**: "Deslizá" del hero, "click en una
+  preview = ver con sonido" de la rueda, "(Clickeá una)" del Toolbox y las
+  notas del modal. Cada una lleva la clase **`.tip`** y sigue en el DOM; el
+  `<body>` arranca con `no-tips` para que no haya parpadeo. Para prender todas,
+  `TIPS_ON = true`; para prender solo una, quitarle la clase `.tip`.
+  **La Galería 3D ya no tiene ninguna línea de instrucción.**
+- **El hero tiene un solo botón: "Ver showreel".** El "Ver videoclips" se
+  eliminó por pedido.
 - **Footer: `.foot-ind` con LED rojo titilante + "INDUSTRIA ARGENTINA".**
 - **Toolbox (textos e íconos vigentes)**: *Dirección creativa* (claqueta) ·
   *Post, Color & VFX* (línea de tiempo con playhead; etiquetas `Edición ·
@@ -65,20 +91,26 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   YOUTUBE`) · *Estrategia Vertical* (celular con la silueta rellena de un
   rapero con micrófono). Los rellenos usan la clase **`.solid`**
   (`fill: var(--acc)`), no `currentColor` — que resolvería al hueso del texto.
-  **PENDIENTE: el ícono de "Lo viejo" es todavía pantalla+play; hay que
-  cambiarlo por la Torino con el fondo removido, en ámbar.** La imagen se
-  anunció en `/assets/uploads/Torino.png` pero **no está en el repo** (revisado
-  el árbol completo de `main`): ese commit no se guardó. Hay que subirla de
-  nuevo o pasarla por el chat.
+  El ícono de "Lo viejo" es la **Torino**: `assets/torino.png` (fondo removido,
+  recortada, 520px) aplicada como **máscara CSS** con `background: var(--acc)`,
+  así toma el ámbar exacto de la marca y acompaña el hover como los demás.
+  El de Estrategia Vertical son **3 celulares** (pantallas solas, sin silueta)
+  **más 2 sparkles filled a la izquierda**, uno más chico que el otro. Los
+  rectángulos llevan `stroke-width: 1.15` y separación real: con el trazo
+  estándar de 1.5 las tres pantallas se fundían en una mancha al tamaño del
+  ícono. **Las etiquetas rojas (`.serv-line`) se eliminaron**: en las tarjetas
+  quedan solo el título y el subtítulo.
 - **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
   la activa el **cartel de neón 3D titilante "GALERÍA 3D"** de la sección
   Contacto (`#ledBtn`), como overlay a pantalla completa (`#galBox` + iframe
   a `lab/vortex/`, que se descarga al cerrar). El neón titila solo cuando está
   a la vista (IntersectionObserver) y anima únicamente opacidad → sin costo
   de rendimiento; se apaga con `prefers-reduced-motion`.
-  La galería contiene **las 34 piezas únicas del sitio** (24 videoclips +
-  showreel + FACTS + 8 reels), una sola vez por vuelta — sin copias y sin
-  contador. Los videos nuevos que se agreguen al sitio deben sumarse también
+  La galería contiene **las 36 piezas únicas del sitio** (27 videoclips +
+  showreel + 8 reels), una sola vez por vuelta — sin copias y sin contador.
+  `N` y `D` se derivan de `UNIQUE.length`, así que agregar piezas recalcula
+  todo solo. **FACTS figura una sola vez como videoclip de YouTube**; el reel
+  vertical `BLOQQ MÁYUS_FACTS.mp4` es otro corte (vertical) y convive con él. Los videos nuevos que se agreguen al sitio deben sumarse también
   a `UNIQUE` en `lab/vortex/index.html`. Fondo: espacio 3D con estrellas
   sutiles. Click en una obra → mesa de luz (65% de oscuridad, vuelo al centro,
   autoplay sin controles; click en la preview = play/pausa invisible; click
