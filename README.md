@@ -263,6 +263,11 @@ vacío (`""`), se muestra la miniatura con un aviso de demo.
 (mantén los nombres, o actualiza las rutas en CONFIG). Recomendado:
 horizontales ≥1600×900, verticales ≥900×1600, JPG calidad ~80.
 
+> ⚠️ **`./deploy.sh sync` pisa lo local con lo publicado.** Va **antes** de
+> editar, nunca después: si ya editaste, el paso siguiente es publicar
+> (`./deploy.sh <TOKEN> "mensaje"`). Correr sync con trabajo sin publicar lo
+> borra — pasó una vez y hubo que rehacer la ronda entera.
+
 ## 🚀 Cómo publicarlo (gratis)
 - **Netlify Drop** — arrastra la carpeta `portfolio/` a https://app.netlify.com/drop y listo.
 - **GitHub Pages** — sube la carpeta a un repo y activa Pages en Settings → Pages.
