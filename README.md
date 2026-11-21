@@ -52,11 +52,12 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   huecos, no uno solo.
 - **El h1 del hero es un CARTEL DE NEÓN 3D**, mismo lenguaje que el de Galería
   3D (placa, tornillos, `rotateX`, tubo con núcleo blanco + halo). Texto:
-  **"activá el BLOQQ MÁYUS. de minúsculas, a MAYÚSCULAS"** (texto exacto: la
-  "a" va en minúsculas y el segundo renglón NO lleva punto final) — las **minúsculas
+  **"activá el BLOQQ MÁYUS de minúsculas a MAYÚSCULAS"** (texto exacto: **sin
+  coma y sin ningún punto** — ni después de MÁYUS ni al final; la "a" va en
+  minúsculas) — las **minúsculas
   también son tubo**: núcleo gris + halo gris (`.hn-low`) y **son LAS QUE
   TITILAN** (`hnBlink`, cortes secos a apagado, dos duraciones desfasadas por
-  renglón). Las **mayúsculas NO titilan**: `BLOQQ MÁYUS.` **ámbar** y
+  renglón). Las **mayúsculas NO titilan**: `BLOQQ MÁYUS` **ámbar** y
   `MAYÚSCULAS` **ácido**, siempre prendidas y sin animación. Las únicas
   palabras en mayúscula son esas dos. Titila solo a la vista (`.lit` por IO),
   solo opacidad, y se apaga con `prefers-reduced-motion`. **No es un botón.**
