@@ -188,17 +188,6 @@
   .hn-row{display:block;text-align:center;font-family:var(--disp);font-weight:800;
     font-size:clamp(1.9rem,6vw,3.7rem);line-height:1.04;letter-spacing:.03em;transform:translateZ(26px)}
   .hn-row+.hn-row{margin-top:.16em}
-  /* cables de alimentación del tubo: entran por un ojal del borde de la placa y terminan en una tapa de goma + electrodo de cobre */
-  .hn-row{position:relative}
-  .hn-wire{position:absolute;pointer-events:none;top:50%;left:calc(-1 * var(--hn-pad,46px) + 6px);width:var(--wl,0px);height:0;opacity:0;transition:opacity .4s}
-  .hn-wire.ok{opacity:1}
-  .hn-wire::before{content:"";position:absolute;left:0;right:7px;top:-2px;height:4px;border-radius:2px;
-    background:linear-gradient(180deg,#4a3d30 0,#15110d 45%,#080604 100%);box-shadow:0 2px 3px rgba(0,0,0,.65)}
-  .hn-wire::after{content:"";position:absolute;right:-1px;top:-6px;width:12px;height:12px;border-radius:3px 5px 5px 3px;
-    background:linear-gradient(180deg,#5a4b3b,#1c1610 55%,#0a0806);box-shadow:inset -3px 0 0 #b87333,0 0 6px rgba(242,165,26,.45),0 2px 3px rgba(0,0,0,.6)}
-  .hn-wire i{position:absolute;left:-5px;top:-6px;width:12px;height:12px;border-radius:50%;
-    background:radial-gradient(circle at 50% 50%,#050403 0 32%,#5d4f3e 36% 62%,#1a140e 66%);box-shadow:0 1px 2px rgba(0,0,0,.7)}
-
   /* las minúsculas también son tubo: núcleo gris + halo gris, y son LAS QUE
      TITILAN (prendido/apagado). Las mayúsculas quedan fijas, siempre prendidas. */
   .hn-low{white-space:nowrap;color:#D6CEC2;
@@ -1981,22 +1970,6 @@ setInterval(() => {
     card.classList.remove("tilting"); card.style.removeProperty("--rx"); card.style.removeProperty("--ry");
     if (cur === card) { cur = null; stopPreview(); }
   });
-})();
-
-/* ---- cartel del header: cables al inicio de cada línea de tubo (largo medido) ---- */
-(function () {
-  const box = document.querySelector(".hn-box"); if (!box) return;
-  const rows = [...box.querySelectorAll(".hn-row")];
-  const wires = rows.map(r => { const w = document.createElement("span"); w.className = "hn-wire"; w.setAttribute("aria-hidden", "true"); w.innerHTML = "<i></i>"; r.insertBefore(w, r.firstChild); return w; });
-  const fit = () => rows.forEach((r, k) => {
-    const first = r.querySelector(".hn-low"); if (!first) return;
-    const pad = parseFloat(getComputedStyle(box).paddingLeft) || 46;
-    box.style.setProperty("--hn-pad", pad + "px");
-    const len = first.offsetLeft - (-pad + 6) - 2;
-    wires[k].style.setProperty("--wl", Math.max(0, len) + "px"); wires[k].classList.toggle("ok", len > 12);
-  });
-  fit(); addEventListener("resize", fit);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
 })();
 
 /* ---- reels: al final, con DOM y modal ya inicializados ---- */
