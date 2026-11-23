@@ -51,7 +51,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   no 30). Si se toca algún margen de esa zona, hay que volver a medir los dos
   huecos, no uno solo.
 - **El h1 del hero es un CARTEL DE NEÓN 3D**, mismo lenguaje que el de Galería
-  3D (placa, 2 tornillos abajo (los de arriba se quitaron: chocaban con la luz verde), `rotateX`, tubo con núcleo blanco + halo). Texto:
+  3D (placa, 2 tornillos abajo, cables de alimentación al inicio de cada línea (largo medido por JS), (los de arriba se quitaron: chocaban con la luz verde), `rotateX`, tubo con núcleo blanco + halo). Texto:
   **"activá el BLOQQ MÁYUS de minúsculas a MAYÚSCULAS"** (texto exacto: **sin
   coma y sin ningún punto** — ni después de MÁYUS ni al final; la "a" va en
   minúsculas) — las **minúsculas
