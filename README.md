@@ -165,8 +165,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   YOUTUBE`) · *Estrategia Vertical* (celular con la silueta rellena de un
   rapero con micrófono). Los rellenos usan la clase **`.solid`**
   (`fill: var(--acc)`), no `currentColor` — que resolvería al hueso del texto.
-  El ícono de "Lo viejo" es la **Torino**, ahora un SVG simple de línea en vista lateral (`svg.car`, 48×24, trazo 1.4, ruedas con cubo `.solid`, faro `.solid`); reemplazó al PNG-máscara `assets/torino.png` (eliminado: menos peso y se ve nítido a 62px).
-  El de Estrategia Vertical son **3 celulares**: uno principal al frente y dos levemente inclinados (±13°) detrás, recortados con una `<mask>` SVG para que no se pisen con el principal, **más 3 sparkles filled** (`.solid`, uno grande arriba a la derecha y dos chicos). **Las etiquetas rojas (`.serv-line`) se eliminaron**: en las tarjetas
+  El ícono de "Lo viejo" es la **Torino**: el lineart original **calcado y simplificado** como SVG inline (`svg.car`, viewBox 520×268, relleno `var(--acc)`), sin la reja, el segundo parante de paragolpes, las costuras del capó, el limpiaparabrisas ni el tirador, para que se lea a 66px. Ya no existe `assets/torino.png`. El de Estrategia Vertical son **3 celulares**: uno principal al frente y dos levemente inclinados (±13°) detrás, recortados con una `<mask>` SVG para que no se pisen con el principal, **más 3 sparkles filled** (`.solid`, uno grande arriba a la derecha y dos chicos). **Las etiquetas rojas (`.serv-line`) se eliminaron**: en las tarjetas
   quedan solo el título y el subtítulo.
 - **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
   la activa el **cartel de neón 3D titilante "GALERÍA 3D"** de la sección
