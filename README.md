@@ -160,7 +160,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - **Footer: `.foot-ind` con LED rojo titilante + "INDUSTRIA ARGENTINA".**
 - **Toolbox (textos e íconos vigentes)**: *Dirección creativa* (claqueta) ·
   *Post, Color & VFX* (línea de tiempo con playhead; etiquetas `Edición ·
-  Color · VFX · Mograph · 2D · 3D`) · *Lo viejo funciona, Juan* ("Team
+  Color · VFX · Mograph · 2D · 3D`) · *Lo viejo funca, Juan* ("Team
   horizontal for ever: narrativa y formato largo."; `16:9 · BLOGS · PÓDCASTS ·
   YOUTUBE`) · *Estrategia Vertical* (celular con la silueta rellena de un
   rapero con micrófono). Los rellenos usan la clase **`.solid`**
