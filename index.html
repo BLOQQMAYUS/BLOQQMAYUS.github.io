@@ -17,24 +17,32 @@
 <meta name="twitter:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker">
 <meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO.">
 <meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/anterior.jpg">
+<link rel="preload" href="assets/fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
 <style>
   /* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
      Hollín #1A1714 · Brasa #B8321F · Ámbar #F2A51A
      Rodocrosita #D9737F · Hueso #F4EEE3 · Verde ácido #B5E61D (solo eventos)
      Sin glow ni bloom. Sin teal-and-orange. */
+  @font-face{font-family:"Big Shoulders";font-weight:800;font-display:swap;src:url(assets/fonts/big-shoulders-display-latin-800-normal.woff2) format("woff2")}
+  @font-face{font-family:"Archivo";font-weight:400;font-display:swap;src:url(assets/fonts/archivo-latin-400-normal.woff2) format("woff2")}
+  @font-face{font-family:"Archivo";font-weight:600;font-display:swap;src:url(assets/fonts/archivo-latin-600-normal.woff2) format("woff2")}
+  @font-face{font-family:"Space Mono";font-weight:400;font-display:swap;src:url(assets/fonts/space-mono-latin-400-normal.woff2) format("woff2")}
   :root{
     --bg:#1A1714; --bg2:#201C17; --card:#26211A; --line:rgba(244,238,227,.1);
     --txt:#F4EEE3; --mut:#A79D8E;
     --acc:#F2A51A; --brasa:#B8321F; --rosa:#D9737F; --acid:#B5E61D;
-    --mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+    --mono:"Space Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+    --body:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --disp:"Big Shoulders","Arial Narrow",Impact,sans-serif;
     --sans:"Helvetica Neue",Helvetica,Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
     --rad:16px;
     --ease:cubic-bezier(.2,.7,.2,1); --ease-io:cubic-bezier(.65,0,.15,1);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--bg);color:var(--txt);font-family:var(--sans);line-height:1.6;overflow-x:hidden;
+  body{background:var(--bg);color:var(--txt);font-family:var(--body);line-height:1.6;overflow-x:hidden;
     -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-kerning:normal;
     -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
   ::selection{background:var(--acc);color:var(--bg)}
@@ -80,7 +88,7 @@
   nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
   nav.scrolled{background:rgba(26,23,20,.85);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
   .nav-in{position:relative;width:100%;padding:16px 28px;display:flex;align-items:center;gap:16px}
-  .logo{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.08em;font-size:.95rem;text-transform:uppercase}
+  .logo{display:flex;align-items:center;gap:12px;font-family:var(--disp);font-weight:800;letter-spacing:.08em;font-size:1.25rem;text-transform:uppercase}
   /* la tecla Bloq Mayús con antena: el botón del universo */
   .key{position:relative;width:28px;height:28px;border:1.5px solid rgba(244,238,227,.35);border-radius:7px;display:grid;place-items:center;color:var(--acc);font-size:1rem;font-weight:700;flex:none}
   /* al tocarlo: la tecla outlined se RELLENA de ámbar y crece 25% con easy ease */
@@ -159,7 +167,7 @@
   .rec::after{content:"";width:clamp(40px,10vw,120px);height:1px;margin-left:6px;
     background:linear-gradient(90deg,rgba(242,165,26,.5),transparent)}
   .rec i{width:9px;height:9px;border-radius:50%;background:var(--brasa);animation:blink 1.2s infinite}
-  h1{font-size:clamp(2.3rem,6vw,4.8rem);line-height:1.08;font-weight:700;letter-spacing:-.02em}
+  h1{font-family:var(--sans);font-size:clamp(2.3rem,6vw,4.8rem);line-height:1.08;font-weight:700;letter-spacing:-.02em}
   /* ---------- el h1 es un CARTEL DE NEÓN 3D (mismo lenguaje que Galería 3D) ----------
      Minúsculas en gris apagado, mayúsculas en tubo: BLOQQ ámbar, A MAYÚSCULAS
      ácido. Titila solo cuando está a la vista (.lit por IntersectionObserver) y
@@ -239,7 +247,7 @@
   .sec-head{margin-bottom:48px;max-width:760px}
   .kicker{font-family:var(--mono);font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:12px}
   .kicker::after{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
-  h2{font-size:clamp(1.9rem,4.2vw,3rem);font-weight:700;letter-spacing:-.015em;line-height:1.08;text-transform:uppercase}
+  h2{font-family:var(--disp);font-size:clamp(2.7rem,6.4vw,4.8rem);font-weight:800;letter-spacing:.01em;line-height:.95;text-transform:uppercase}
   .sec-desc{color:var(--mut);margin-top:14px;font-size:1.02rem}
 
   /* ---------- filtros + grid videoclips ---------- */
@@ -273,7 +281,7 @@
   .work-card:hover .play{opacity:1}
   .work-card:hover .play i{transform:scale(1)}
   .work-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 4px 0}
-  .work-meta h3{font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+  .work-meta h3{font-family:var(--disp);font-size:1.5rem;font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
   .work-meta .mono{font-size:.68rem;color:var(--mut);letter-spacing:.12em;text-transform:uppercase;text-align:right;flex:none;max-width:55%}
 
   /* ---------- vertical · film strip interactivo ---------- */
@@ -388,7 +396,7 @@
   .serv-ico .torino{width:62px;height:44px;background:var(--acc);
     -webkit-mask:url("assets/torino.png") center/contain no-repeat;
     mask:url("assets/torino.png") center/contain no-repeat}
-  .serv h3{font-size:1rem;font-weight:700;line-height:1.2}
+  .serv h3{font-family:var(--disp);font-size:1.45rem;font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
   .serv p{color:var(--mut);font-size:.78rem;line-height:1.45;margin:0}
   .serv-line{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rosa);line-height:1.7}
 
@@ -402,7 +410,7 @@
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0}
   @media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px}
-  .stat b{display:block;font-size:1.6rem;font-weight:700;color:var(--acc);letter-spacing:-.02em}
+  .stat b{display:block;font-family:var(--disp);font-size:2.4rem;line-height:1;font-weight:800;color:var(--acc);letter-spacing:.01em}
   .stat span{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
   .gear{display:flex;flex-wrap:wrap;gap:8px}
   .gear span{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--mut);transition:background .2s,color .2s,border-color .2s}
@@ -412,7 +420,7 @@
   .contact{background:transparent;border-top:1px solid var(--line);text-align:center}
   .contact .kicker{justify-content:center}
   .contact .kicker::before{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
-  .contact h2{font-size:clamp(2.3rem,6.5vw,4.6rem)}
+  .contact h2{font-size:clamp(3rem,8.5vw,6rem)}
   .contact h2 em{font-style:normal;color:var(--acc)}
   .contact p{color:var(--mut);max-width:48ch;margin:36px auto}
   /* botón flecha con LED: al apretarlo se destaca toda la box de contacto */
@@ -570,7 +578,7 @@
   .modal-media iframe,.modal-media video{width:100%;aspect-ratio:16/9;border:0;display:block}
   .modal-media.vert iframe,.modal-media.vert video{aspect-ratio:9/16;max-height:68svh;width:auto;max-width:100%;margin:0 auto}
   .modal-cap{padding:22px 26px;display:flex;justify-content:space-between;gap:18px;align-items:baseline;flex-wrap:wrap}
-  .modal-cap h3{font-size:1.3rem;font-weight:700}
+  .modal-cap h3{font-family:var(--disp);font-size:1.7rem;font-weight:800;letter-spacing:.02em;text-transform:uppercase}
   .modal-cap .mono{font-size:.68rem;color:var(--mut);letter-spacing:.13em;text-transform:uppercase}
   .modal-hint{padding:0 26px 22px;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--rosa)}
   .modal-open{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
