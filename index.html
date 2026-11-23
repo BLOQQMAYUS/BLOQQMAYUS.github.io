@@ -509,6 +509,19 @@
   .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:11px 20px;color:var(--mut);transition:.2s}
   .socials a:hover{color:var(--txt);border-color:var(--acc);transform:translateY(-2px)}
   .socials svg{width:15px;height:15px;fill:currentColor}
+  /* botones de redes: fill de marca al hover (mouse) y al apretar (celular) */
+  a[data-net]{position:relative;isolation:isolate;overflow:hidden;transition:color .25s,border-color .25s,transform .2s}
+  a[data-net]::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:var(--net);opacity:0;transition:opacity .25s}
+  a[data-net=whatsapp]{--net:#25D366;--net-ink:#0d1f14}
+  a[data-net=youtube]{--net:#FF0000;--net-ink:#fff}
+  a[data-net=linkedin]{--net:#0A66C2;--net-ink:#fff}
+  a[data-net=instagram]{--net:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);--net-ink:#fff}
+  a[data-net]:active{color:var(--net-ink);border-color:transparent;background:transparent}
+  a[data-net]:active::before{opacity:1}
+  @media(hover:hover){
+    a[data-net]:hover,a[data-net]:focus-visible{color:var(--net-ink);border-color:transparent;background:transparent}
+    a[data-net]:hover::before,a[data-net]:focus-visible::before{opacity:1}
+  }
 
   footer{border-top:1px solid var(--line);padding:28px 0;background:var(--bg)}
   .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
@@ -762,7 +775,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
           <span data-bind="email">fs7benitez@gmail.com</span>
         </a>
-        <a class="btn btn-ghost" id="phoneBtn" href="tel:+541159754088">
+        <a class="btn btn-ghost" id="phoneBtn" data-net="whatsapp" href="tel:+541159754088">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
           <span data-bind="phone">+54 11 5975 4088</span>
         </a>
@@ -913,7 +926,7 @@ document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]
 
 /* ---- redes ---- */
 document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
-  `<a href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
+  `<a data-net="${s.id}" href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
 
 /* ---- MINIATURAS DE YOUTUBE: AUTO-ACTUALIZABLES ---------------------------
    REGLA PERMANENTE: las previews de YouTube NUNCA se congelan. Se piden
