@@ -457,3 +457,6 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
 ## Movimiento (rama tipografia-cine)
 - **Títulos de sección (h2)** se tipean al entrar en pantalla (IntersectionObserver, 60 %), con cursor neón ácido como el del hero. Sin efecto con `prefers-reduced-motion`. Cada h2 lleva `aria-label` con el texto completo.
 - **Tarjetas de obras**: inclinación 3D + brillo que siguen al mouse, y tras 650 ms encima, loop mudo del videoclip (iframe `youtube-nocookie`, solo se muestra cuando el player reporta `playerState 1`; si no arranca en 9 s se descarta). Solo con `(hover:hover) and (pointer:fine)`, sin `saveData` ni reduced-motion; una a la vez y se limpia al salir.
+
+## Texto del hero
+Párrafo reducido (≈ 61 % del original). Dos versiones en el mismo `<p class="hero-sub">`: `.hs-long` (escritorio) y `.hs-short` (celular, ≤ 600 px).

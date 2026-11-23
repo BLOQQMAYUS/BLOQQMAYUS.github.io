@@ -238,6 +238,8 @@
   h1 .min{color:var(--mut)}
   .hero-sub{margin:26px auto 34px;max-width:60ch;color:#D8D0C2;font-size:clamp(1rem,1.6vw,1.15rem)}
   .hero-sub b{color:var(--txt)}
+  .hs-short{display:none}
+  @media(max-width:600px){.hs-long{display:none}.hs-short{display:inline}}
   .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center}
   .btn{display:inline-flex;align-items:center;gap:10px;background:var(--acc);color:var(--bg);font-weight:700;padding:15px 28px;border-radius:999px;font-size:.95rem;transition:transform .2s,background .2s;letter-spacing:.02em}
   .btn:hover{background:#f7b83f;transform:translateY(-2px)}
@@ -716,7 +718,7 @@
         <span class="hn-row"><span class="hn-low">de minúsculas a</span> <span class="hn-tube hn-acid">MAYÚSCULAS</span></span>
       </span>
     </h1>
-    <p class="hero-sub">Realizador audiovisual con <b>+10 años de experiencia</b> en coordinación, producción y postproducción para marcas y productoras en entornos digitales. Combino criterio narrativo y método para llevar cada proyecto del brief a la entrega, manteniendo el estándar visual y cumpliendo plazos y presupuestos. Apuesto a construir vínculos de trabajo duraderos, aportando solidez técnica, mirada de producto y agilidad operativa.</p>
+    <p class="hero-sub">Realizador audiovisual con <b>+10 años de experiencia</b> en producción y postproducción para marcas y productoras.<span class="hs-long"> Llevo cada proyecto del brief a la entrega con criterio narrativo, estándar visual y gestión de agenda, y construyo vínculos de trabajo duraderos.</span><span class="hs-short"> Del brief a la entrega, con criterio narrativo y gestión de agenda.</span></p>
     <div class="hero-cta">
       <button class="btn" id="showreelBtn">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
