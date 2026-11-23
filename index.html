@@ -186,13 +186,16 @@
   .hn-screw.bl{bottom:9px;left:9px}
   .hn-screw.br{bottom:9px;right:9px}
   .hn-row{display:block;text-align:center;font-family:var(--disp);font-weight:800;
-    font-size:clamp(1.9rem,6vw,3.7rem);line-height:1.04;letter-spacing:.03em;transform:translateZ(26px)}
-  .hn-row+.hn-row{margin-top:.16em}
+    font-size:clamp(1.9rem,6vw,3.7rem);line-height:1.2;letter-spacing:.03em;transform:translateZ(26px)}
+  .hn-row+.hn-row{margin-top:0}
   /* luz del tubo derramada sobre la placa + brillo de vidrio; y encendido con parpadeo (una vez, al cargar) */
   .hn-box::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
     background:radial-gradient(ellipse 40% 24% at 68% 35%,rgba(242,165,26,.22),transparent 72%),
       radial-gradient(ellipse 36% 24% at 72% 70%,rgba(181,230,29,.18),transparent 72%),
       linear-gradient(115deg,transparent 38%,rgba(255,255,255,.045) 47%,transparent 56%)}
+  @media(max-width:600px){.hn-box::after{background:radial-gradient(ellipse 48% 18% at 62% 28%,rgba(242,165,26,.22),transparent 72%),
+      radial-gradient(ellipse 40% 20% at 50% 76%,rgba(181,230,29,.2),transparent 72%),
+      linear-gradient(115deg,transparent 38%,rgba(255,255,255,.045) 47%,transparent 56%)}}
   .hero-neon.ignite .hn-box::after{animation:hnSpill 2.6s ease-out backwards .35s}
   .hero-neon.ignite .hn-row{animation:hnOn 1.9s linear backwards .35s}
   .hero-neon.ignite .hn-row+.hn-row{animation-delay:.95s}
