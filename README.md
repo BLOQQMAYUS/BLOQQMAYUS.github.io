@@ -460,3 +460,7 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
 
 ## Texto del hero
 Párrafo reducido (≈ 61 % del original). Dos versiones en el mismo `<p class="hero-sub">`: `.hs-long` (escritorio) y `.hs-short` (celular, ≤ 600 px).
+
+## Escala tipográfica (variables en :root)
+- `--fs-micro .68rem` (metadatos, contadores, pies, etiquetas chicas) · `--fs-label .76rem` (kicker, chips, botones mono, REC) · `--fs-lead` (párrafo de hero y descripciones de sección) · `--fs-h3 1.5rem` (títulos de tarjetas, servicios y modal) · `--ls-label .14em` (tracking de etiquetas mono; kicker/REC/índice quedan en .24em).
+- Mínimo en celular: 10.2 px (antes 9 px). Solo `h1` y la flecha del cartel Galería 3D conservan `--sans` (neón); el resto del sitio usa `--body`/`--disp`/`--mono`.
