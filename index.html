@@ -188,6 +188,18 @@
   .hn-row{display:block;text-align:center;font-family:var(--disp);font-weight:800;
     font-size:clamp(1.9rem,6vw,3.7rem);line-height:1.04;letter-spacing:.03em;transform:translateZ(26px)}
   .hn-row+.hn-row{margin-top:.16em}
+  /* luz del tubo derramada sobre la placa + brillo de vidrio; y encendido con parpadeo (una vez, al cargar) */
+  .hn-box::after{content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+    background:radial-gradient(ellipse 40% 24% at 68% 35%,rgba(242,165,26,.22),transparent 72%),
+      radial-gradient(ellipse 36% 24% at 72% 70%,rgba(181,230,29,.18),transparent 72%),
+      linear-gradient(115deg,transparent 38%,rgba(255,255,255,.045) 47%,transparent 56%)}
+  .hero-neon.ignite .hn-box::after{animation:hnSpill 2.6s ease-out backwards .35s}
+  .hero-neon.ignite .hn-row{animation:hnOn 1.9s linear backwards .35s}
+  .hero-neon.ignite .hn-row+.hn-row{animation-delay:.95s}
+  @keyframes hnOn{0%,6%{opacity:.04}8%{opacity:.9}10%{opacity:.08}17%{opacity:.08}19%{opacity:.75}22%{opacity:.1}38%{opacity:.1}40%{opacity:1}44%{opacity:.25}48%{opacity:1}52%{opacity:.6}55%,100%{opacity:1}}
+  @keyframes hnSpill{0%,30%{opacity:0}45%{opacity:.9}60%{opacity:.4}100%{opacity:1}}
+  @media(prefers-reduced-motion:reduce){.hero-neon.ignite .hn-row,.hero-neon.ignite .hn-box::after{animation:none}}
+
   /* las minúsculas también son tubo: núcleo gris + halo gris, y son LAS QUE
      TITILAN (prendido/apagado). Las mayúsculas quedan fijas, siempre prendidas. */
   .hn-low{white-space:nowrap;color:#D6CEC2;
@@ -1771,7 +1783,7 @@ document.getElementById("galX").addEventListener("click", () => closeGal());
 const heroNeon = document.getElementById("heroNeon");
 if ("IntersectionObserver" in window) {
   new IntersectionObserver(es => es.forEach(en =>
-    heroNeon.classList.toggle("lit", en.isIntersecting)), { threshold: .1 }).observe(heroNeon);
+    { heroNeon.classList.toggle("lit", en.isIntersecting); if (en.isIntersecting) heroNeon.classList.add("ignite"); }), { threshold: .1 }).observe(heroNeon);
 } else { heroNeon.classList.add("lit"); }
 const neonSign = document.getElementById("ledBtn");
 if ("IntersectionObserver" in window) {
