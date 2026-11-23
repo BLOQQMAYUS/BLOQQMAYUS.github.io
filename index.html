@@ -691,7 +691,7 @@
       </button>
     </div>
   </div>
-  <div class="hero-meta">4K · 24 FPS<br>TC <b id="tc">00:00:00:00</b></div>
+  <div class="hero-meta">4K · 120 FPS<br>TC <b id="tc">00:00:00:00</b></div>
   <div class="scroll-cue tip" id="scrollCue" aria-hidden="true"><span>Deslizá</span><i></i></div>
 </header>
 
@@ -795,7 +795,7 @@
 
 <footer>
   <div class="wrap foot">
-    <span>© 2026 <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">CABA, Buenos Aires</span></span>
+    <span>© 2026 <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">Buenos Aires, Argentina</span></span>
     <span class="foot-ind"><i></i> INDUSTRIA ARGENTINA</span>
   </div>
 </footer>
@@ -872,7 +872,7 @@ document.body.classList.toggle("no-tips", !TIPS_ON);
    ================================================================ */
 const CONFIG = {
   name: "Francisco Benítez",
-  city: "Buenos Aires",
+  city: "Buenos Aires, Argentina",
   email: "fs7benitez@gmail.com",
   phone: "+54 11 5975 4088",
   showreel: { title: "Reel 2026", img: "assets/showreel.jpg", video: "https://www.youtube.com/watch?v=Csj207PWog0" },
@@ -1852,15 +1852,15 @@ const io = new IntersectionObserver(entries => entries.forEach(en => {
 }), { threshold: .12 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-/* ---- timecode decorativo (24 fps) ---- */
+/* ---- timecode decorativo (120 fps): sigue el reloj real, 120 cuadros por segundo ---- */
 const tcEl = document.getElementById("tc");
-let frame = 0;
+const t0 = performance.now();
 const pad = n => String(n).padStart(2, "0");
 setInterval(() => {
   if (document.hidden) return;
-  frame++;
-  const f = frame % 24, s = Math.floor(frame / 24) % 60, m = Math.floor(frame / 1440) % 60, h = Math.floor(frame / 86400);
-  tcEl.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${pad(f)}`;
+  const frame = Math.floor((performance.now() - t0) * 120 / 1000);
+  const f = frame % 120, s = Math.floor(frame / 120) % 60, m = Math.floor(frame / 7200) % 60, h = Math.floor(frame / 432000);
+  tcEl.textContent = `${pad(h)}:${pad(m)}:${pad(s)}:${String(f).padStart(3, "0")}`;
 }, 1000 / 12);
 
 /* ---- reels: al final, con DOM y modal ya inicializados ---- */

@@ -75,7 +75,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - **Interfaz de cámara grabando** (decorativa, `aria-hidden`): cuatro escuadras
   ámbar finas (`.cam-c`, 1px al 34%) más dos hairlines ámbar — una detrás del
   REC y otra sobre el timecode. El marco arranca **debajo del nav** (`top:84px`,
-  74px en celu) para no pelearse con el logo. **El timecode "4K · 24 FPS / TC"
+  74px en celu) para no pelearse con el logo. **El timecode "4K · 120 FPS / TC"
   ahora se ve también en mobile** (antes se ocultaba bajo 640px). Sin glow y sin
   loops JS: el único movimiento es el LED rojo del REC y el contador `#tc`.
 - **CHEESY FUCK (`s0pRkDDI57Y`) está FUERA del sitio**: YouTube lo marcó como
