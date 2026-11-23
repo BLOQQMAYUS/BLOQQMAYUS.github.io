@@ -160,19 +160,13 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - **Footer: `.foot-ind` con LED rojo titilante + "INDUSTRIA ARGENTINA".**
 - **Toolbox (textos e íconos vigentes)**: *Dirección creativa* (claqueta) ·
   *Post, Color & VFX* (línea de tiempo con playhead; etiquetas `Edición ·
-  Color · VFX · Mograph · 2D · 3D`) · *Lo viejo funca, Juan* ("Team
+  Color · VFX · Mograph · 2D · 3D`) · *Lo viejo funciona, Juan* ("Team
   horizontal for ever: narrativa y formato largo."; `16:9 · BLOGS · PÓDCASTS ·
   YOUTUBE`) · *Estrategia Vertical* (celular con la silueta rellena de un
   rapero con micrófono). Los rellenos usan la clase **`.solid`**
   (`fill: var(--acc)`), no `currentColor` — que resolvería al hueso del texto.
-  El ícono de "Lo viejo" es la **Torino**: `assets/torino.png` (fondo removido,
-  recortada, 520px) aplicada como **máscara CSS** con `background: var(--acc)`,
-  así toma el ámbar exacto de la marca y acompaña el hover como los demás.
-  El de Estrategia Vertical son **3 celulares** (pantallas solas, sin silueta)
-  **más 2 sparkles filled a la izquierda**, uno más chico que el otro. Los
-  rectángulos llevan `stroke-width: 1.15` y separación real: con el trazo
-  estándar de 1.5 las tres pantallas se fundían en una mancha al tamaño del
-  ícono. **Las etiquetas rojas (`.serv-line`) se eliminaron**: en las tarjetas
+  El ícono de "Lo viejo" es la **Torino**, ahora un SVG simple de línea en vista lateral (`svg.car`, 48×24, trazo 1.4, ruedas con cubo `.solid`, faro `.solid`); reemplazó al PNG-máscara `assets/torino.png` (eliminado: menos peso y se ve nítido a 62px).
+  El de Estrategia Vertical son **3 celulares**: uno principal al frente y dos levemente inclinados (±13°) detrás, recortados con una `<mask>` SVG para que no se pisen con el principal, **más 3 sparkles filled** (`.solid`, uno grande arriba a la derecha y dos chicos). **Las etiquetas rojas (`.serv-line`) se eliminaron**: en las tarjetas
   quedan solo el título y el subtítulo.
 - **La Galería 3D es función oficial del sitio** (ya no es un lab temporal):
   la activa el **cartel de neón 3D titilante "GALERÍA 3D"** de la sección
