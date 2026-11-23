@@ -123,6 +123,7 @@
     .nav-links{gap:8px;font-size:.64rem}
     .nav-links a.cta{padding:7px 10px}
   }
+  @media(max-width:350px){.nav-links{left:auto;right:12px;transform:none;gap:6px;font-size:.6rem}.nav-links a.cta{padding:6px 8px}}
 
   /* ---------- hero ---------- */
   .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
@@ -277,6 +278,7 @@
   .sec-head{margin-bottom:48px;max-width:760px}
   .kicker{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:12px}
   .kicker::after{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
+  .nw{white-space:nowrap}
   @media(max-width:480px){.kicker::after{display:none}}
   h2{font-family:var(--disp);font-size:clamp(2.7rem,6.4vw,4.8rem);font-weight:800;letter-spacing:.01em;line-height:1.08;text-transform:uppercase}
   .sec-desc{color:var(--mut);margin-top:14px;font-size:var(--fs-lead)}
@@ -805,7 +807,7 @@
   <section id="contacto" class="contact">
     <div class="wrap reveal" id="contactBox">
       <div class="kicker">05 · Contacto</div>
-      <h2>activá el bloqq <em>MÁYUS</em></h2>
+      <h2>activá el <span class="nw">bloqq <em>MÁYUS</em></span></h2>
       <button class="neon" id="ledBtn" aria-label="Abrir la Galería 3D" title="Abrir la Galería 3D">
         <span class="neon-box">
           <span class="neon-screw tl"></span><span class="neon-screw tr"></span>
