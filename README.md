@@ -61,6 +61,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   `MAYÚSCULAS` **ácido**, siempre prendidas y sin animación. Las únicas
   palabras en mayúscula son esas dos. Titila solo a la vista (`.lit` por IO),
   solo opacidad, y se apaga con `prefers-reduced-motion`. **No es un botón.**
+  **Detalles del cartel**: una **luz LED ácida** tras "MÁYUS" (`.hn-amber::after`, mismo parpadeo `blink` que el LED de la flecha de Galería 3D) y un **cursor de tipeo neón ácido** tras "MAYÚSCULAS" (`.hn-acid::after`, `caretBlink` 1.1s con `steps(1)`, núcleo blanco + halo ácido): como si esperara seguir escribiendo. Ambos son pseudo-elementos absolutos, así no mueven el centrado del texto; arrancan con `.lit` y se detienen con `prefers-reduced-motion`.
   La placa es **`width:fit-content` + `max-width:100%`** con **padding horizontal
   amplio (46px, 24px en celu)**: tiene que haber aire de verdad entre las letras
   y el borde. *(Esto da vuelta el pedido anterior de "placa ajustada, sin aire":
