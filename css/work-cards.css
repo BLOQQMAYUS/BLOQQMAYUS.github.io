@@ -1,0 +1,16 @@
+/* work-cards.css — Tarjetas de obras: inclinación 3D, brillo y loop mudo. */
+/* ---- tarjetas de obras con vida: inclinación 3D, brillo que sigue al mouse y loop mudo ---- */
+.work-media{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));will-change:transform}
+.work-card:active .work-media{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(.99)}
+.work-media::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .35s;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,236,200,.22),transparent 55%)}
+.work-card.tilting .work-media::before{opacity:1}
+.work-media iframe.pv{position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;pointer-events:none;transition:opacity .45s}
+.work-media.vid-on iframe.pv{opacity:1}
+.work-media.vid-on .play{opacity:0!important}
+@media(prefers-reduced-motion:reduce){.work-media{transform:none!important}.work-media::before{display:none}}
+
+footer{border-top:1px solid var(--line);padding:28px 0;background:var(--bg)}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--mut)}
+.foot i{color:var(--acc);font-style:normal}
+.foot b{color:var(--brasa);font-weight:400}

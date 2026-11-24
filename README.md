@@ -240,101 +240,32 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - Todo lo que no sirva al objetivo portfolio → contacto se corta.
 
 
-## 📁 Estructura
+## 📁 Estructura (desde la rama `saas`)
 ```
-portfolio/
-├── index.html      ← todo el sitio (diseño + lógica + tus datos)
-└── assets/         ← las imágenes (ahora son ejemplos generados con IA)
+index.html        ← solo la estructura HTML de las secciones
+AGENTS.md         ← guía de 1 página para agentes (dónde está cada cosa, cómo probar)
+content/site.js   ← CONTENIDO: CONFIG (contacto, showreel, videoclips) — lo único que se edita a diario
+css/              ← tokens.css (paleta y variables) + un archivo por sección; reveal.css va último
+js/               ← core.js (utilidades) + un archivo por función; main.js arranca los reels
+tests/            ← qa.mjs (Edge headless: capturas, conducta, huella) + hoist-check.cjs
+assets/           ← fuentes, hero, miniaturas de respaldo (real/), reels y posters
+lab/vortex/       ← Galería 3D (se carga en un iframe)
 ```
-
-## ✏️ Cómo personalizarlo (5 minutos)
-Abre `index.html` y busca el bloque **`✏️ CONFIG — EDITA SOLO ESTE BLOQUE`** (dentro de `<script>`, casi al final). Ahí cambias:
-
-| Campo | Qué es |
-|---|---|
-| `name`, `city`, `email`, `phone` | Tu nombre, ciudad, email y teléfono (se actualizan en toda la página) |
-| `showreel.video` | URL de tu showreel (YouTube, Vimeo o .mp4) |
-| `clients` | Marcas/clientes del carrusel animado |
-| `stats` | Tus métricas (años, proyectos, views…) |
-| `gear` | Tu equipo |
-| `socials` | Enlaces a tus redes |
-| `films` | Proyectos horizontales: título, categoría, año, rol, miniatura y vídeo |
-| `verticals` | Reels/TikToks/Shorts: título, plataforma, views, miniatura y vídeo |
-
-**Vídeos:** en cada proyecto, pega la URL en el campo `video`. El modal detecta
-YouTube (incluido Shorts), Vimeo y archivos `.mp4` automáticamente. Si lo dejas
-vacío (`""`), se muestra la miniatura con un aviso de demo.
-
-**Imágenes:** sustituye los archivos de `assets/` por tus propios frames
-(mantén los nombres, o actualiza las rutas en CONFIG). Recomendado:
-horizontales ≥1600×900, verticales ≥900×1600, JPG calidad ~80.
-
-> ⚠️ **`./deploy.sh sync` pisa lo local con lo publicado.** Va **antes** de
-> editar, nunca después: si ya editaste, el paso siguiente es publicar
-> (`./deploy.sh <TOKEN> "mensaje"`). Correr sync con trabajo sin publicar lo
-> borra — pasó una vez y hubo que rehacer la ronda entera.
-
-## 🚀 Cómo publicarlo (gratis)
-- **Netlify Drop** — arrastra la carpeta `portfolio/` a https://app.netlify.com/drop y listo.
-- **GitHub Pages** — sube la carpeta a un repo y activa Pages en Settings → Pages.
-- **Vercel / Cloudflare Pages** — importa el repo, sin configuración (sitio estático).
-
-## 🅰️ Si prefieres montarlo en Adobe Portfolio
-No puedo entrar en tu cuenta, pero puedes replicar esta estructura tú mismo:
-1. En portfolio.adobe.com/sites → **Create New Site** → elige una plantilla minimalista oscura (p. ej. *Ludwig* o *Meridian*) y pon el fondo en negro (#0b0b0e).
-2. Crea estas páginas/secciones: **Work** (galería grid 2 columnas con tus piezas horizontales), **Vertical** (galería con miniaturas 9:16), **About** (retrato + bio + métricas) y **Contact**.
-3. Usa el bloque **Video** para incrustar tu showreel y cada pieza (YouTube/Vimeo).
-4. Copia los textos de este sitio (bio, servicios, kickers) desde `index.html`.
-5. Tipografía: Helvetica Bold (la biblia pide Helvetica 75 Bold), títulos en mayúsculas. Paleta brasa de la biblia: hollín #1A1714, ámbar #F2A51A, brasa #B8321F, rodocrosita #D9737F, hueso #F4EEE3; verde ácido #B5E61D solo en momentos clave.
-6. Conecta tu dominio propio en Settings → Domain (incluido con tu suscripción Creative Cloud).
+Sin build ni npm: GitHub Pages sirve los archivos tal cual.
 
 ## 🖥️ Verlo en local
-```bash
-cd portfolio
-python3 -m http.server 8000
-# abre http://localhost:8000
+`python -m http.server 8765` en esta carpeta y abrir http://localhost:8765.
+Con doble click (`file://`) YouTube no deja incrustar (Error 153): el sitio lo detecta y ofrece
+«Ver en YouTube».
+
+## ✅ Checks antes de cada push
 ```
-
-## ⚠️ Abrir el HTML con doble click (file://)
-YouTube **no permite reproductores incrustados desde archivos locales** (Error 153).
-El sitio lo detecta y muestra la miniatura con un botón **"Ver en YouTube"** que abre
-el video en una pestaña nueva. Publicado en la web (o servido por http), reproduce
-inline sin problema. Además, el link "Ver en YouTube ↗" está siempre en el modal.
-
-Versiones para descargar:
-- `portfolio_BLOQQ_MAYUS.zip` — el sitio completo (index.html + assets/). Descomprimir y abrir index.html.
-- `Portfolio_BLOQQ_MAYUS.html` — versión de un solo archivo con las 18 imágenes embebidas (~9 MB). Funciona con doble click, sin carpeta assets.
-
-## ✅ Checks antes de cada push (en `../tests/`)
-
-```bash
-./tests/smoke.sh                              # conducta del sitio + galería + SEGURIDAD
-NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desktop + mobile)
+node tests/qa.mjs _plan/qa-ahora --compare _plan/qa-antes   # capturas + 20 chequeos + huella
+node tests/hoist-check.cjs                                   # orden de carga de los scripts
 ```
-
-- `shim.js` / `lab-shim.js` — conducta sin navegador (scanner, mesas, shuffle,
-  pliegue 8, botón → Contacto + `.attn`, galería abrir/cerrar/descargar).
-- **`security.js`** — la única entrada de datos externos es la API de GitHub
-  (`REEL_OK`: sólo nombres `.mp4` simples, sin rutas/traversal ni caracteres
-  con significado en HTML; las rutas viajan con `encodeURIComponent`).
-  Además verifica: sin `eval`/`new Function`/`document.write`, sin
-  `target="_blank"` sin `noopener`, sin `postMessage` sin control de origen,
-  embeds en `youtube-nocookie`, sin contenido mixto `http://` y
-  **ningún token filtrado en los archivos publicables**.
-- `tour.js` — **175 checks** en navegador real (texto vigente, pliegue 8/5,
-  botón que lleva a Contacto y hace que el neón pida el click, márgenes
-  clickeables de todas las previews, scroll horizontal, nav centrado y sin
-  hamburguesa, tap del logo, precarga de la galería, galería con 620 estrellas
-  y 3 cometas y sin textos sueltos).
-  Las esperas van por **estado** (`rlPhase`, centrado del rect), no por reloj:
-  en móviles emulados la transición visual tarda más que el timer.
-- `starflow.js` — **dirección del campo de estrellas**: sigue estrellas
-  individuales entre dos frames y exige que se alejen del centro (atrás →
-  adelante). Va **separado del tour a propósito**: el `getImageData` del canvas
-  fuerza readback y en render por software deja al renderer tan lento que el
-  paseo se colgaba. El radio medio de TODOS los píxeles no sirve como criterio
-  (las que salen del cuadro renacen lejos, cerca del centro, y arrastran el
-  promedio hacia abajo): hay que seguir estrellas de una a otra.
+`qa.mjs` es determinista (Math.random con semilla, sin `api.github.com` ni `i.ytimg.com`, así usa
+los respaldos locales). Un refactor sin cambio visual tiene que dar huella **IDÉNTICA**. El orden
+de filtros, obras y rueda se compara como conjunto: es aleatorio por regla.
 
 ### Medio del header y vista previa para compartir (REGLA PERMANENTE)
 
@@ -374,7 +305,7 @@ Desde la v1.0 (tag `v1.0`) el diseño está cerrado: **solo se agregan o quitan
 videos**. No se toca CSS/JS salvo pedido explícito.
 
 ### Videoclips (sección 1)
-Todo está en `CONFIG.films` de `index.html` (más nuevos primero).
+Todo está en `CONFIG.films` de `content/site.js` (más nuevos primero).
 
 1. **Agregar**: sumar una línea al principio de `films` con este formato:
    `{ title: "…", cat: "ARTISTA", artist: "…", year: "2026", role: "Videoclip oficial", img: "assets/real/<ID>.jpg", video: "https://www.youtube.com/watch?v=<ID>" }`
@@ -396,7 +327,7 @@ Todo está en `CONFIG.films` de `index.html` (más nuevos primero).
 - **Quitar**: borrar el `.mp4` (y sus variantes/poster) y su nombre de `FALLBACK_REELS`.
 
 ### Publicar
-1. Verlo en local (`python -m http.server 8000`) y correr los checks de la sección «Checks antes de cada push» (si `tests/` existe en el clon).
+1. Verlo en local (`python -m http.server 8765`) y correr los checks de «Checks antes de cada push».
 2. Commit → `git push origin main` y `git push origin main:bloqqfolio`.
 3. Verificar online (Pages tarda ~1–2 min) que aparezca el cambio.
 

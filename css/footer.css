@@ -1,0 +1,4 @@
+/* footer.css — Pie con LED de INDUSTRIA ARGENTINA. */
+/* LED rec pulsante, igual que el del header */
+.foot-ind{display:inline-flex;align-items:center;gap:9px}
+.foot-ind i{width:9px;height:9px;border-radius:50%;background:var(--brasa);flex:none;position:relative;top:-.5px;animation:blink 1.2s infinite}  /* centro de las mayúsculas, no de la caja de línea */

@@ -1,0 +1,45 @@
+/* base.css — Reset, scrollbar, foco, estrellas, rótulos de sección. */
+/* ---------- acabado pro: scrollbar de marca · foco accesible · tacto ---------- */
+html{scrollbar-color:var(--brasa) var(--bg2);scrollbar-width:thin}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--brasa),#8f2718);border-radius:999px;border:3px solid var(--bg2)}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--acc),#c9820f)}
+a:focus-visible,button:focus-visible,.chip:focus-visible,.work-card:focus-visible,.reel-card:focus-visible,
+.strip-arrow:focus-visible,.socials a:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
+.btn:active,.chip:active,#moreBtn:active,.socials a:active,.strip-arrow:active,.modal-open a:active{transform:scale(.97)}
+.work-card:active .work-media{transform:scale(.99)}
+/* saltar al contenido (teclado / lectores) */
+.skip{position:fixed;top:-60px;left:16px;z-index:3000;background:var(--acc);color:var(--bg);font-weight:700;
+  padding:11px 20px;border-radius:0 0 12px 12px;font-size:.85rem;transition:top .25s var(--ease)}
+.skip:focus{top:0}
+/* las anclas no quedan tapadas por el nav fijo */
+section{scroll-margin-top:84px;position:relative;z-index:1}
+footer{position:relative;z-index:1}
+/* campo de estrellas: arranca en 01 · MONTAJE y sigue hasta el final.
+   Canvas fijo detrás del contenido, recortado a partir de 01 → nunca tapa
+   el hero. Dibuja SOLO lo que entra en pantalla y se frena fuera de vista. */
+#starfield,#starfieldTop{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#starfield{z-index:0}
+/* estrellas sobre la IMAGEN del header: por encima de .hero-img, por debajo del texto (.hero-in z2) */
+#starfieldTop{z-index:1}
+/* fade-in de imágenes al cargar (sin riesgo: base visible, anima al entrar) */
+.work-media img.ld,.lt-thumb img.ld{animation:imgIn .6s ease}
+@keyframes imgIn{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
+
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.mono{font-family:var(--mono)}
+
+/* ---------- secciones ---------- */
+section{padding:110px 0}
+.sec-head{margin-bottom:48px;max-width:760px}
+/* rótulo de sección: número ámbar (ancla) + palabra clave en hueso, más grande y con menos tracking */
+.kicker{font-family:var(--mono);font-size:clamp(.8rem,1.1vw,.92rem);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.kicker b{color:var(--acc);font-weight:700}
+/* riel: línea que ocupa el ancho disponible y se apaga hacia la derecha */
+.kicker{width:85%}
+.kicker::after{content:"";flex:1;min-width:24px;height:1px;background:linear-gradient(90deg,var(--acc),rgba(242,165,26,0))}
+.nw{white-space:nowrap}
+h2{font-family:var(--disp);font-size:clamp(2.7rem,6.4vw,4.8rem);font-weight:800;letter-spacing:.01em;line-height:1.08;text-transform:uppercase}
+.sec-desc{color:var(--mut);margin-top:14px;font-size:var(--fs-lead)}

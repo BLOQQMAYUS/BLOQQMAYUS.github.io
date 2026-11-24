@@ -1,0 +1,30 @@
+/* tokens.css — Paleta Brasa y variables globales. Un color o medida nueva se declara ACÁ. */
+/* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
+   Hollín #1A1714 · Brasa #B8321F · Ámbar #F2A51A
+   Rodocrosita #D9737F · Hueso #F4EEE3 · Verde ácido #B5E61D (solo eventos)
+   Sin glow ni bloom. Sin teal-and-orange. */
+@font-face{font-family:"Big Shoulders";font-weight:800;font-display:swap;src:url(../assets/fonts/big-shoulders-display-latin-800-normal.woff2) format("woff2")}
+@font-face{font-family:"Archivo";font-weight:400;font-display:swap;src:url(../assets/fonts/archivo-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Archivo";font-weight:600;font-display:swap;src:url(../assets/fonts/archivo-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Space Mono";font-weight:400;font-display:swap;src:url(../assets/fonts/space-mono-latin-400-normal.woff2) format("woff2")}
+:root{
+  --bg:#1A1714; --bg2:#201C17; --card:#26211A; --line:rgba(244,238,227,.1);
+  --txt:#F4EEE3; --mut:#A79D8E;
+  --acc:#F2A51A; --brasa:#B8321F; --rosa:#D9737F; --acid:#B5E61D;
+  --mono:"Space Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --body:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --disp:"Big Shoulders","Arial Narrow",Impact,sans-serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --fs-micro:.68rem;--fs-label:.76rem;--fs-lead:clamp(1rem,1.6vw,1.15rem);--fs-h3:1.5rem;--ls-label:.14em;
+  --rad:16px;
+  --ease:cubic-bezier(.2,.7,.2,1); --ease-io:cubic-bezier(.65,0,.15,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--body);line-height:1.6;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-kerning:normal;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+::selection{background:var(--acc);color:var(--bg)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
