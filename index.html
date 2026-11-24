@@ -1037,8 +1037,8 @@ function armThumb(img) {
     return p;
   }
   function size() {
-    /* dpr acotado: son puntos de 1px, no hace falta una backing store 2x */
-    const dpr = Math.min(devicePixelRatio || 1, 1.5);
+    /* dpr hasta 2: círculos nítidos también las estrellas más grandes */
+    const dpr = Math.min(devicePixelRatio || 1, 2);
     W = innerWidth; H = innerHeight;
     spread = Math.max(W, H) * 0.95;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
@@ -1077,13 +1077,14 @@ function armThumb(img) {
       const x = W / 2 + p.x * k, y = H / 2 + p.y * k;
       if (x < -8 || x > W + 8 || y < -8 || y > H + 8) { if (p.z < FAR * 0.35) born(p, true); continue; }
       let a = p.o * Math.min(1, k * 1.7);
-      if (p.z < NEAR * 3) a *= (p.z - NEAR) / (NEAR * 2);   // se apaga al pasar
+      a *= Math.min(1, (FAR - p.z) / 260);   // entra gradual desde lejos: nunca aparece de golpe
+      if (p.z < NEAR * 1.6) a *= (p.z - NEAR) / (NEAR * .6);          // solo en el último instante antes de pasar la cámara
       /* En la banda de fundido del header las estrellas se ven de verdad: sin
          este piso quedarían tapadas por lo que resta de imagen y el corte se
          seguiría notando. Entran con rampa y desde 01 van como siempre. */
       if (y < top) a = Math.max(a, 0.45) * Math.max(0, Math.min(1, (y - cut) / (band * 0.6)));
       g.globalAlpha = Math.max(0, Math.min(1, a));
-      g.beginPath(); g.arc(x, y, Math.min(2.4, p.r * k * 0.85 + 0.25), 0, 6.283); g.fill();
+      g.beginPath(); g.arc(x, y, Math.min(3, p.r * k * 0.85 + 0.25), 0, 6.283); g.fill();
     }
     /* cometas: uno cada tanto, cruzando en diagonal con cola degradada.
        Suman variabilidad al patrón sin invadir ni costar frames de más. */

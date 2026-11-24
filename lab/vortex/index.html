@@ -22,8 +22,7 @@
   #stage.dragging{cursor:grabbing}
   #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
   /* ---------- espacio 3D: estrellas sutiles que pasan con el avance ---------- */
-  .star{position:absolute;left:50%;top:50%;background:var(--hueso);border-radius:50%;
-    pointer-events:none}
+  #starcv{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
   /* SIN will-change en las estrellas: son 620 y cada una promovida sería una
      capa compuesta propia (620 capas viviendo toda la sesión desde que la
      galería se precarga). No hace falta: se mueven con #world, que ya tiene
@@ -111,6 +110,7 @@
 </head>
 <body>
 
+<canvas id="starcv" aria-hidden="true"></canvas>
 <div id="stage">
   <div id="world"></div>
 </div>
@@ -200,29 +200,50 @@ function cardHTML(it, i) {
     <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${img}" data-yt="${ytid}" data-local="${local}" alt="" draggable="false">
     ${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
 }
-/* estrellas: puntos sutiles en el volumen del corredor, pasan con el avance */
-const STARS = 620;   // pedido: más estrellas, misma velocidad de paseo
-/* El volumen de estrellas es más corto que el del corredor (SD < D): si se
-   repartieran en toda la profundidad, la mayoría quedaría a 12.000 px y se
-   vería como polvo subpíxel. Además el tamaño se compensa por perspectiva con
-   un tope de 2.5×: así en pantalla miden SIEMPRE entre .8 y 2.4 px (nunca
-   manchas) y las lejanas siguen siendo puntos visibles en vez de nada. */
-const SD = 3600, STAR_PERSP = 900;   // STAR_PERSP = perspective de #stage
-let stars = [];
+/* estrellas: canvas 2D detrás del corredor, con la MISMA proyección que #stage
+   (perspective 900, origen al centro). Antes eran 620 <i> escalados por 3D: el
+   navegador los rasteriza chicos y los agranda → pixelados de cerca. En canvas
+   se dibuja un círculo nítido a la resolución real. Nunca se corta de golpe:
+   entran con rampa desde lejos y solo mueren al salir de pantalla (o pasar la
+   cámara, con una rampa mínima), reciclando recién ahí. */
+const STARS = 620, SD = 3600, STAR_PERSP = 900, NEARCAM = 40;
+const starcv = document.getElementById("starcv"), sg = starcv.getContext("2d");
+let stars = [], SW = 0, SH = 0;
+function sizeStars() {
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  SW = innerWidth; SH = innerHeight;
+  starcv.width = Math.round(SW * dpr); starcv.height = Math.round(SH * dpr);
+  sg.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
 function buildStars() {
-  let h = "";
-  for (let i = 0; i < STARS; i++) {
-    const z = Math.round(-Math.random() * SD);
-    const comp = Math.min(2.5, (STAR_PERSP - z) / STAR_PERSP);
-    const sz = ((Math.random() * 1.6 + .8) * comp).toFixed(1);
-    const op = (Math.random() * .5 + .2).toFixed(2);
-    const x = Math.round((Math.random() * 2 - 1) * 1100);
-    const y = Math.round((Math.random() * 2 - 1) * 700);
-    h += `<i class="star" data-s="${i}" data-x="${x}" data-y="${y}" data-z="${z}"
-      style="width:${sz}px;height:${sz}px;opacity:${op};transform:translate3d(${x}px,${y}px,${z}px)"></i>`;
+  sizeStars();
+  stars = Array.from({ length: STARS }, () => ({
+    x: (Math.random() * 2 - 1) * 1100, y: (Math.random() * 2 - 1) * 700,
+    z: -Math.random() * SD, r: Math.random() * 1.1 + .6, o: Math.random() * .5 + .25 }));
+}
+function paintStars() {
+  sg.clearRect(0, 0, SW, SH);
+  sg.fillStyle = "#F4EEE3";
+  const cx = SW / 2, cy = SH / 2;
+  for (const s of stars) {
+    let zc = s.z + camZ;
+    const gone = zc > STAR_PERSP - NEARCAM;           // detrás/pegada a la cámara
+    let k = STAR_PERSP / (STAR_PERSP - zc);
+    if (!gone && zc > -SD) {
+      const px = cx + s.x * k, py = cy + s.y * k;
+      /* salió de pantalla mientras se acerca → ya no se ve: se recicla al fondo
+         sin que nadie lo note (fuera de cuadro, sin pop) */
+      if (k > 1 && (px < -12 || px > SW + 12 || py < -12 || py > SH + 12)) { s.z -= SD; continue; }
+      let a = s.o;
+      a *= Math.min(1, (zc + SD) / 700);              // entrada gradual desde lejos
+      a *= Math.min(1, (STAR_PERSP - NEARCAM - zc) / 120);   // último tramo antes de la cámara
+      if (a <= .01) continue;
+      sg.globalAlpha = a;
+      sg.beginPath(); sg.arc(px, py, Math.min(3, s.r * Math.max(.45, Math.min(k, 3.2) * .8)), 0, 6.2832); sg.fill();
+    } else if (gone) s.z -= SD;
+    else if (zc <= -SD) s.z += SD;                     // al retroceder: vuelve por el frente
   }
-  world.insertAdjacentHTML("afterbegin", h);
-  stars = [...world.querySelectorAll(".star")];
+  sg.globalAlpha = 1;
 }
 function build() {
   pool = [];
@@ -312,13 +333,7 @@ function tick(t) {
     if (z > T) { c._z -= D; setTF(c); }
     else if (z < T - D) { c._z += D; setTF(c); }
   }
-  for (const s of stars) {
-    const z = +s.dataset.z + camZ;
-    if (z > 620 || z < 620 - SD) {
-      s.dataset.z = z > 620 ? +s.dataset.z - SD : +s.dataset.z + SD;
-      s.style.transform = `translate3d(${s.dataset.x}px,${s.dataset.y}px,${s.dataset.z}px)`;
-    }
-  }
+  paintStars();
   world.style.transform = `translateZ(${camZ}px)`;
 }
 
@@ -507,6 +522,7 @@ function finishClose() {
   cineOpen = false;                          // el paseo se reanuda solo
 }
 addEventListener("resize", () => {
+  sizeStars();
   computeRecycle();                         // el encuadre cambió → nuevo umbral
   if (phase === "in" || phase === "out") setRect(fly, fitRect(cineAspect));
   if (phase === "open") {
