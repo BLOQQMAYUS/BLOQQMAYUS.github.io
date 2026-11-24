@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com https://bloqqmayus.github.io; media-src 'self' blob: https://bloqqmayus.github.io; font-src 'self'; frame-src 'self' https://www.youtube-nocookie.com https://player.vimeo.com; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical</title>
 <meta name="description" content="Francisco Benítez, alias BLOQQ MÁYUS: director creativo, rapero y filmmaker argentino. Guión, montaje, edición, VFX, motion graphics y contenido vertical. CABA, Buenos Aires.">
@@ -872,12 +874,14 @@
   <div class="modal-box">
     <button class="modal-x" id="modalX" aria-label="Cerrar">✕</button>
     <div class="modal-media" id="modalMedia"></div>
-    <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener" hidden>Ver en YouTube ↗</a></div>
+    <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a></div>
     <div class="modal-hint tip" id="modalHint"></div>
   </div>
 </div>
 
 <script>
+/* escapa texto/atributos antes de armarlo como HTML (todo template pasa por acá) */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 /* ---- PISTAS / INSTRUCCIONES ----------------------------------------------
    Todas apagadas por pedido: "Deslizá" del hero, "click en una preview = ver
    con sonido" de la rueda, "(Clickeá una)" del Toolbox y las notas del modal.
@@ -974,7 +978,7 @@ document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]
 
 /* ---- redes ---- */
 document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
-  `<a data-net="${s.id}" href="${s.url}" target="_blank" rel="noopener">${ICONS[s.id] || ""}${s.label}</a>`).join("");
+  `<a data-net="${esc(s.id)}" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${ICONS[s.id] || ""}${esc(s.label)}</a>`).join("");
 
 /* ---- MINIATURAS DE YOUTUBE: AUTO-ACTUALIZABLES ---------------------------
    REGLA PERMANENTE: las previews de YouTube NUNCA se congelan. Se piden
@@ -1180,14 +1184,14 @@ const workOrder = buildWorkOrder();
 workGrid.innerHTML = workOrder.map((fi, pos) => {
   const f = CONFIG.films[fi];
   return `
-  <article class="work-card reveal" data-cat="${f.cat}" data-i="${fi}" data-pos="${pos}" tabindex="0" role="button" aria-label="Ver ${f.title} — ${f.artist}">
+  <article class="work-card reveal" data-cat="${esc(f.cat)}" data-i="${fi}" data-pos="${pos}" tabindex="0" role="button" aria-label="Ver ${esc(f.title)} — ${esc(f.artist)}">
     <div class="work-media">
-      <img src="${ytIdOf(f.video) ? ytThumb(ytIdOf(f.video)) : f.img}" data-yt="${ytIdOf(f.video) || ""}" data-local="${f.img}" referrerpolicy="no-referrer" alt="${f.title} — ${f.artist}" loading="lazy" decoding="async">
+      <img src="${esc(ytIdOf(f.video) ? ytThumb(ytIdOf(f.video)) : f.img)}" data-yt="${esc(ytIdOf(f.video) || "")}" data-local="${esc(f.img)}" referrerpolicy="no-referrer" alt="${esc(f.title)} — ${esc(f.artist)}" loading="lazy" decoding="async">
       <span class="play"><i>${ICONS.play}</i></span>
     </div>
     <div class="work-meta">
-      <h3>${f.title}</h3>
-      <span class="mono">${f.artist} · ${f.year}</span>
+      <h3>${esc(f.title)}</h3>
+      <span class="mono">${esc(f.artist)} · ${esc(f.year)}</span>
     </div>
   </article>`;
 }).join("");
@@ -1202,7 +1206,7 @@ CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);
    y devuelve al pliegue. */
 const cats = shuffle(Object.keys(counts));
 const filters = document.getElementById("filters");
-filters.innerHTML = cats.map(c => `<button class="chip" data-cat="${c}">${c}</button>`).join("");
+filters.innerHTML = cats.map(c => `<button class="chip" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
 /* Pliegue: la grilla muestra las primeras FOLD piezas del orden mezclado.
    El resto de las piezas vive en la Galería 3D: el botón ya no despliega
    la grilla, lleva a 05 · Contacto y hace que el cartel de neón llame la
@@ -1345,9 +1349,9 @@ function wheelCardAt(x, y) {
 function buildWheel(items) {
   wheelItems = items;
   wheelRotor.innerHTML = items.map((v, i) => `
-    <article class="reel-card wheel-card" data-i="${i}" tabindex="0" role="button" aria-label="Ver ${v.title}">
+    <article class="reel-card wheel-card" data-i="${i}" tabindex="0" role="button" aria-label="Ver ${esc(v.title)}">
       <div class="reel-ph"><i>${ICONS.play}</i></div>
-      <img class="reel-poster" src="${v.poster}" alt="" loading="lazy" decoding="async" draggable="false">
+      <img class="reel-poster" src="${esc(v.poster)}" alt="" loading="lazy" decoding="async" draggable="false">
     </article>`).join("");
   wheelCards = [...wheelRotor.querySelectorAll(".wheel-card")];
   wheelCards.forEach(c => {
@@ -1574,17 +1578,17 @@ function openLT(cat) {
     /* cada preview respeta la relación de aspecto original del archivo */
     if (it.t === "ph") {
       return `<span class="lt-item lt-phwrap" data-i="${i}">
-        <span class="lt-thumb lt-ph" style="aspect-ratio:${it.ar};border-color:${tb.acc};color:${tb.acc}">
-          ${IMG_ICO}<b>${it.label}</b><span>${it.fmt}</span></span>
-        <span class="lt-cap">${it.label}<em>próximamente · ${it.fmt}</em></span></span>`;
+        <span class="lt-thumb lt-ph" style="aspect-ratio:${esc(it.ar)};border-color:${esc(tb.acc)};color:${esc(tb.acc)}">
+          ${IMG_ICO}<b>${esc(it.label)}</b><span>${esc(it.fmt)}</span></span>
+        <span class="lt-cap">${esc(it.label)}<em>próximamente · ${esc(it.fmt)}</em></span></span>`;
     }
     const ar = it.t === "yt" ? "16/9" : "9/16";
     const thumb = it.t === "yt" ? `https://i.ytimg.com/vi/${it.id}/hqdefault.jpg` : ltVideo(it.n).poster;
     const badge = it.t === "yt" ? "▶ youtube" : "▶ video 9:16";
     const play = `<span class="lt-play"><i>${ICONS.play}</i></span>`;
     return `<button type="button" class="lt-item" data-i="${i}">
-      <span class="lt-thumb" style="aspect-ratio:${ar}"><img src="${thumb}" alt="" loading="lazy" draggable="false"><span class="lt-badge ${it.t}">${badge}</span>${play}</span>
-      <span class="lt-cap">${it.title}<em>${it.sub || ""}</em></span></button>`;
+      <span class="lt-thumb" style="aspect-ratio:${ar}"><img src="${esc(thumb)}" alt="" loading="lazy" draggable="false"><span class="lt-badge ${it.t}">${badge}</span>${play}</span>
+      <span class="lt-cap">${esc(it.title)}<em>${esc(it.sub || "")}</em></span></button>`;
   }).join("");
   ltBox.classList.add("open");
   void ltPanel.offsetWidth;
@@ -1689,13 +1693,14 @@ async function loadReels() {  let names = FALLBACK_REELS;
 const modal = document.getElementById("modal");
 const mMedia = document.getElementById("modalMedia");
 function videoEmbed(url) {
-  if (!url) return null;
+  if (!url || !/^https:\/\//i.test(url)) return null;   /* solo https; nada de javascript:/data: */
+  const SB = 'sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"';
   const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{6,})/);
-  if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0" referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  if (yt) return `<iframe src="https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&rel=0" ${SB} referrerpolicy="strict-origin-when-cross-origin" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
   const vm = url.match(/vimeo\.com\/(\d+)/);
-  if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-  if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return `<video src="${url}" controls autoplay playsinline></video>`;
-  return `<iframe src="${url}" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  if (vm) return `<iframe src="https://player.vimeo.com/video/${vm[1]}?autoplay=1" ${SB} allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls autoplay playsinline></video>`;
+  return null;
 }
 function openModal(item) {
   /* YouTube no acepta embeds desde file:// (Error 153): solo http/https */
@@ -1705,9 +1710,9 @@ function openModal(item) {
   if (embed) {
     mMedia.innerHTML = embed;
   } else if (item.video) {
-    mMedia.innerHTML = `<img src="${item.img}" alt="${item.title}"><span class="modal-open"><a href="${item.video}" target="_blank" rel="noopener">${ICONS.play} Ver en YouTube</a></span>`;
+    mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}"><span class="modal-open"><a href="${esc(item.video)}" target="_blank" rel="noopener noreferrer">${ICONS.play} Ver en YouTube</a></span>`;
   } else {
-    mMedia.innerHTML = `<img src="${item.img}" alt="${item.title}">`;
+    mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}">`;
   }
   document.getElementById("modalTitle").textContent = item.title;
   document.getElementById("modalMeta").textContent = item.meta || "";
@@ -1956,16 +1961,16 @@ setInterval(() => {
     if (!id || !canPreview || document.body.style.overflow === "hidden") return;
     const media = card.querySelector(".work-media");
     const f = document.createElement("iframe");
-    f.className = "pv"; f.setAttribute("aria-hidden", "true"); f.tabIndex = -1; f.setAttribute("allow", "autoplay");
+    f.className = "pv"; f.setAttribute("sandbox", "allow-scripts allow-same-origin"); f.setAttribute("aria-hidden", "true"); f.tabIndex = -1; f.setAttribute("allow", "autoplay");
     f.referrerPolicy = "strict-origin-when-cross-origin";
     f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}&modestbranding=1&playsinline=1&rel=0&disablekb=1&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
-    f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1 }), "*"); } catch (e) {} });
+    f.addEventListener("load", () => { try { f.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1 }), "https://www.youtube-nocookie.com"); } catch (e) {} });
     media.insertBefore(f, media.querySelector(".play")); pv = f;
     pvTimer = setTimeout(stopPreview, 9000);   /* si no arranca (no embebible), se descarta */
   }
   /* el iframe avisa cuando realmente está reproduciendo: recién ahí se muestra */
   addEventListener("message", e => {
-    if (!pv || e.source !== pv.contentWindow) return;
+    if (!pv || e.source !== pv.contentWindow || e.origin !== "https://www.youtube-nocookie.com") return;
     let d; try { d = typeof e.data === "string" ? JSON.parse(e.data) : e.data; } catch (_) { return; }
     const st = d && d.info && d.info.playerState;
     if (st === 1) { clearTimeout(pvTimer); pv.parentNode.classList.add("vid-on"); }

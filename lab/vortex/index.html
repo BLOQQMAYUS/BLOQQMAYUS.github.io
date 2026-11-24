@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com https://bloqqmayus.github.io; media-src 'self' blob: https://bloqqmayus.github.io; font-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
 <title>GALERÍA 3D — BLOQQ MÁYUS</title>
@@ -468,6 +469,7 @@ function mount(it) {
     if (v && v.play) v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });
   } else {
     cineMedia.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${it.yt}?autoplay=1&rel=0&controls=0&playsinline=1"
+      sandbox="allow-scripts allow-same-origin allow-presentation allow-popups"
       style="${sz}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
       referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   }
