@@ -910,7 +910,7 @@
 
 <footer>
   <div class="wrap foot">
-    <span>© 2026 <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">Buenos Aires, Argentina</span></span>
+    <span>© <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">Buenos Aires, Argentina</span> · <span id="copyYear">2026</span></span>
     <span class="foot-ind"><i></i> INDUSTRIA ARGENTINA</span>
   </div>
 </footer>
@@ -1046,6 +1046,12 @@ document.querySelectorAll("[data-bind]").forEach(el => {
   const k = el.dataset.bind;
   if (CONFIG[k]) el.textContent = CONFIG[k];
 });
+/* año del copyright: arranca en 2026 y el final es el año en curso ("2026 - 2027", "2026 - 2028"…).
+   Sin JS queda el "2026" fijo del HTML. */
+(function () {
+  const START = 2026, now = new Date().getFullYear();
+  document.getElementById("copyYear").textContent = now > START ? START + " - " + now : String(START);
+})();
 document.getElementById("mailBtn").href = "mailto:" + CONFIG.email;
 document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
 
