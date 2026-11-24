@@ -22,7 +22,10 @@
   #stage.dragging{cursor:grabbing}
   #world{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
   /* ---------- espacio 3D: estrellas sutiles que pasan con el avance ---------- */
-  #starcv{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  #starcv,#starfg{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+  #starcv{z-index:0}
+  /* estrellas CERCANAS: por delante del corredor (pasan sobre las tarjetas, no detrás) */
+  #starfg{z-index:1}
   /* SIN will-change en las estrellas: son 620 y cada una promovida sería una
      capa compuesta propia (620 capas viviendo toda la sesión desde que la
      galería se precarga). No hace falta: se mueven con #world, que ya tiene
@@ -103,6 +106,7 @@
 <div id="stage">
   <div id="world"></div>
 </div>
+<canvas id="starfg" aria-hidden="true"></canvas>
 <div id="fog"></div>
 <canvas id="cometcv" aria-hidden="true"></canvas>
 
@@ -198,6 +202,7 @@ function cardHTML(it, i) {
    cuadro. */
 const STARS = 620, SD = 3600, STAR_PERSP = 900, NEARCAM = 40, KMAX = 6;
 const starcv = document.getElementById("starcv"), sg = starcv.getContext("2d");
+const starfg = document.getElementById("starfg"), fg = starfg.getContext("2d");
 const cometcv = document.getElementById("cometcv"), cg = cometcv.getContext("2d");
 const sprite = (() => {
   const c = document.createElement("canvas"); c.width = c.height = 128;
@@ -210,8 +215,8 @@ let stars = [], SW = 0, SH = 0, MINR = 120;
 function sizeStars() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
   SW = innerWidth; SH = innerHeight;
-  for (const cv of [starcv, cometcv]) { cv.width = Math.round(SW * dpr); cv.height = Math.round(SH * dpr); }
-  sg.setTransform(dpr, 0, 0, dpr, 0, 0); cg.setTransform(dpr, 0, 0, dpr, 0, 0);
+  for (const cv of [starcv, starfg, cometcv]) { cv.width = Math.round(SW * dpr); cv.height = Math.round(SH * dpr); }
+  sg.setTransform(dpr, 0, 0, dpr, 0, 0); fg.setTransform(dpr, 0, 0, dpr, 0, 0); cg.setTransform(dpr, 0, 0, dpr, 0, 0);
   sg.imageSmoothingQuality = "high";
   /* radio mínimo para salir de cuadro antes de que k pase de ~12 */
   MINR = Math.hypot(SW, SH) / 2 / 12;
@@ -228,7 +233,7 @@ function buildStars() {
   stars = Array.from({ length: STARS }, () => { const s = seedStar({}); s.z = -Math.random() * SD; return s; });
 }
 function paintStars() {
-  sg.clearRect(0, 0, SW, SH);
+  sg.clearRect(0, 0, SW, SH); fg.clearRect(0, 0, SW, SH);
   const cx = SW / 2, cy = SH / 2;
   for (const s of stars) {
     const zc = s.z + camZ;
@@ -240,10 +245,11 @@ function paintStars() {
     if (k > 1 && (px < -rad - 6 || px > SW + rad + 6 || py < -rad - 6 || py > SH + rad + 6)) { seedStar(s, s.z - SD); continue; }
     const a = s.o * Math.min(1, (zc + SD) / 700);              // entrada gradual desde lejos
     if (a <= .01) continue;
-    sg.globalAlpha = a;
-    sg.drawImage(sprite, px - rad, py - rad, rad * 2, rad * 2);
+    const c = k > 1.8 ? fg : sg;      // cerca de la cámara → por delante de las tarjetas
+    c.globalAlpha = a;
+    c.drawImage(sprite, px - rad, py - rad, rad * 2, rad * 2);
   }
-  sg.globalAlpha = 1;
+  sg.globalAlpha = 1; fg.globalAlpha = 1;
 }
 /* cometas: uno a la vez, cada uno con su propia profundidad (lejos = fino, lento,
    tenue; cerca = largo, rápido, brillante), dirección y recorrido al azar */
