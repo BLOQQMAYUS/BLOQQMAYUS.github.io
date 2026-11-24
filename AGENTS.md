@@ -19,6 +19,8 @@ página en GitHub Pages: **sin build, sin npm, sin framework**. Lo que está en 
 | Colores, fuentes, variables | `css/tokens.css` |
 | Estructura HTML de las secciones | `index.html` |
 | Estilos de una sección | `css/<sección>.css` (nav, hero, proof, work, vertical, services, contact, footer, overlays) |
+| Datos para buscadores (JSON-LD) | `<script type="application/ld+json">` del `<head>` de `index.html` (copiar ahí cambios de email/teléfono/redes) |
+| Cambiar la foto/video del header | `./cambiar-hero.sh assets/hero/ARCHIVO` (también AVIF/WebP y tarjeta de redes 1200×630) |
 | Cifras bajo el hero | `index.html` (`#proof`) + `js/proof.js`: videoclips y artistas = `CONFIG.films` + `data-base` (150 y 50) |
 | Lógica de una sección | `js/<sección>.js` (cada archivo arranca con una línea que dice qué hace) |
 | Galería 3D | `lab/vortex/index.html` (su lista `UNIQUE` también se actualiza al sumar videos) |
@@ -38,6 +40,7 @@ node tests/qa.mjs _plan/qa-ahora --compare _plan/qa-antes
 Edge headless, sin dependencias: capturas por sección (desktop 1440 y celu 390), 21 chequeos de
 conducta (pliegue, filtros, rueda, Showreel, Escape, Galería 3D, consola limpia) y una **huella** del
 DOM + estilos computados. Para refactors sin cambio visual la huella tiene que dar **IDÉNTICA**.
+Velocidad: `node tests/perf.mjs` (FCP/LCP/CLS/TBT en celu y compu; `--lista` dice qué pesa y qué salta).
 Vista previa manual: `python -m http.server 8765` en esta carpeta.
 
 ## Estilo del código

@@ -45,14 +45,40 @@ if not poster:
     om = re.search(r'property="og:image" content="https://bloqqmayus\.github\.io/([^"]+)"', s)
     poster = om.group(1) if om else "assets/hero/bloqq-bg.jpg"
 preview = poster if video else new
-tag = (f'<video src="{new}" poster="{poster}" autoplay muted loop playsinline></video>'
-       if video else f'<img src="{new}" alt="{alt}">')
+# F5: para una imagen se generan (si hay Pillow) su AVIF/WebP al lado y la tarjeta de redes 1200×630;
+# el <img> lleva medidas fijas y prioridad alta (es lo primero que se ve).
+stem = os.path.splitext(new)[0]
+dims = ""
+try:
+    from PIL import Image
+    if not video:
+        im = Image.open(new).convert("RGB")
+        dims = ' width="%d" height="%d"' % im.size
+        if not os.path.exists(stem + ".webp"): im.save(stem + ".webp", "WEBP", quality=80, method=6)
+        if not os.path.exists(stem + ".avif"):
+            try: im.save(stem + ".avif", "AVIF", quality=60, speed=4)
+            except Exception: pass                      # Pillow sin AVIF: queda WebP + JPG
+    # tarjeta de redes: recorte 1,91:1 del medio siguiendo el encuadre de compu, a 1200×630
+    src = Image.open(poster if video else new).convert("RGB")
+    fx = float(FRAMES.get(os.path.basename(new), ("50% 50%",))[0].split()[0].rstrip("%")) / 100
+    W, H = src.size
+    cw, ch = (W, round(W / 1.905)) if W / H < 1.905 else (round(H * 1.905), H)
+    x, y = round((W - cw) * fx), round((H - ch) * 0.3)
+    og = os.path.join(os.path.dirname(new), "og-" + os.path.basename(stem) + ".jpg").replace("\\", "/")
+    src.crop((x, y, x + cw, y + ch)).resize((1200, 630), Image.LANCZOS).save(og, "JPEG", quality=86, optimize=True, progressive=True)
+    preview = og
+except ImportError:
+    print("· sin Pillow: no se generan AVIF/WebP ni la tarjeta 1200×630 (pip install pillow)")
+img = f'<img src="{new}"{dims} alt="{alt}" fetchpriority="high" decoding="async">'
+srcs = "".join(f'<source srcset="{stem}.{e}" type="image/{e}">' for e in ("avif", "webp") if os.path.exists(f"{stem}.{e}"))
+if not video and srcs: img = f"<picture>{srcs}{img}</picture>"
+tag = f'<video src="{new}" poster="{poster}" autoplay muted loop playsinline></video>' if video else img
 partes = re.split(r'(<!--.*?-->)', inner, flags=re.S)
 hecho = False
 for i, parte in enumerate(partes):
     if parte.startswith("<!--"): continue          # las instrucciones se conservan
-    if re.search(r'<(img|video)\b', parte):
-        partes[i] = re.sub(r'<(img|video)\b[^>]*>', lambda _: tag, parte, count=1)
+    if re.search(r'<(picture|img|video)\b', parte):
+        partes[i] = re.sub(r'<picture\b.*?</picture>|<(?:img|video)\b[^>]*>(?:</video>)?', lambda _: tag, parte, count=1, flags=re.S)
         hecho = True; break
 assert hecho, "no se encontró el medio activo del header"
 s = s[:m.start(2)] + "".join(partes) + s[m.end(2):]
@@ -67,7 +93,7 @@ if base:
                lambda m: m.group(1) + mob + "}}", s, count=1)
     s = re.sub(r'(\n    \.hero-img img,\.hero-img video\{object-position:)[^}]+\}',
                lambda m: m.group(1) + mob + "}", s, count=1)
-open("index.html", "w", encoding="utf-8").write(s)
+open("index.html", "w", encoding="utf-8", newline="\n").write(s)   # LF también en Windows
 print("✓ header  →", new, "(video)" if video else "(imagen)")
 if base: print("✓ encuadre →", base, "desktop /", mob, "celu")
 else: print("· encuadre sin tocar (medio nuevo): revisá object-position si hace falta")

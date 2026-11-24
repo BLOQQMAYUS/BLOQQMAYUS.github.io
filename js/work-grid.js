@@ -56,7 +56,7 @@ workGrid.innerHTML = workOrder.map((fi, pos) => {
   return `
   <article class="work-card reveal" data-cat="${esc(f.cat)}" data-i="${fi}" data-pos="${pos}" tabindex="0" role="button" aria-label="Ver ${esc(f.title)} — ${esc(f.artist)}">
     <div class="work-media">
-      <img src="${esc(ytIdOf(f.video) ? ytThumb(ytIdOf(f.video)) : f.img)}" data-yt="${esc(ytIdOf(f.video) || "")}" data-local="${esc(f.img)}" referrerpolicy="no-referrer" alt="${esc(f.title)} — ${esc(f.artist)}" loading="lazy" decoding="async">
+      <img src="${esc(ytIdOf(f.video) ? ytThumb(ytIdOf(f.video)) : f.img)}" data-yt="${esc(ytIdOf(f.video) || "")}" data-local="${esc(f.img)}" width="1280" height="720" referrerpolicy="no-referrer" alt="${esc(f.title)} — ${esc(f.artist)}" loading="lazy" decoding="async">
       <span class="play"><i>${ICONS.play}</i></span>
     </div>
     <div class="work-meta">

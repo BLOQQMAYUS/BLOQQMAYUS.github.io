@@ -12,6 +12,7 @@
   mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.85) 58%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.12) 88%,transparent 95%)}
 /* el zoom suave en loop lo pone esta regla, no el archivo: sirve igual para
    <img> y para <video>, así que cambiar el medio no toca la animación */
+.hero-img picture{display:contents}   /* <picture> con AVIF/WebP: no agrega caja, el <img> sigue llenando el header */
 .hero-img img,.hero-img video{width:100%;height:100%;object-fit:cover;object-position:72% 28%;
   transform:scale(1.05);animation:slowzoom 24s ease-in-out infinite alternate;
   will-change:transform}   /* el zoom corre en el compositor, no repinta la imagen */
@@ -29,6 +30,9 @@
     color-mix(in srgb,var(--bg) 62%,transparent) 72%,color-mix(in srgb,var(--bg) 86%,transparent) 85%,color-mix(in srgb,var(--bg) 97%,transparent) 94%,var(--bg) 100%),
   linear-gradient(90deg,color-mix(in srgb,var(--bg) 86%,transparent) 0%,color-mix(in srgb,var(--bg) 44%,transparent) 52%,color-mix(in srgb,var(--bg) 16%,transparent) 100%)}
 .hero-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:150px 24px 90px;text-align:center}
+/* subtítulo: frase larga en compu, corta en celu (en CSS, no en JS: así no salta el hero al cargar) */
+.ht-short{display:none}
+@media(max-width:600px){.ht-long{display:none}.ht-short{display:inline}}
 /* ---------- interfaz de cámara: marco ámbar sutil + REC + timecode ----------
    PURAMENTE decorativa (aria-hidden). Cuatro escuadras finas y dos hairlines
    ámbar: nada de glow, nada de loops JS. El marco arranca debajo del nav para

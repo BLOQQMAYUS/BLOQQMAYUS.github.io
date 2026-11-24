@@ -423,7 +423,7 @@ Todo está en `CONFIG.films` de `content/site.js` (más nuevos primero).
 - **Tarjetas de obras**: inclinación 3D + brillo que siguen al mouse, y tras 650 ms encima, loop mudo del videoclip (iframe `youtube-nocookie`, solo se muestra cuando el player reporta `playerState 1`; si no arranca en 9 s se descarta). Solo con `(hover:hover) and (pointer:fine)`, sin `saveData` ni reduced-motion; una a la vez y se limpia al salir.
 
 ## Texto del hero
-Párrafo reducido (≈ 61 % del original). Una sola frase en el HTML (`#heroTail`, la larga, para buscadores/IAs); en celular (≤ 600 px) un script la cambia por la corta guardada en su atributo `data-short`.
+Párrafo reducido (≈ 61 % del original). Las dos colas de la frase están en el HTML (`.ht-long`, la que leen buscadores/IAs, y `.ht-short`); en celular (≤ 600 px) la CSS muestra la corta. Antes lo hacía un script y el hero saltaba al cargar (CLS 0,04 en celu).
 
 ## Escala tipográfica (variables en :root)
 - `--fs-micro .68rem` (metadatos, contadores, pies, etiquetas chicas) · `--fs-label .76rem` (kicker, chips, botones mono, REC) · `--fs-lead` (párrafo de hero y descripciones de sección) · `--fs-h3 1.5rem` (títulos de tarjetas, servicios y modal) · `--ls-label .14em` (tracking de etiquetas mono; kicker/REC/índice quedan en .24em).
@@ -451,3 +451,22 @@ Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
 - **Rueda**: cada pieza con marco de celular + puntos (`#wheelDots`, `wheelGoto`).
 - **Servicios en bento** (≥1024 px): 01–03 horizontales en dos columnas y **04 · Contenido Vertical en vertical** (columna derecha, alta, como un celular). Sin bloque «Cómo trabajo» (sacado a pedido).
 - **Contacto**: sin botón copiar aparte; **click en el botón del email copia la dirección** y muestra un aviso sutil «Copiado ✓» (1,6 s). Si el navegador no deja copiar, abre el `mailto:`; Ctrl/rueda siguen abriendo el mail (`js/bind.js`). **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.
+
+## Rendimiento y SEO (F5, rama `saas`)
+- **Medir**: `node tests/perf.mjs [veces] [--lista]` → FCP, LCP, CLS, TBT, peso y pedidos en celu (CPU ×4 + 4G lenta,
+  como Lighthouse móvil) y compu, con gzip como GitHub Pages. `--lista` agrega los 15 archivos más pesados, los
+  corrimientos de layout y cuándo termina cada tipo de archivo. Sin Lighthouse ni dependencias.
+- **Antes → después** (mediana de 3): celu CLS **0,041 → 0**, FCP/LCP 2,21 → 2,07 s; compu FCP 164 → 144 ms, CLS 0.
+- **CLS en celu**: lo causaba `bind.js` cambiando la frase del hero al cargar → ahora las dos colas están en el HTML
+  (`.ht-long` / `.ht-short`) y elige la CSS.
+- **Hero**: `<picture>` con AVIF (32 KB) y WebP (37 KB) antes del JPG (62 KB), medidas fijas y `fetchpriority="high"`.
+  `cambiar-hero.sh` arma todo eso solo (genera AVIF/WebP con Pillow si faltan) y la **tarjeta de redes 1200×630**
+  `assets/hero/og-<nombre>.jpg` (recorte del medio con su encuadre), que pasa a ser `og:image` / `twitter:image`.
+- **Fuentes**: se precargan las tres que usa el hero (Big Shoulders, Archivo 400, Space Mono).
+- **Miniaturas de obras** con `width/height` (16:9) para que el navegador reserve el lugar.
+- **JSON-LD** `Person` en el `<head>` (nombre, alias, rol, CABA, email, teléfono, redes). Es estático a propósito:
+  si cambian email, teléfono o redes en `content/site.js`, actualizarlo también ahí.
+- **Probado y descartado**: `defer` en los scripts (en celu el primer pintado empeoraba de 2,2 a 2,8 s porque esperaba a
+  que corriera todo el JS) y `content-visibility` (el TBT ya es ~100 ms y con alturas estimadas los saltos del menú a
+  cada sección pueden caer corridos). La precarga de la Galería 3D queda como está (contrato de arriba): es la mayor
+  parte del peso total, pero a propósito y después del `load`.

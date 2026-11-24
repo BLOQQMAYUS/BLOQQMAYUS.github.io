@@ -13,14 +13,43 @@
 <meta property="og:url" content="https://bloqqmayus.github.io/">
 <meta property="og:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical">
 <meta property="og:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO. Buenos Aires, Argentina.">
-<meta property="og:image" content="https://bloqqmayus.github.io/assets/hero/anterior.jpg">
+<meta property="og:image" content="https://bloqqmayus.github.io/assets/hero/og-anterior.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Francisco Benítez (BLOQQ MÁYUS) mirando a cámara a través de sus dedos">
+<meta property="og:site_name" content="BLOQQ MÁYUS">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker">
 <meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO.">
-<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/anterior.jpg">
+<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/og-anterior.jpg">
+<!-- Datos estructurados para buscadores e IAs (schema.org). Si cambian email, teléfono o redes en
+     content/site.js, actualizarlos también acá: Google lee esto sin ejecutar JS. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://bloqqmayus.github.io/#persona",
+  "name": "Francisco Benítez",
+  "alternateName": ["BLOQQ MÁYUS", "Bloqq Máyus"],
+  "url": "https://bloqqmayus.github.io/",
+  "image": "https://bloqqmayus.github.io/assets/hero/og-anterior.jpg",
+  "jobTitle": "Director creativo y filmmaker",
+  "description": "Director creativo, rapero y filmmaker argentino: guion, montaje, edición, VFX, motion graphics y contenido vertical.",
+  "knowsAbout": ["Dirección de videoclips", "Edición de video", "Color", "VFX", "Motion graphics", "Animación 2D/3D", "Contenido vertical"],
+  "email": "mailto:fs7benitez@gmail.com",
+  "telephone": "+54 11 5975 4088",
+  "address": { "@type": "PostalAddress", "addressLocality": "Ciudad Autónoma de Buenos Aires", "addressCountry": "AR" },
+  "sameAs": [
+    "https://instagram.com/bloqqmayus",
+    "https://youtube.com/@bloqqmayus",
+    "https://www.linkedin.com/in/franciscosben%C3%ADtez/"
+  ]
+}
+</script>
 <link rel="preload" href="assets/fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/archivo-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231A1714'/%3E%3Ctext x='16' y='23' font-size='19' font-family='Helvetica,Arial' font-weight='bold' text-anchor='middle' fill='%23F2A51A'%3E%E2%87%AA%3C/text%3E%3Ccircle cx='26' cy='6' r='3' fill='%23B5E61D'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
@@ -73,7 +102,7 @@
        twitter:image del <head> — es la vista previa al compartir el link.
        ═══════════════════════════════════════════════════════════════════════ -->
   <div class="hero-img">
-    <img src="assets/hero/anterior.jpg" alt="Francisco Benítez mirando a cámara a través de sus dedos">
+    <picture><source srcset="assets/hero/anterior.avif" type="image/avif"><source srcset="assets/hero/anterior.webp" type="image/webp"><img src="assets/hero/anterior.jpg" width="1280" height="720" alt="Francisco Benítez mirando a cámara a través de sus dedos" fetchpriority="high" decoding="async"></picture>
     <!-- <video src="assets/hero/clip.mp4" poster="assets/hero/bloqq-bg.jpg" autoplay muted loop playsinline></video> -->
   </div>
   <div class="cam" aria-hidden="true"><span class="cam-c tl"></span><span class="cam-c tr"></span><span class="cam-c bl"></span><span class="cam-c br"></span></div>
@@ -87,7 +116,7 @@
         <span class="hn-row"><span class="hn-low">de minúsculas a</span> <span class="hn-tube hn-acid">MAYÚSCULAS</span></span>
       </span>
     </h1>
-    <p class="hero-sub">Realizador audiovisual con <b>+10 años de experiencia</b> en producción y postproducción para marcas y productoras.<span id="heroTail" data-short=" Del brief a la entrega, con criterio narrativo y gestión de agenda."> Llevo cada proyecto del brief a la entrega con criterio narrativo, estándar visual y gestión de agenda, construyendo <span class="hs-u">vínculos de trabajo duraderos</span>.</span></p>
+    <p class="hero-sub">Realizador audiovisual con <b>+10 años de experiencia</b> en producción y postproducción para marcas y productoras.<span class="ht-long"> Llevo cada proyecto del brief a la entrega con criterio narrativo, estándar visual y gestión de agenda, construyendo <span class="hs-u">vínculos de trabajo duraderos</span>.</span><span class="ht-short"> Del brief a la entrega, con criterio narrativo y gestión de agenda.</span></p>
     <div class="hero-cta">
       <button class="btn" id="showreelBtn">
         <svg viewBox="5.86 2.28 15.28 19.45" fill="currentColor" aria-hidden="true"><path transform="translate(13.5 12) scale(1.167) translate(-13.5 -12)" d="M8 7.7Q8 5 10.354 6.319L17.186 10.144Q20.5 12 17.186 13.856L10.354 17.681Q8 19 8 16.3Z"/></svg>

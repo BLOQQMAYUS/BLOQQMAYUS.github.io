@@ -20,12 +20,6 @@ document.querySelectorAll("[data-bind]").forEach(el => {
   const START = 2026, now = new Date().getFullYear();
   document.getElementById("copyYear").textContent = now > START ? START + " - " + now : String(START);
 })();
-/* subtítulo del hero: una sola frase en el HTML; en pantallas chicas se cambia por la corta (data-short) */
-(function () {
-  const t = document.getElementById("heroTail"), long = t.innerHTML, short = t.dataset.short, mq = matchMedia("(max-width:600px)");
-  const apply = () => { if (mq.matches) t.textContent = short; else t.innerHTML = long; };
-  apply(); mq.addEventListener("change", apply);
-})();
 document.getElementById("mailBtn").href = "mailto:" + CONFIG.email;
 document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
 document.getElementById("footMail").href = "mailto:" + CONFIG.email;
