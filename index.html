@@ -102,10 +102,10 @@
   .nav-links a{color:var(--mut);transition:color .2s}
   .nav-links a:hover{color:var(--txt)}
   .nav-links a.active{color:var(--txt)}
-  .nav-links a:not(.cta){position:relative}
-  .nav-links a:not(.cta)::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--acc);
+  .nav-links a:not(.cta):not(.logo){position:relative}
+  .nav-links a:not(.cta):not(.logo)::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--acc);
     transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
-  .nav-links a:not(.cta):hover::after,.nav-links a:not(.cta).active::after{transform:scaleX(1)}
+  .nav-links a:not(.cta):not(.logo):hover::after,.nav-links a:not(.cta):not(.logo).active::after{transform:scaleX(1)}
   .nav-links a.cta{color:var(--bg);background:var(--acc);padding:9px 18px;border-radius:999px;font-weight:700;transition:background .2s,transform .2s}
   .nav-links a.cta:hover{background:#f7b83f;color:var(--bg)}
   .nav-links a.cta:active{transform:scale(.96)}
@@ -120,7 +120,7 @@
     .nav-links{gap:8px;font-size:.64rem}
     .nav-links a.cta{padding:7px 10px}
   }
-  @media(max-width:350px){.nav-links{left:auto;right:12px;transform:none;gap:6px;font-size:.6rem}.nav-links a.cta{padding:6px 8px}}
+  @media(max-width:350px){.nav-links .logo{position:fixed;left:12px;top:13px}.nav-links{left:auto;right:12px;transform:none;gap:6px;font-size:.6rem}.nav-links a.cta{padding:6px 8px}}
 
   /* ---------- hero ---------- */
   .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
@@ -684,8 +684,8 @@
 
 <nav id="nav">
   <div class="nav-in">
-    <a class="logo" href="#top" aria-label="Volver arriba"><span class="key">⇪</span></a>
     <div class="nav-links" id="navLinks">
+      <a class="logo" href="#top" aria-label="Volver arriba"><span class="key">⇪</span></a>
       <a href="#trabajo">Obras</a>
       <a href="#vertical">Vertical</a>
       <a href="#servicios">Servicios</a>
@@ -1888,7 +1888,7 @@ document.querySelector(".logo").addEventListener("click", () => {
 
 /* ---- scrollspy: marca la sección activa en el nav ---- */
 const spyMap = {};
-navLinks.querySelectorAll('a[href^="#"]').forEach(a => { spyMap[a.getAttribute("href").slice(1)] = a; });
+navLinks.querySelectorAll('a[href^="#"]:not(.logo)').forEach(a => { spyMap[a.getAttribute("href").slice(1)] = a; });
 if ("IntersectionObserver" in window) {
   const spy = new IntersectionObserver(es => es.forEach(en => {
     if (!en.isIntersecting) return;
