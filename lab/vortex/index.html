@@ -428,7 +428,7 @@ stage.addEventListener("pointerup", e => {
   if (card && !phase && !cineOpen) openCine(+card.dataset.i);
 });
 stage.addEventListener("pointercancel", e => { release(e); downCard = null; });
-stage.addEventListener("wheel", e => { e.preventDefault(); camZ += e.deltaY * .9; targetZ = null; seen(); }, { passive: false });
+stage.addEventListener("wheel", e => { e.preventDefault(); camZ -= e.deltaY * .9; targetZ = null; seen(); }, { passive: false });
 stage.addEventListener("dragstart", e => e.preventDefault());
 function step(d) {
   targetZ = (d > 0 ? Math.floor(camZ / G) + 1 : Math.ceil(camZ / G) - 1) * G;
