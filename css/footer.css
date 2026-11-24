@@ -4,7 +4,7 @@
 .foot-ind{display:inline-flex;align-items:center;gap:9px}
 .foot-ind i{width:9px;height:9px;border-radius:50%;background:var(--brasa);flex:none;position:relative;top:-.5px;animation:blink 1.2s infinite}  /* centro de las mayúsculas, no de la caja de línea */
 /* columnas: marca ancha + 3 listas de links */
-.foot-cols{display:grid;grid-template-columns:2fr 1fr 1.3fr 1fr;gap:var(--s-6);padding-top:var(--s-8);padding-bottom:var(--s-7);border-bottom:1px solid var(--line);margin-bottom:28px}
+.foot-cols{display:grid;grid-template-columns:1fr;gap:var(--s-6);padding-top:var(--s-8);padding-bottom:var(--s-7);border-bottom:1px solid var(--line);margin-bottom:28px}
 .fc{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s-2);min-width:0}
 .fc h4{font-family:var(--mono);font-size:var(--t-2xs);font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:var(--s-1)}
 .fc a{font-size:var(--t-sm);color:var(--mut);transition:color var(--d-1);overflow-wrap:anywhere}
@@ -12,6 +12,5 @@
 .fc .fc-logo{font-family:var(--disp);font-weight:800;font-size:var(--t-lg);letter-spacing:.04em;color:var(--txt);text-transform:uppercase}
 .fc-logo i{color:var(--acc);font-style:normal}
 .fc-brand p{color:var(--mut);font-size:var(--t-sm);line-height:1.6;max-width:34ch}
-@media(max-width:880px){.foot-cols{grid-template-columns:1fr 1fr}.fc-brand{grid-column:1 / -1}}
 @media(max-width:480px){.foot-cols{gap:var(--s-5);padding-top:var(--s-7)}}
 } /* fin @layer footer */

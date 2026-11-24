@@ -446,11 +446,12 @@ Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
 
 ## Hero, cifras y secciones (F3–F4, rama `saas`)
 - **Cifras bajo el hero** (`#proof`): +10 años de oficio · videoclips = `CONFIG.films` **+150** · artistas = `cat` únicos **+50** (`data-base` en el HTML). Sin cinta de artistas ni «piezas de la Galería 3D» (pedido).
-- **«Disponible para proyectos · respondo en 24 h»** arriba del neón; **nav en píldora de vidrio** al bajar (solo ≥761 px).
+- **«Disponible para proyectos · respondo en 24 hs»** arriba del neón; **nav en píldora de vidrio** al bajar (solo ≥761 px).
 - **Filtros = control segmentado** (pulgar ácido que se desliza, `moveThumb`). **Ficha de caso**: Artista / Año / Rol + `credits` opcionales, con View Transition desde la miniatura.
 - **Rueda**: cada pieza con marco de celular + puntos (`#wheelDots`, `wheelGoto`).
 - **Servicios en bento** (≥1024 px): 01–03 horizontales en dos columnas y **04 · Contenido Vertical en vertical** (columna derecha, alta, como un celular). Sin bloque «Cómo trabajo» (sacado a pedido).
 - **Contacto**: sin botón copiar aparte; **click en el botón del email copia la dirección** y muestra un aviso sutil «Copiado ✓» (1,6 s). Si el navegador no deja copiar, abre el `mailto:`; Ctrl/rueda siguen abriendo el mail (`js/bind.js`). **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.
+- **Pie**: solo la marca + «Director creativo y realizador audiovisual.» (sin columnas Secciones/Contacto/Redes: ya están en Contacto, justo arriba). En celu la píldora «Disponible… 24 hs» se ve entera (letra más chica ≤370 px).
 
 ## Rendimiento y SEO (F5, rama `saas`)
 - **Medir**: `node tests/perf.mjs [veces] [--lista]` → FCP, LCP, CLS, TBT, peso y pedidos en celu (CPU ×4 + 4G lenta,

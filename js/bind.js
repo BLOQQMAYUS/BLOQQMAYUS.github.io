@@ -22,8 +22,6 @@ document.querySelectorAll("[data-bind]").forEach(el => {
 })();
 document.getElementById("mailBtn").href = "mailto:" + CONFIG.email;
 document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
-document.getElementById("footMail").href = "mailto:" + CONFIG.email;
-document.getElementById("footPhone").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
 
 /* ---- botón del email: al click COPIA la dirección y muestra un aviso sutil "Copiado ✓" (1,6 s).
    Portapapeles moderno; si el navegador lo niega, textarea + execCommand; si nada copia,
@@ -55,5 +53,3 @@ document.getElementById("footPhone").href = "tel:" + CONFIG.phone.replace(/[^+\d
 /* ---- redes ---- */
 document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
   `<a data-net="${esc(s.id)}" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${ICONS[s.id] || ""}${esc(s.label)}</a>`).join("");
-document.getElementById("footSocials").insertAdjacentHTML("beforeend", CONFIG.socials.map(s =>
-  `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)}</a>`).join(""));
