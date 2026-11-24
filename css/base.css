@@ -1,17 +1,18 @@
 /* base.css — Reset, scrollbar, foco, estrellas, rótulos de sección. */
+@layer base {
 /* ---------- acabado pro: scrollbar de marca · foco accesible · tacto ---------- */
 html{scrollbar-color:var(--brasa) var(--bg2);scrollbar-width:thin}
 ::-webkit-scrollbar{width:11px;height:11px}
 ::-webkit-scrollbar-track{background:var(--bg2)}
-::-webkit-scrollbar-thumb{background:linear-gradient(var(--brasa),#8f2718);border-radius:999px;border:3px solid var(--bg2)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--brasa),#8f2718);border-radius:var(--r-pill);border:3px solid var(--bg2)}
 ::-webkit-scrollbar-thumb:hover{background:linear-gradient(var(--acc),#c9820f)}
 a:focus-visible,button:focus-visible,.chip:focus-visible,.work-card:focus-visible,.reel-card:focus-visible,
-.strip-arrow:focus-visible,.socials a:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:8px}
+.strip-arrow:focus-visible,.socials a:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:var(--r-sm)}
 .btn:active,.chip:active,#moreBtn:active,.socials a:active,.strip-arrow:active,.modal-open a:active{transform:scale(.97)}
 .work-card:active .work-media{transform:scale(.99)}
 /* saltar al contenido (teclado / lectores) */
 .skip{position:fixed;top:-60px;left:16px;z-index:3000;background:var(--acc);color:var(--bg);font-weight:700;
-  padding:11px 20px;border-radius:0 0 12px 12px;font-size:.85rem;transition:top .25s var(--ease)}
+  padding:11px 20px;border-radius:0 0 12px 12px;font-size:var(--t-sm);transition:top var(--d-2) var(--ease)}
 .skip:focus{top:0}
 /* las anclas no quedan tapadas por el nav fijo */
 section{scroll-margin-top:84px;position:relative;z-index:1}
@@ -35,11 +36,19 @@ footer{position:relative;z-index:1}
 section{padding:110px 0}
 .sec-head{margin-bottom:48px;max-width:760px}
 /* rótulo de sección: número ámbar (ancla) + palabra clave en hueso, más grande y con menos tracking */
-.kicker{font-family:var(--mono);font-size:clamp(.8rem,1.1vw,.92rem);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.kicker{font-family:var(--mono);font-size:var(--t-sm);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .kicker b{color:var(--acc);font-weight:700}
 /* riel: línea que ocupa el ancho disponible y se apaga hacia la derecha */
 .kicker{width:85%}
-.kicker::after{content:"";flex:1;min-width:24px;height:1px;background:linear-gradient(90deg,var(--acc),rgba(242,165,26,0))}
+.kicker::after{content:"";flex:1;min-width:24px;height:1px;background:linear-gradient(90deg,var(--acc),color-mix(in srgb,var(--acc) 0%,transparent))}
 .nw{white-space:nowrap}
-h2{font-family:var(--disp);font-size:clamp(2.7rem,6.4vw,4.8rem);font-weight:800;letter-spacing:.01em;line-height:1.08;text-transform:uppercase}
+h2{font-family:var(--disp);font-size:var(--t-2xl);font-weight:800;letter-spacing:.01em;line-height:1.08;text-transform:uppercase}
 .sec-desc{color:var(--mut);margin-top:14px;font-size:var(--fs-lead)}
+
+/* ── pulido de sistema (F2) ── títulos sin palabras huérfanas, párrafos parejos,
+   y un único anillo de foco para TODO lo que se puede usar con teclado */
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+:where(a,button,[role="button"],[tabindex]:not([tabindex="-1"]),input,select,textarea):focus-visible{
+  outline:2px solid var(--acc);outline-offset:3px;border-radius:var(--r-sm)}
+} /* fin @layer base */

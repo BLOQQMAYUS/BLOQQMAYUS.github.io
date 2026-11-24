@@ -1,4 +1,5 @@
 /* work.css — 01 · Videoclips: filtros, grilla, botón play, tarjetas con inclinación 3D. */
+@layer work {
 /* ---------- filtros + grid videoclips ---------- */
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
 @media(max-width:760px){
@@ -6,7 +7,7 @@
   .filters::-webkit-scrollbar{display:none}
   .chip{flex:none}
 }
-.chip{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--ls-label);text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--line);color:var(--mut);transition:.2s}
+.chip{font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;padding:9px 18px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--mut);transition:var(--d-1)}
 /* hover: relleno ámbar + texto hollín; seleccionado: relleno verde ácido */
 @media(hover:hover){.chip:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}}
 .chip.on,.chip.on:hover{background:var(--acid);border-color:var(--acid);color:var(--bg);font-weight:700}
@@ -15,43 +16,44 @@
 .work-card{cursor:pointer}
 .work-card.hidden{display:none}
 .work-more{display:flex;justify-content:center;margin-top:36px}
-#moreBtn{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--ls-label);text-transform:uppercase;
-  padding:13px 28px;border-radius:999px;border:1px solid var(--line);color:var(--txt);transition:.2s}
+#moreBtn{font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;
+  padding:13px 28px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--txt);transition:var(--d-1)}
 @media(hover:hover){#moreBtn:hover{background:var(--acid);border-color:var(--acid);color:var(--bg)}}
-.work-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);background:var(--card);
-  transition:border-color .35s var(--ease),box-shadow .35s var(--ease),transform .2s var(--ease)}
-.work-card:hover .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
-.work-media img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.6,.2,1),filter .4s;filter:saturate(.92)}
+.work-media{position:relative;aspect-ratio:16/9;border-radius:var(--r-md);overflow:hidden;border:1px solid var(--line);background:var(--card);
+  transition:border-color var(--d-2) var(--ease),box-shadow var(--d-2) var(--ease),transform var(--d-1) var(--ease)}
+.work-card:hover .work-media{border-color:color-mix(in srgb,var(--acc) 40%,transparent);box-shadow:0 18px 48px rgba(0,0,0,.45)}
+.work-media img{width:100%;height:100%;object-fit:cover;transition:transform var(--d-3) var(--e-out),filter var(--d-2);filter:saturate(.92)}
 .work-card:hover .work-media img{transform:scale(1.06);filter:saturate(1.08)}
-.work-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(26,23,20,.6));opacity:0;transition:.35s}
+.work-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--bg) 60%,transparent));opacity:0;transition:var(--d-2)}
 .work-card:hover .work-media::after{opacity:1}
-.play{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:.35s}
+.play{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:var(--d-2)}
 /* botón de preview: verde ácido, entra con resorte, anillos que se expanden y triángulo que acompaña */
 .play i{position:relative;width:68px;height:68px;border-radius:50%;background:var(--acid);display:grid;place-items:center;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 22px rgba(181,230,29,.28);
-  transform:scale(.55) rotate(-14deg);transition:transform .55s cubic-bezier(.34,1.56,.64,1),box-shadow .35s}
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 22px color-mix(in srgb,var(--acid) 28%,transparent);
+  transform:scale(.55) rotate(-14deg);transition:transform var(--d-3) var(--e-spring),box-shadow var(--d-2)}
 .play i::before,.play i::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--acid);opacity:0;pointer-events:none}
-.play svg{width:24px;height:24px;fill:var(--bg);margin:0;transform:translateX(-.5px);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}  /* centro óptico del triángulo (path 8→19 en 24) */
+.play svg{width:24px;height:24px;fill:var(--bg);margin:0;transform:translateX(-.5px);transition:transform var(--d-3) var(--e-spring)}  /* centro óptico del triángulo (path 8→19 en 24) */
 .work-card:hover .play{opacity:1}
 .work-card:hover .play i{transform:scale(1) rotate(0)}
-.work-card:hover .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
-.work-card:hover .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
+.work-card:hover .play i::before{animation:playRing 1.9s var(--e-out) .25s infinite}
+.work-card:hover .play i::after{animation:playRing 1.9s var(--e-out) 1.2s infinite}
 .work-card:hover .play svg{transform:translateX(-.5px) scale(1.08)}
 .work-card:active .play i{transform:scale(.9);transition-duration:.15s}
 /* mobile: la tarjeta que ocupa el centro de la pantalla toma el estado "hover" (clase .live, la pone el JS) */
-.work-card.live .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
+.work-card.live .work-media{border-color:color-mix(in srgb,var(--acc) 40%,transparent);box-shadow:0 18px 48px rgba(0,0,0,.45)}
 .work-card.live .work-media img{transform:scale(1.06);filter:saturate(1.08)}
 .work-card.live .work-media::after{opacity:1}
 .work-card.live .play{opacity:1}
 .work-card.live .play i{transform:scale(1) rotate(0)}
-.work-card.live .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
-.work-card.live .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
+.work-card.live .play i::before{animation:playRing 1.9s var(--e-out) .25s infinite}
+.work-card.live .play i::after{animation:playRing 1.9s var(--e-out) 1.2s infinite}
 .work-card.live .play svg{transform:translateX(-.5px) scale(1.08)}
 .work-card.live .work-media::before{opacity:1}
 @media(prefers-reduced-motion:reduce){.work-card.live .play i::before,.work-card.live .play i::after{animation:none}}
 @keyframes playRing{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.85)}}
 @media(prefers-reduced-motion:reduce){.work-card:hover .play i::before,.work-card:hover .play i::after{animation:none}}
 .work-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 4px 0}
-.work-meta h3{font-family:var(--disp);font-size:var(--fs-h3);font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
-.work-meta .mono{font-size:var(--fs-micro);color:var(--mut);letter-spacing:var(--ls-label);text-transform:uppercase;text-align:right;flex:none;max-width:55%;text-wrap:balance}
+.work-meta h3{font-family:var(--disp);font-size:var(--t-lg);font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
+.work-meta .mono{font-size:var(--t-xs);color:var(--mut);letter-spacing:var(--ls-label);text-transform:uppercase;text-align:right;flex:none;max-width:55%;text-wrap:balance}
 @media(max-width:480px){.work-meta{flex-direction:column;align-items:flex-start;gap:6px}.work-meta .mono{text-align:left;max-width:100%}}
+} /* fin @layer work */

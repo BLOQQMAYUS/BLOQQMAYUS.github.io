@@ -1,4 +1,7 @@
 /* tokens.css — Paleta Brasa y variables globales. Un color o medida nueva se declara ACÁ. */
+/* Orden de las capas = orden de carga. Una capa posterior gana sin pelear especificidad. */
+@layer tokens, base, nav, hero, work, vertical, services, contact, titles, work-cards, footer, overlays, reveal;
+@layer tokens {
 /* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
    Hollín #1A1714 · Brasa #B8321F · Ámbar #F2A51A
    Rodocrosita #D9737F · Hueso #F4EEE3 · Verde ácido #B5E61D (solo eventos)
@@ -16,8 +19,24 @@
   --disp:"Big Shoulders","Arial Narrow",Impact,sans-serif;
   --sans:"Helvetica Neue",Helvetica,Arial,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   --fs-micro:.68rem;--fs-label:.76rem;--fs-lead:clamp(1rem,1.6vw,1.15rem);--fs-h3:1.5rem;--ls-label:.14em;
-  --rad:16px;
-  --ease:cubic-bezier(.2,.7,.2,1); --ease-io:cubic-bezier(.65,0,.15,1);
+  --rad:var(--r-md);   /* alias viejo */
+  --ease:var(--e-out); --ease-io:var(--e-io);   /* alias viejos */
+
+  /* ── SISTEMA DE DISEÑO (F2) ─────────────────────────────────────────────
+     Toda medida nueva sale de acá. Escalas cortas a propósito: si un valor no
+     está, se elige el más cercano en vez de inventar uno. */
+  /* tipo: 9 pasos (texto fijo, títulos fluidos) */
+  --t-2xs:.64rem; --t-xs:.72rem; --t-sm:.875rem; --t-base:1rem; --t-md:1.15rem; --t-lg:1.5rem;
+  --t-xl:2.4rem; --t-2xl:clamp(2.4rem,6vw,4.8rem); --t-3xl:clamp(3rem,8vw,6rem);
+  /* espacio: grilla de 4/8 px */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:24px; --s-6:32px; --s-7:48px; --s-8:64px; --s-9:96px; --s-10:128px;
+  /* radios: 4 */
+  --r-sm:8px; --r-md:14px; --r-lg:24px; --r-pill:999px;
+  /* movimiento: 3 curvas × 3 duraciones */
+  --e-out:cubic-bezier(.2,.7,.2,1); --e-io:cubic-bezier(.65,0,.15,1); --e-spring:cubic-bezier(.34,1.56,.64,1);
+  --d-1:.16s; --d-2:.28s; --d-3:.48s;
+  /* superficies y tintas de apoyo (antes sueltas como hex) */
+  --ink:#12100D; --ink-deep:#0A0806; --surface-3:#3A332B; --txt-2:#D8D0C2; --dim:#6B6257; --acc-hi:#F7B83F;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -28,3 +47,4 @@ body{background:var(--bg);color:var(--txt);font-family:var(--body);line-height:1
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+} /* fin @layer tokens */

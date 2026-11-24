@@ -27,7 +27,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   por defecto. El catálogo son **26 videoclips** (FACE DE FURRO y FACTS, de BLOQQ MÁYUS,
   entraron en noviembre; CHEESY FUCK se retiró por el bloqueo +18).
   El botón **"¿Querés más? ↓"** ya NO despliega la grilla:
-  lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
+  lleva a **04 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
   El subtítulo del cartel es **solo la flecha ⇪, grande y en neón ámbar**
@@ -218,7 +218,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   (16:9, 9:16, 1:1, 4:5…): nunca se fuerza un crop uniforme.
 - **Todas las mesas de luz / previews oscurecen el fondo al 65%**
   (rgba(10,8,6,.65)): reels, mesas del Toolbox, modal y Galería 3D.
-- **04 · Toolbox: las mesas de luz están APAGADAS a propósito** (falta preparar
+- **03 · Servicios: las mesas de luz están APAGADAS a propósito** (falta preparar
   el contenido de cada rama). El interruptor es **`const LIGHTTABLES_ON = false`**
   en `index.html`: ponerlo en `true` reactiva TODO solo — el click de las 4
   tarjetas, las mesas y el `(Clickeá una)` del h2. No hay nada que reescribir.
@@ -436,3 +436,10 @@ Párrafo reducido (≈ 61 % del original). Una sola frase en el HTML (`#heroTail
 - `rel="noopener noreferrer"` en links externos; `referrer` restringido; `postMessage` con origen explícito.
 - `robots.txt`, `sitemap.xml` y `404.html` (con la estética del sitio) en la raíz.
 - Chequeo final (desktop 1280, mobile 375 y 320): sin violaciones de CSP, sin scroll horizontal, reel y Galería abren/cierran con ✕, Esc y botón atrás.
+
+## Sistema de diseño (F2, rama `saas`)
+Todas las medidas salen de `css/tokens.css`: tipo `--t-2xs…--t-3xl` (9 pasos), espacio `--s-1…--s-10`
+(grilla 4/8 px), radios `--r-sm/md/lg/pill`, movimiento `--e-out/--e-io/--e-spring` × `--d-1/2/3`.
+Colores de la paleta: `var(--acc)` etc.; transparencias con `color-mix(in srgb,var(--acc) 30%,transparent)`.
+Cada hoja va en su `@layer` (mismo orden que los `<link>`); `reveal` es la última capa.
+Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.

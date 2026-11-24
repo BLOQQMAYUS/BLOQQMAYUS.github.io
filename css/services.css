@@ -1,4 +1,5 @@
 /* services.css — 04 · Servicios: fichas e íconos animados. */
+@layer services {
 /* ---------- servicios: íconos de programa clickeables → mesa de luz ---------- */
 .servicios{background:transparent;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 /* Pistas/instrucciones: todas apagadas por el interruptor TIPS_ON.
@@ -6,32 +7,32 @@
 .no-tips .tip{display:none!important}
 .h2-hint{font-size:.42em;font-weight:400;color:var(--mut);letter-spacing:.02em;white-space:nowrap}
 .serv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:10px}
-@media(max-width:600px){.serv-grid{grid-template-columns:1fr;gap:20px}}
+@media(max-width:640px){.serv-grid{grid-template-columns:1fr;gap:20px}}
 /* Ficha: título y texto abajo a la izquierda; ícono de línea fino, entero y tenue a la derecha */
 .serv{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:14px;min-height:280px;overflow:hidden;
-  background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:64px 36px 34px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:64px 36px 34px;
   cursor:pointer;font-family:var(--body);color:var(--txt);-webkit-tap-highlight-color:transparent;
-  transition:opacity .7s ease,transform .45s cubic-bezier(.2,.7,.2,1),border-color .35s}
-@media(max-width:600px){.serv{min-height:220px;padding:58px 26px 28px}}
+  transition:opacity .7s ease,transform var(--d-3) var(--e-out),border-color var(--d-2)}
+@media(max-width:640px){.serv{min-height:220px;padding:58px 26px 28px}}
 /* luz que sigue al puntero (variables --mx/--my desde JS) */
-.serv::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .45s;
-  background:radial-gradient(300px circle at var(--mx,75%) var(--my,100%),rgba(242,165,26,.14),rgba(242,165,26,0) 70%)}
+.serv::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity var(--d-3);
+  background:radial-gradient(300px circle at var(--mx,75%) var(--my,100%),color-mix(in srgb,var(--acc) 14%,transparent),color-mix(in srgb,var(--acc) 0%,transparent) 70%)}
 .serv:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 .serv:active{transform:scale(.985)}
 .serv-off{cursor:default}
 .serv-off:active{transform:none}
 .serv-no{position:absolute;top:26px;left:36px;display:flex;align-items:center;font:700 .74rem/1 var(--mono);letter-spacing:.16em;color:var(--acc)}
-@media(max-width:600px){.serv-no{left:26px;top:22px}}
-.serv-no::after{content:"";height:1px;width:0;margin-left:0;background:var(--acc);transition:width .5s cubic-bezier(.2,.7,.2,1),margin .5s}
-.serv-ico{position:absolute;right:30px;bottom:30px;pointer-events:none;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+@media(max-width:640px){.serv-no{left:26px;top:22px}}
+.serv-no::after{content:"";height:1px;width:0;margin-left:0;background:var(--acc);transition:width var(--d-3) var(--e-out),margin var(--d-3)}
+.serv-ico{position:absolute;right:30px;bottom:30px;pointer-events:none;transition:transform var(--d-3) var(--e-out)}
 .serv-ico svg{display:block;width:clamp(122px,15.5vw,172px);height:auto;overflow:visible}
 .serv-ico svg.ic-car{width:clamp(150px,18.5vw,226px)}
 .serv h3,.serv p{position:relative;max-width:54%}
 .serv:has(.ic-car) :is(h3,p){max-width:48%}
-.serv h3{font-family:var(--disp);font-size:1.7rem;font-weight:800;letter-spacing:.02em;line-height:1.08;text-transform:uppercase;transition:color .35s,transform .45s cubic-bezier(.2,.7,.2,1)}
-.serv p{color:var(--mut);font-size:.92rem;line-height:1.6;margin:0;transition:transform .45s cubic-bezier(.2,.7,.2,1) .03s}
-@media(max-width:600px){.serv h3,.serv p{max-width:58%}.serv:has(.ic-car) :is(h3,p){max-width:47%}.serv-ico{right:12px;bottom:26px}.serv-ico svg{width:104px}.serv-ico svg.ic-car{width:146px}}
-.serv-line{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--rosa);line-height:1.7}
+.serv h3{font-family:var(--disp);font-size:var(--t-lg);font-weight:800;letter-spacing:.02em;line-height:1.08;text-transform:uppercase;transition:color var(--d-2),transform var(--d-3) var(--e-out)}
+.serv p{color:var(--mut);font-size:var(--t-sm);line-height:1.6;margin:0;transition:transform var(--d-3) var(--e-out) .03s}
+@media(max-width:640px){.serv h3,.serv p{max-width:58%}.serv:has(.ic-car) :is(h3,p){max-width:47%}.serv-ico{right:12px;bottom:26px}.serv-ico svg{width:104px}.serv-ico svg.ic-car{width:146px}}
+.serv-line{font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--rosa);line-height:1.7}
 
 /* ====== Animaciones de los íconos: se disparan con .go (al verse la ficha, al pasar el mouse o tocar).
    Sin .go cada ícono queda en su pose final. ====== */
@@ -42,9 +43,9 @@
 .ic-clap .cl-body{transform-box:view-box;transform-origin:80px 110px}
 .ic-clap .cl-arm{transform-box:view-box;transform-origin:30px 39px}
 @keyframes clIn{0%{transform:scale(.35);opacity:0}55%{transform:scale(1.07);opacity:1}78%{transform:scale(.985)}100%{transform:scale(1);opacity:1}}
-@keyframes clArm{0%,34%{transform:rotate(0);animation-timing-function:cubic-bezier(.2,.8,.3,1)}54%,66%{transform:rotate(-32deg);animation-timing-function:cubic-bezier(.6,0,1,.6)}72%{transform:rotate(0);animation-timing-function:cubic-bezier(.2,.8,.4,1)}78%{transform:rotate(-4.5deg);animation-timing-function:ease-in-out}88%,100%{transform:rotate(0)}}
+@keyframes clArm{0%,34%{transform:rotate(0);animation-timing-function:var(--e-out)}54%,66%{transform:rotate(-32deg);animation-timing-function:cubic-bezier(.6,0,1,.6)}72%{transform:rotate(0);animation-timing-function:var(--e-out)}78%{transform:rotate(-4.5deg);animation-timing-function:ease-in-out}88%,100%{transform:rotate(0)}}
 @keyframes clHit{0%,71%{transform:none}73%{transform:translateY(1.8px) scaleY(.985)}80%{transform:translateY(-.5px)}88%,100%{transform:none}}
-.serv.go .ic-clap .cl{animation:clIn .5s cubic-bezier(.2,.9,.3,1) backwards,clIdle 4.8s ease-in-out 1.5s infinite}
+.serv.go .ic-clap .cl{animation:clIn .5s var(--e-out) backwards,clIdle 4.8s ease-in-out 1.5s infinite}
 @keyframes clIdle{0%,100%{transform:scale(1)}25%{transform:scale(1.04)}75%{transform:scale(.97)}}
 .serv.go .ic-clap .cl-arm{animation:clArm 1.5s linear backwards}
 .serv.go .ic-clap .cl-body{animation:clHit 1.5s linear backwards}
@@ -55,14 +56,14 @@
 @keyframes tlBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @keyframes tlPh{0%{transform:translateX(24px);opacity:0}7%{opacity:1}78%{transform:translateX(104.5px);animation-timing-function:ease-out}100%{transform:translateX(102px);opacity:1}}
 .ic-tl .tl-st{transform-box:view-box;transform-origin:80px 61px}
-.serv.go .ic-tl .tl-st{animation:tlFade .3s cubic-bezier(.2,.9,.3,1.15) backwards}
-.serv.go .ic-tl .tl-b{animation:tlBar .36s cubic-bezier(.55,0,.25,1) var(--d) backwards}
-.serv.go .ic-tl .tl-ph{animation:tlPh .7s cubic-bezier(.55,0,.2,1) .95s backwards}
+.serv.go .ic-tl .tl-st{animation:tlFade .3s var(--e-spring) backwards}
+.serv.go .ic-tl .tl-b{animation:tlBar .36s var(--e-io) var(--d) backwards}
+.serv.go .ic-tl .tl-ph{animation:tlPh .7s var(--e-io) .95s backwards}
 /* Torino: entra de derecha a izquierda, ruedas girando y humo ~2 s */
 .ic-car .car-run{transform-origin:50% 100%}
 .ic-car .wheel{transform-origin:center}
 .ic-car .car-smoke circle{opacity:0;transform-origin:center}
-@keyframes carRun{0%{transform:translateX(58px);animation-timing-function:cubic-bezier(.08,.7,.22,1)}58%{transform:translateX(.3px) rotate(0)}72%{transform:rotate(-1.8deg);animation-timing-function:ease-out}86%{transform:rotate(.6deg)}100%{transform:none}}
+@keyframes carRun{0%{transform:translateX(58px);animation-timing-function:var(--e-out)}58%{transform:translateX(.3px) rotate(0)}72%{transform:rotate(-1.8deg);animation-timing-function:ease-out}86%{transform:rotate(.6deg)}100%{transform:none}}
 @keyframes carWheel{from{transform:rotate(0)}to{transform:rotate(-2880deg)}}
 @keyframes wheelIdle{from{transform:rotate(0)}to{transform:rotate(-360deg)}}
 .ic-car .car-smoke circle.ip{animation:none!important}
@@ -84,12 +85,12 @@
 @keyframes phSp{0%{transform:scale(0) rotate(-120deg);opacity:0}65%{transform:scale(1.35) rotate(12deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
 @keyframes spPulse{0%,100%{scale:1}50%{scale:1.22}}
 @keyframes spTurn{to{rotate:360deg}}
-.serv.go .ic-ph .ph-f{animation:phF .45s cubic-bezier(.2,.9,.3,1.1) backwards}
-.serv.go .ic-ph .ph-l{animation:phL .55s cubic-bezier(.25,.85,.3,1) .35s backwards}
-.serv.go .ic-ph .ph-r{animation:phR .55s cubic-bezier(.25,.85,.3,1) .55s backwards}
-.serv.go .ic-ph .sp1{animation:phSp .45s cubic-bezier(.3,1.2,.4,1) 1.0s backwards,spPulse 2.4s ease-in-out 1.45s infinite,spTurn 14.4s linear 1.45s infinite}
-.serv.go .ic-ph .sp2{animation:phSp .45s cubic-bezier(.3,1.2,.4,1) 1.12s backwards,spPulse 2.4s ease-in-out 1.57s infinite,spTurn 14.4s linear 1.57s infinite}
-.serv.go .ic-ph .sp3{animation:phSp .45s cubic-bezier(.3,1.2,.4,1) 1.24s backwards,spPulse 2.4s ease-in-out 1.69s infinite,spTurn 14.4s linear 1.69s infinite}
+.serv.go .ic-ph .ph-f{animation:phF .45s var(--e-spring) backwards}
+.serv.go .ic-ph .ph-l{animation:phL .55s var(--e-out) .35s backwards}
+.serv.go .ic-ph .ph-r{animation:phR .55s var(--e-out) .55s backwards}
+.serv.go .ic-ph .sp1{animation:phSp .45s var(--e-spring) 1.0s backwards,spPulse 2.4s ease-in-out 1.45s infinite,spTurn 14.4s linear 1.45s infinite}
+.serv.go .ic-ph .sp2{animation:phSp .45s var(--e-spring) 1.12s backwards,spPulse 2.4s ease-in-out 1.57s infinite,spTurn 14.4s linear 1.57s infinite}
+.serv.go .ic-ph .sp3{animation:phSp .45s var(--e-spring) 1.24s backwards,spPulse 2.4s ease-in-out 1.69s infinite,spTurn 14.4s linear 1.69s infinite}
 
 /* Hover (solo mouse): la ficha sube, se enciende y el ícono vuelve a animarse */
 @media(hover:hover) and (pointer:fine){
@@ -103,3 +104,4 @@
 @media(prefers-reduced-motion:reduce){
   .serv *,.serv::before{animation:none!important;transition:none!important}
 }
+} /* fin @layer services */
