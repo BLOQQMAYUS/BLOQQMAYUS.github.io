@@ -451,7 +451,7 @@ Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
 - **Rueda**: cada pieza con marco de celular + puntos (`#wheelDots`, `wheelGoto`).
 - **Servicios en bento** (≥1024 px): 01–03 horizontales en dos columnas y **04 · Contenido Vertical en vertical** (columna derecha, alta, como un celular). Sin bloque «Cómo trabajo» (sacado a pedido).
 - **Contacto**: sin botón copiar aparte; **click en el botón del email copia la dirección** y muestra un aviso sutil «Copiado ✓» (1,6 s). Si el navegador no deja copiar, abre el `mailto:`; Ctrl/rueda siguen abriendo el mail (`js/bind.js`). **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.
-- **Pie**: solo la marca + «Director creativo y realizador audiovisual.» (sin columnas Secciones/Contacto/Redes: ya están en Contacto, justo arriba). En celu la píldora «Disponible… 24 hs» se ve entera (letra más chica ≤370 px).
+- **Pie**: una sola barra «Francisco Benítez ⇪ Buenos Aires · 2026» + LED «INDUSTRIA ARGENTINA» (sin bloque de marca ni columnas: contacto y redes están en Contacto, justo arriba). En celu la píldora «Disponible… 24 hs» se ve entera (letra más chica ≤370 px).
 
 ## Rendimiento y SEO (F5, rama `saas`)
 - **Medir**: `node tests/perf.mjs [veces] [--lista]` → FCP, LCP, CLS, TBT, peso y pedidos en celu (CPU ×4 + 4G lenta,
