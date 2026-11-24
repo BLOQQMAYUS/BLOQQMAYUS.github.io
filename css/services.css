@@ -63,7 +63,9 @@
 .serv.go .ic-clap .cl-arm{animation:clArm 1.5s linear backwards}
 .serv.go .ic-clap .cl-body{animation:clHit 1.5s linear backwards}
 /* timeline: marco que se traza, barras que cargan, playhead que recorre */
-.ic-tl .tl-b{transform-origin:0 50%}
+/* un clip por capa, en escalera: cada uno empieza donde termina el anterior y entre los tres cubren el tiempo entero;
+   cada clip crece desde su propio inicio (fill-box) */
+.ic-tl .tl-b{transform-box:fill-box;transform-origin:0 50%}
 .ic-tl .tl-ph{transform:translateX(102px)}
 @keyframes tlFade{from{opacity:0;transform:translateY(10px) scale(.82)}to{opacity:1;transform:none}}
 @keyframes tlBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
