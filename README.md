@@ -11,7 +11,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   en cada carga (Fisher–Yates sobre `workOrder`). Al agregar links/videos
   nuevos, entran al pool y se mezclan con el resto — sin prioridad por fecha.
   `CONFIG.films` se mantiene en orden cronológico solo como archivo de datos.
-  El pliegue muestra **8** en computadora y **5 en celular** (`FOLD = 8`,
+  El pliegue muestra **6** en computadora y **5 en celular** (`FOLD = 6`,
   `FOLD_SM = 5`, breakpoint 760px — en celu la grilla es de una columna y la
   sección se haría larguísima). Se recalcula solo al cambiar el breakpoint.
   **El pliegue cumple tres reglas** (`buildWorkOrder`): **nunca más de
