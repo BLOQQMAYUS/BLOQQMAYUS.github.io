@@ -70,7 +70,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   placa en vw se desborda y queda descentrada en celu.
   `.hn-tube`/`.hn-low` llevan `white-space:nowrap`, así en mobile cada bloque
   baja entero y el cartel queda en 3 renglones.
-- **Todo el header va CENTRADO** (cartel, párrafo y "Ver showreel"), **menos
+- **Todo el header va CENTRADO** (cartel, párrafo y "Showreel"), **menos
   "REC · FRANCISCO BENÍTEZ · CABA", que queda SIEMPRE a la izquierda.**
 - **Interfaz de cámara grabando** (decorativa, `aria-hidden`): cuatro escuadras
   ámbar finas (`.cam-c`, 1px al 34%) más dos hairlines ámbar — una detrás del
@@ -156,7 +156,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   `<body>` arranca con `no-tips` para que no haya parpadeo. Para prender todas,
   `TIPS_ON = true`; para prender solo una, quitarle la clase `.tip`.
   **La Galería 3D ya no tiene ninguna línea de instrucción.**
-- **El hero tiene un solo botón: "Ver showreel".** El "Ver videoclips" se
+- **El hero tiene un solo botón: "Showreel".** El "Ver videoclips" se
   eliminó por pedido.
 - **Footer: `.foot-ind` con LED rojo titilante + "INDUSTRIA ARGENTINA".**
 - **Toolbox (textos e íconos vigentes)**: *Dirección creativa* (claqueta) ·
