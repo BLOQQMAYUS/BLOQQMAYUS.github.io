@@ -240,7 +240,7 @@
     animation:blink 2.2s infinite;animation-play-state:paused}
   .hn-acid::after{content:"";position:absolute;left:100%;margin-left:.12em;top:.1em;width:.09em;height:.96em;border-radius:.02em;
     background:#fff;box-shadow:0 0 2px #fff,0 0 6px #fff,0 0 14px var(--acid),0 0 26px var(--acid),0 0 48px var(--acid),0 0 92px rgba(181,230,29,.5);
-    animation:caretBlink 1.1s steps(1,end) infinite;animation-play-state:paused}
+    animation:caretSoft 1.1s ease-in-out infinite;animation-play-state:paused}
   .hero-neon.lit .hn-amber::after,.hero-neon.lit .hn-acid::after{animation-play-state:running}
   @keyframes caretBlink{0%,49.9%{opacity:1}50%,100%{opacity:0}}
   @media(prefers-reduced-motion:reduce){.hn-amber::after{animation:none}.hn-acid::after{animation:none;opacity:1}}
@@ -312,10 +312,13 @@
   /* ---------- secciones ---------- */
   section{padding:110px 0}
   .sec-head{margin-bottom:48px;max-width:760px}
-  .kicker{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:.24em;text-transform:uppercase;color:var(--acc);margin-bottom:14px;display:flex;align-items:center;gap:12px}
-  .kicker::after{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
+  /* rótulo de sección: número ámbar (ancla) + palabra clave en hueso, más grande y con menos tracking */
+  .kicker{font-family:var(--mono);font-size:clamp(.8rem,1.1vw,.92rem);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(244,238,227,.88);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+  .kicker b{color:var(--acc);font-weight:700}
+  /* riel: línea que ocupa el ancho disponible y se apaga hacia la derecha */
+  .kicker{width:85%}
+  .kicker::after{content:"";flex:1;min-width:24px;height:1px;background:linear-gradient(90deg,var(--acc),rgba(242,165,26,0))}
   .nw{white-space:nowrap}
-  @media(max-width:480px){.kicker::after{display:none}}
   h2{font-family:var(--disp);font-size:clamp(2.7rem,6.4vw,4.8rem);font-weight:800;letter-spacing:.01em;line-height:1.08;text-transform:uppercase}
   .sec-desc{color:var(--mut);margin-top:14px;font-size:var(--fs-lead)}
 
@@ -327,8 +330,9 @@
     .chip{flex:none}
   }
   .chip{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--ls-label);text-transform:uppercase;padding:9px 18px;border-radius:999px;border:1px solid var(--line);color:var(--mut);transition:.2s}
-  .chip:hover{color:var(--txt);border-color:rgba(244,238,227,.35)}
-  .chip.on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:700}
+  /* hover: relleno ámbar + texto hollín; seleccionado: relleno verde ácido */
+  @media(hover:hover){.chip:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}}
+  .chip.on,.chip.on:hover{background:var(--acid);border-color:var(--acid);color:var(--bg);font-weight:700}
   .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
   @media(max-width:760px){.work-grid{grid-template-columns:1fr}}
   .work-card{cursor:pointer}
@@ -345,10 +349,31 @@
   .work-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(26,23,20,.6));opacity:0;transition:.35s}
   .work-card:hover .work-media::after{opacity:1}
   .play{position:absolute;inset:0;display:grid;place-items:center;z-index:2;opacity:0;transition:.35s}
-  .play i{width:64px;height:64px;border-radius:50%;background:var(--brasa);display:grid;place-items:center;box-shadow:0 10px 34px rgba(0,0,0,.5);transform:scale(.8);transition:.35s}
-  .play svg{width:22px;height:22px;fill:var(--txt);margin-left:3px}
+  /* botón de preview: verde ácido, entra con resorte, anillos que se expanden y triángulo que acompaña */
+  .play i{position:relative;width:68px;height:68px;border-radius:50%;background:var(--acid);display:grid;place-items:center;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 22px rgba(181,230,29,.28);
+    transform:scale(.55) rotate(-14deg);transition:transform .55s cubic-bezier(.34,1.56,.64,1),box-shadow .35s}
+  .play i::before,.play i::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--acid);opacity:0;pointer-events:none}
+  .play svg{width:24px;height:24px;fill:var(--bg);margin-left:4px;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
   .work-card:hover .play{opacity:1}
-  .work-card:hover .play i{transform:scale(1)}
+  .work-card:hover .play i{transform:scale(1) rotate(0)}
+  .work-card:hover .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
+  .work-card:hover .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
+  .work-card:hover .play svg{transform:scale(1.08) translateX(1px)}
+  .work-card:active .play i{transform:scale(.9);transition-duration:.15s}
+  /* mobile: la tarjeta que ocupa el centro de la pantalla toma el estado "hover" (clase .live, la pone el JS) */
+  .work-card.live .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
+  .work-card.live .work-media img{transform:scale(1.06);filter:saturate(1.08)}
+  .work-card.live .work-media::after{opacity:1}
+  .work-card.live .play{opacity:1}
+  .work-card.live .play i{transform:scale(1) rotate(0)}
+  .work-card.live .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
+  .work-card.live .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
+  .work-card.live .play svg{transform:scale(1.08) translateX(1px)}
+  .work-card.live .work-media::before{opacity:1}
+  @media(prefers-reduced-motion:reduce){.work-card.live .play i::before,.work-card.live .play i::after{animation:none}}
+  @keyframes playRing{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.85)}}
+  @media(prefers-reduced-motion:reduce){.work-card:hover .play i::before,.work-card:hover .play i::after{animation:none}}
   .work-meta{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:16px 4px 0}
   .work-meta h3{font-family:var(--disp);font-size:var(--fs-h3);font-weight:800;letter-spacing:.02em;line-height:1.05;text-transform:uppercase}
   .work-meta .mono{font-size:var(--fs-micro);color:var(--mut);letter-spacing:var(--ls-label);text-transform:uppercase;text-align:right;flex:none;max-width:55%;text-wrap:balance}
@@ -485,7 +510,8 @@
   /* ---------- contacto ---------- */
   .contact{background:transparent;border-top:1px solid var(--line);text-align:center}
   .contact .kicker{justify-content:center}
-  .contact .kicker::before{content:"";height:1px;width:56px;background:var(--acc);opacity:.5}
+  .contact .kicker{margin-left:auto;margin-right:auto}
+  .contact .kicker::before{content:"";flex:1;min-width:24px;height:1px;background:linear-gradient(270deg,var(--acc),rgba(242,165,26,0))}
   .contact h2{font-size:clamp(3rem,8.5vw,6rem)}
   .contact h2 em{font-style:normal}
   .contact h2 .nw{color:var(--acc)}
@@ -595,7 +621,14 @@
   .ty.on{opacity:1}
   .ty.cur::after{content:"";position:absolute;left:100%;margin-left:.24em;top:.1em;width:.09em;height:.96em;border-radius:.02em;
     background:#fff;box-shadow:0 0 2px #fff,0 0 6px #fff,0 0 14px var(--acid),0 0 26px var(--acid),0 0 48px var(--acid),0 0 92px rgba(181,230,29,.5)}
-  .ty.cur.idle::after{animation:caretBlink 1.1s steps(1,end) infinite}
+  /* aparición suave de la barra (solo en la 1.ª letra), parpadeo con fundido corto y salida en fade */
+  .ty.cur.first::after{animation:caretIn .38s cubic-bezier(.2,.8,.3,1) both}
+  /* 4 titileos exactos; el último queda apagado, así al sacar la barra no hay salto */
+  .ty.cur.idle::after{animation:caretFour 4.4s ease-in-out forwards}
+  @keyframes caretFour{0%,10%{opacity:1}14%,21%{opacity:.04}25%,35%{opacity:1}39%,46%{opacity:.04}50%,60%{opacity:1}64%,71%{opacity:.04}75%,85%{opacity:1}89%,100%{opacity:0}}
+  @keyframes caretIn{from{opacity:0;transform:scaleY(.35)}60%{opacity:1}to{opacity:1;transform:none}}
+  @keyframes caretSoft{0%,40%{opacity:1}56%,84%{opacity:.04}100%{opacity:1}}
+  @keyframes caretOut{from{opacity:1;transform:none}to{opacity:0;transform:scaleY(.35)}}
   /* ---- tarjetas de obras con vida: inclinación 3D, brillo que sigue al mouse y loop mudo ---- */
   .work-media{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));will-change:transform}
   .work-card:active .work-media{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(.99)}
@@ -782,7 +815,7 @@
   <section id="trabajo">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="kicker">01 · MONTAJE | EDICIÓN | VFX</div>
+        <div class="kicker"><b>01 ·</b> Videoclips</div>
         <h2>Videoclips oficiales</h2>
         <p class="sec-desc">Proyectos pensados desde el brief y trabajados en Premiere Pro, After Effects, Photoshop, Illustrator, mas herramientas de IA agéntica / generativa para potenciar el workflow.</p>
       </div>
@@ -796,7 +829,7 @@
   <section id="vertical" class="vertical">
     <div class="wrap">
       <div class="sec-head reveal" style="margin-bottom:26px">
-        <div class="kicker">02 · Proyectos 2D / 3D — últimos trabajos</div>
+        <div class="kicker"><b>02 ·</b> Animación 2D y 3D</div>
         <h2 class="h-big">Contenido vertical</h2>
       </div>
     </div>
@@ -814,8 +847,8 @@
   <section id="servicios" class="servicios">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="kicker">04 · Toolbox — servicios</div>
-        <h2>Mi sistema,<br>tus resultados <span class="h2-hint tip">(Clickeá una)</span></h2>
+        <div class="kicker"><b>04 ·</b> Servicios</div>
+        <h2>Mi sistema,<br>tus resultados. <span class="h2-hint tip">(Clickeá una)</span></h2>
       </div>
       <div class="serv-grid">
         <button type="button" class="serv reveal" data-lt="direccion">
@@ -849,7 +882,7 @@
   <!-- ============ 05 · CONTACTO ============ -->
   <section id="contacto" class="contact">
     <div class="wrap reveal" id="contactBox">
-      <div class="kicker">05 · Contacto</div>
+      <div class="kicker"><b>05 ·</b> Contacto</div>
       <h2>activá el <span class="nw">bloqq <em>MÁYUS</em></span></h2>
       <button class="neon" id="ledBtn" aria-label="Abrir la Galería 3D" title="Abrir la Galería 3D">
         <span class="neon-box">
@@ -962,7 +995,7 @@ const CONFIG = {
   showreel: { title: "Reel 2026", img: "assets/showreel.jpg", video: "https://www.youtube.com/watch?v=Csj207PWog0" },
   clients: ["MUSHER", "TIERRAS RARAS", "DANO", "MIR NICOLAS", "CEROUNNO", "H DE PERRA", "EL MORTEDOR", "LOW", "B13X", "LASISTTA", "SHOWSA", "MARTOCHA", "DINÁMICA", "iQ.NO1", "MAYOR R", "BLOQQ MÁYUS"],
   socials: [
-    { id: "instagram", label: "@bloqqmayus", url: "https://instagram.com/bloqqmayus" },
+    { id: "instagram", label: "Instagram", url: "https://instagram.com/bloqqmayus" },
     { id: "youtube",   label: "YouTube",     url: "https://youtube.com/@bloqqmayus" },
     { id: "linkedin",  label: "LinkedIn",    url: "https://www.linkedin.com/in/franciscosben%C3%ADtez/" }
   ],
@@ -1994,10 +2027,17 @@ setInterval(() => {
       io.unobserve(en.target);
       const spans = en.target._ty; let i = 0, prev = null;
       const tick = () => {
-        if (i >= spans.length) { if (prev) { prev.classList.add("idle"); setTimeout(() => prev.classList.remove("cur", "idle"), 2600); } return; }
+        if (i >= spans.length) {
+          if (prev) {
+            const last = prev; last.classList.add("idle");
+            /* 4 titileos (4,4 s): termina apagada, recién ahí se quita la barra */
+            setTimeout(() => last.classList.remove("cur", "idle", "first"), 4500);
+          }
+          return;
+        }
         const s = spans[i++]; s.classList.add("on");
         if (prev) prev.classList.remove("cur");
-        s.classList.add("cur"); prev = s;
+        s.classList.add("cur"); if (i === 1) s.classList.add("first"); prev = s;
         setTimeout(tick, /\s/.test(s.textContent) ? 40 : 70);
       };
       tick();
@@ -2024,7 +2064,10 @@ setInterval(() => {
 
 /* ---- tarjetas de obras: inclinación 3D + brillo + loop mudo al quedarse encima (solo mouse) ---- */
 (function () {
-  if (!matchMedia("(hover:hover) and (pointer:fine)").matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
+  const touch = matchMedia("(hover:none)").matches;
+  if (!fine && !touch) return;
   const grid = document.getElementById("workGrid");
   const conn = navigator.connection || {};
   const canPreview = !conn.saveData;
@@ -2053,6 +2096,47 @@ setInterval(() => {
     if (st === 1) { clearTimeout(pvTimer); pv.parentNode.classList.add("vid-on"); }
     else if (d && d.event === "onError") stopPreview();
   });
+  /* ---- mobile: la tarjeta del centro de la pantalla se "activa" sola; 1.er toque = preview, 2.º = modal ---- */
+  if (touch) {
+    let armed = null, ticking = false;
+    const setLive = card => {
+      if (card === cur) return;
+      stopPreview();
+      if (cur) cur.classList.remove("live");
+      cur = card; armed = null;
+      if (!card) return;
+      card.classList.add("live");
+      card.style.setProperty("--gx", "50%"); card.style.setProperty("--gy", "50%");
+      dwell = setTimeout(() => startPreview(card), 800);
+    };
+    const pick = () => {
+      ticking = false;
+      if (document.hidden || document.body.style.overflow === "hidden") { setLive(null); return; }
+      const mid = innerHeight / 2; let best = null, bd = innerHeight * .22;
+      grid.querySelectorAll(".work-card").forEach(c => {
+        const r = c.querySelector(".work-media").getBoundingClientRect();
+        if (!r.height) return;
+        const d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < bd) { bd = d; best = c; }
+      });
+      setLive(best);
+    };
+    const queue = () => { if (!ticking) { ticking = true; requestAnimationFrame(pick); } };
+    addEventListener("scroll", queue, { passive: true });
+    addEventListener("resize", queue);
+    document.addEventListener("visibilitychange", queue);
+    pick();
+    grid.addEventListener("click", e => {
+      const card = e.target.closest(".work-card"); if (!card) return;
+      const playable = canPreview && card.querySelector("img[data-yt]");
+      if (!playable || armed === card) return;          /* 2.º toque (o sin preview posible): sigue al modal */
+      e.preventDefault(); e.stopPropagation();
+      armed = card;
+      if (card !== cur) { card.scrollIntoView({ behavior: "smooth", block: "center" }); setLive(card); armed = card; }
+      else if (!pv) { clearTimeout(dwell); startPreview(card); }
+    }, true);
+    return;
+  }
   grid.addEventListener("pointermove", e => {
     const card = e.target.closest(".work-card"); if (!card) return;
     const m = card.querySelector(".work-media"); const r = m.getBoundingClientRect();

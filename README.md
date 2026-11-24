@@ -42,7 +42,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   y se salta al tope — antes el navegador restauraba a medias el scroll y la
   recarga se veía rara.
 - **Textos vigentes de 04 y 05**: h2 de 04 **"Mi sistema,
-  (salto de línea) tus resultados"**; Post **"Edición, etalonaje, VFX, animación 2D/3D y mograph son
+  (salto de línea) tus resultados."** (con punto final); Post **"Edición, etalonaje, VFX, animación 2D/3D y mograph son
   la materia prima."**; Vertical **"La ola de contenido nunca frena. Paquetes
   9:16 para Reels, TikTok y Shorts."**; Contacto **"Contame tu proyecto — de tu
   idea pasamos al brief, y mi sistema devuelve RESULTADOS."**. El párrafo de
