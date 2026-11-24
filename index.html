@@ -354,12 +354,12 @@
     box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),0 10px 28px rgba(0,0,0,.5),0 0 22px rgba(181,230,29,.28);
     transform:scale(.55) rotate(-14deg);transition:transform .55s cubic-bezier(.34,1.56,.64,1),box-shadow .35s}
   .play i::before,.play i::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--acid);opacity:0;pointer-events:none}
-  .play svg{width:24px;height:24px;fill:var(--bg);margin-left:4px;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+  .play svg{width:24px;height:24px;fill:var(--bg);margin:0;transform:translateX(-.5px);transition:transform .5s cubic-bezier(.34,1.56,.64,1)}  /* centro óptico del triángulo (path 8→19 en 24) */
   .work-card:hover .play{opacity:1}
   .work-card:hover .play i{transform:scale(1) rotate(0)}
   .work-card:hover .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
   .work-card:hover .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
-  .work-card:hover .play svg{transform:scale(1.08) translateX(1px)}
+  .work-card:hover .play svg{transform:translateX(-.5px) scale(1.08)}
   .work-card:active .play i{transform:scale(.9);transition-duration:.15s}
   /* mobile: la tarjeta que ocupa el centro de la pantalla toma el estado "hover" (clase .live, la pone el JS) */
   .work-card.live .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
@@ -369,7 +369,7 @@
   .work-card.live .play i{transform:scale(1) rotate(0)}
   .work-card.live .play i::before{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) .25s infinite}
   .work-card.live .play i::after{animation:playRing 1.9s cubic-bezier(.2,.6,.3,1) 1.2s infinite}
-  .work-card.live .play svg{transform:scale(1.08) translateX(1px)}
+  .work-card.live .play svg{transform:translateX(-.5px) scale(1.08)}
   .work-card.live .work-media::before{opacity:1}
   @media(prefers-reduced-motion:reduce){.work-card.live .play i::before,.work-card.live .play i::after{animation:none}}
   @keyframes playRing{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(1.85)}}
