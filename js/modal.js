@@ -48,7 +48,7 @@ function fillModal(item) {
   facts.innerHTML = (item.facts || []).filter(([, v]) => v)
     .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
   const ext = document.getElementById("modalExt");
-  if (item.video) {
+  if (item.video && /^https:\/\//i.test(item.video)) {   /* solo https: nunca javascript:/data: en el enlace */
     ext.hidden = false;
     ext.href = item.video;
     ext.textContent = /vimeo\.com/.test(item.video) ? "Ver en Vimeo ↗" : (/youtube|youtu\.be/.test(item.video) ? "Ver en YouTube ↗" : "Abrir video ↗");

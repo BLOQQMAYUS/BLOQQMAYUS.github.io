@@ -176,6 +176,8 @@ function armThumb(img) {
   img.addEventListener("error", next);
   img.addEventListener("load", () => { if (img.naturalWidth > 0 && img.naturalWidth <= 120) next(); });
 }
+/* escape HTML: los datos son propios, pero nada se interpola crudo */
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 function cardHTML(it, i) {
   const demo = it.copy ? '<span class="demo">copia</span>' : "";
   const img = posterOf(it);
@@ -183,13 +185,13 @@ function cardHTML(it, i) {
   const local = ytid ? "../../assets/real/" + ytid + ".jpg" : "";
   if (it.kind === "reel" && !img) {
     return `<article class="vcard reel${it.is3d ? " is3d" : ""}" data-i="${i}">
-      <span class="n">${pad2(i + 1)}</span><span class="t">${it.title}</span>
-      <span class="g">${it.group} · reel${it.is3d ? " · 3D" : ""}</span>
+      <span class="n">${pad2(i + 1)}</span><span class="t">${esc(it.title)}</span>
+      <span class="g">${esc(it.group)} · reel${it.is3d ? " · 3D" : ""}</span>
       ${demo}<i class="pl">${PLAY}</i></article>`;
   }
   return `<article class="vcard ${it.kind} poster${it.is3d ? " is3d" : ""}" data-i="${i}">
-    <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${img}" data-yt="${ytid}" data-local="${local}" alt="" draggable="false">
-    ${demo}<span class="cap">${it.title}<em>${it.author}</em></span></article>`;
+    <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="${esc(img)}" data-yt="${esc(ytid)}" data-local="${esc(local)}" alt="" draggable="false">
+    ${demo}<span class="cap">${esc(it.title)}<em>${esc(it.author)}</em></span></article>`;
 }
 /* estrellas: canvas 2D detrás del corredor, con la MISMA proyección que #stage
    (perspective 900, origen al centro). Cada estrella es un sprite radial
