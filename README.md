@@ -464,3 +464,11 @@ Párrafo reducido (≈ 61 % del original). Dos versiones en el mismo `<p class="
 ## Escala tipográfica (variables en :root)
 - `--fs-micro .68rem` (metadatos, contadores, pies, etiquetas chicas) · `--fs-label .76rem` (kicker, chips, botones mono, REC) · `--fs-lead` (párrafo de hero y descripciones de sección) · `--fs-h3 1.5rem` (títulos de tarjetas, servicios y modal) · `--ls-label .14em` (tracking de etiquetas mono; kicker/REC/índice quedan en .24em).
 - Mínimo en celular: 10.2 px (antes 9 px). Solo `h1` y la flecha del cartel Galería 3D conservan `--sans` (neón); el resto del sitio usa `--body`/`--disp`/`--mono`.
+
+## Seguridad y SEO básico (rama tipografia-cine)
+- **CSP** por `<meta http-equiv>` en `index.html` y `lab/vortex/index.html` (GitHub Pages no permite headers). Necesita `'unsafe-inline'` porque el JS/CSS está inline. Si se agrega un dominio externo (imágenes, video, fuentes) hay que sumarlo a la directiva correspondiente o se bloquea.
+- **`esc()`** escapa todo texto que entra por `innerHTML` (títulos, URLs de `videos.json`).
+- **Embeds solo https** (`videoEmbed()` devuelve null si no) e iframes con `sandbox`.
+- `rel="noopener noreferrer"` en links externos; `referrer` restringido; `postMessage` con origen explícito.
+- `robots.txt`, `sitemap.xml` y `404.html` (con la estética del sitio) en la raíz.
+- Chequeo final (desktop 1280, mobile 375 y 320): sin violaciones de CSP, sin scroll horizontal, reel y Galería abren/cierran con ✕, Esc y botón atrás.
