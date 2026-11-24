@@ -8,6 +8,43 @@
 .h2-hint{font-size:.42em;font-weight:400;color:var(--mut);letter-spacing:.02em;white-space:nowrap}
 .serv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;margin-top:10px}
 @media(max-width:640px){.serv-grid{grid-template-columns:1fr;gap:20px}}
+/* bento (pantallas anchas): 01 y 03 anchas a la izquierda · 02 alta a la derecha · 04 a todo el ancho abajo.
+   El auto de 03 y los celus de 04 necesitan tarjetas anchas: nunca van en una columna sola. */
+@media(min-width:1024px){
+  .serv-grid{grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(280px,auto);gap:var(--s-5)}
+  .serv[data-lt="direccion"]{grid-column:1 / 3;grid-row:1}
+  .serv[data-lt="post"]{grid-column:3;grid-row:1 / 3}
+  .serv[data-lt="viejo"]{grid-column:1 / 3;grid-row:2}
+  .serv[data-lt="vertical"]{grid-column:1 / 4;grid-row:3}
+  .serv[data-lt="post"] .serv-ico{top:84px;bottom:auto;right:50%;transform:translateX(50%)}
+  .serv[data-lt="post"] .serv-ico svg{width:210px}
+  .serv[data-lt="post"] :is(h3,p){max-width:100%}
+  .serv[data-lt="vertical"] :is(h3,p){max-width:40%}
+}
+@media(min-width:1024px) and (hover:hover) and (pointer:fine){
+  .serv[data-lt="post"]:hover .serv-ico{transform:translateX(50%) translateY(-4px)}
+}
+/* ---------- Cómo trabajo: 4 pasos unidos por una línea ---------- */
+.process{margin-top:var(--s-9)}
+.process-h{font-family:var(--mono);font-size:var(--t-xs);font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:var(--s-5)}
+.steps{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-5);counter-reset:none}
+.steps li{position:relative;padding-top:var(--s-6)}
+/* la línea: arranca en el punto de cada paso y llega al siguiente */
+.steps li::before{content:"";position:absolute;top:5px;left:0;width:11px;height:11px;border-radius:50%;border:2px solid var(--acc);background:var(--bg)}
+.steps li:not(:last-child)::after{content:"";position:absolute;top:10px;left:19px;right:calc(var(--s-5) * -1 + 8px);height:1px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 60%,transparent),var(--line))}
+.steps li:last-child::before{background:var(--acc)}
+.step-n{font-family:var(--mono);font-size:var(--t-2xs);letter-spacing:.14em;color:var(--acc)}
+.steps h4{font-family:var(--disp);font-size:var(--t-lg);font-weight:800;text-transform:uppercase;letter-spacing:.02em;line-height:1.1;margin:var(--s-1) 0 var(--s-2)}
+.steps p{color:var(--mut);font-size:var(--t-sm);line-height:1.6;max-width:30ch}
+@media(max-width:880px){.steps{grid-template-columns:1fr 1fr;row-gap:var(--s-6)}.steps li:nth-child(2)::after{display:none}}
+@media(max-width:480px){
+  .steps{grid-template-columns:1fr;row-gap:var(--s-5)}
+  .steps li{padding:0 0 0 var(--s-6)}
+  .steps li::before{top:4px}
+  .steps li:not(:last-child)::after,.steps li:nth-child(2)::after{display:block;top:19px;left:5px;right:auto;bottom:calc(var(--s-5) * -1 + 4px);width:1px;height:auto;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 60%,transparent),var(--line))}
+}
 /* Ficha: título y texto abajo a la izquierda; ícono de línea fino, entero y tenue a la derecha */
 .serv{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;text-align:left;gap:14px;min-height:280px;overflow:hidden;
   background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:64px 36px 34px;

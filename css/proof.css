@@ -1,4 +1,4 @@
-/* proof.css — F3: píldora «Disponible», franja de cifras y cinta de artistas, nav flotante en píldora. */
+/* proof.css — Píldora «Disponible», franja de cifras y nav flotante en píldora. */
 @layer proof {
 
 /* ── píldora de disponibilidad (arriba del cartel de neón) ── */
@@ -10,6 +10,7 @@
   transition:border-color var(--d-2) var(--e-out),background var(--d-2) var(--e-out);transform:translateZ(0)}
 .avail span{color:var(--mut)}
 .avail i{position:relative;width:7px;height:7px;border-radius:50%;background:var(--acid);flex:none}
+@media(prefers-reduced-motion:reduce){.avail i::after{animation:none}}
 .avail i::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--acid);opacity:0;animation:availPing 2.4s var(--e-out) infinite}
 @keyframes availPing{0%{transform:scale(.4);opacity:.8}70%,100%{transform:scale(1.5);opacity:0}}
 .avail:hover{border-color:color-mix(in srgb,var(--acid) 45%,transparent);background:color-mix(in srgb,var(--bg) 75%,transparent)}
@@ -17,7 +18,7 @@
 
 /* ── franja de cifras ── */
 .proof{position:relative;z-index:2;padding:var(--s-7) 0 var(--s-8)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;
   background:color-mix(in srgb,var(--card) 55%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   box-shadow:inset 0 1px 0 color-mix(in srgb,var(--txt) 6%,transparent)}
 .stat{display:flex;flex-direction:column;gap:var(--s-2);padding:var(--s-5) var(--s-5) 22px}
@@ -26,21 +27,7 @@
 .stat dd{font-family:var(--disp);font-weight:800;font-size:var(--t-xl);line-height:.9;color:var(--txt);font-variant-numeric:tabular-nums}
 .stat:first-child dd{color:var(--acc)}
 .stat dt{font-family:var(--mono);font-size:var(--t-2xs);letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
-@media(max-width:760px){.proof{padding:var(--s-6) 0}.stat{padding:var(--s-4) var(--s-4) 18px}.stats{grid-template-columns:1fr 1fr}.stat:nth-child(3){border-left:0}.stat:nth-child(n+3){border-top:1px solid var(--line)}}
-
-/* ── cinta de artistas: loop infinito, se frena al pasar el mouse y fuera de vista ── */
-.marquee{margin-top:var(--s-6)}
-.mq-label{text-align:center;font-family:var(--mono);font-size:var(--t-2xs);letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:var(--s-3)}
-.mq-view{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.mq-track{display:flex;width:max-content;animation:mq var(--mq-dur,40s) linear infinite;animation-play-state:paused;will-change:transform}
-.marquee.on .mq-track{animation-play-state:running}
-.marquee:hover .mq-track{animation-play-state:paused}
-.mq-track span{font-family:var(--disp);font-weight:800;font-size:var(--t-lg);text-transform:uppercase;letter-spacing:.02em;
-  color:color-mix(in srgb,var(--txt) 42%,transparent);padding:0 var(--s-5);white-space:nowrap;transition:color var(--d-1)}
-.mq-track span::after{content:"⇪";display:inline-block;margin-left:var(--s-5);color:color-mix(in srgb,var(--acc) 60%,transparent);font-size:.7em;transform:translateY(-.1em)}
-.mq-track span:hover{color:var(--txt)}
-@keyframes mq{to{transform:translate3d(-50%,0,0)}}
-@media(prefers-reduced-motion:reduce){.mq-track{animation:none}.avail i::after{animation:none}}
+@media(max-width:760px){.proof{padding:var(--s-6) 0}.stat{padding:var(--s-4) var(--s-3) 18px}.stat dd{font-size:var(--t-lg)}}
 
 /* ── nav flotante: al bajar, los links quedan en una píldora de vidrio centrada (solo pantallas anchas) ── */
 @media(min-width:761px){

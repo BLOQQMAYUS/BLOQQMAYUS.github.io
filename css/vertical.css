@@ -77,7 +77,19 @@ section.acid .strip-arrow:hover{background:var(--acid);border-color:var(--acid)}
 .wheel-card:focus-visible{transform:var(--tf);outline:2px solid var(--acc);outline-offset:4px}
 .wheel-card .reel-ph{opacity:.9}
 .wheel-card:hover .reel-ph{opacity:1}
-.wheel-foot{display:flex;justify-content:center;margin-top:6px}
+.wheel-foot{display:flex;flex-direction:column;align-items:center;gap:var(--s-3);margin-top:6px}
+/* marco de celular: bisel oscuro + isla arriba (la rueda pasa a ser una fila de teléfonos) */
+.wheel-card{border:6px solid var(--ink-deep);border-radius:28px;box-shadow:0 0 0 1px var(--surface-3),0 24px 60px rgba(0,0,0,.5)}
+.wheel-card::after{content:"";position:absolute;top:9px;left:50%;width:30%;height:11px;margin-left:-15%;border-radius:var(--r-pill);background:var(--ink-deep);z-index:3;pointer-events:none}
+.wheel-card:hover{border-color:var(--ink-deep);box-shadow:0 0 0 1.5px var(--acc),0 30px 70px rgba(0,0,0,.62)}
+@media(max-width:760px){.wheel-card{border-width:5px;border-radius:22px}.wheel-card::after{top:7px;height:9px}}
+/* puntos: el activo se estira en píldora ámbar */
+.wheel-dots{display:flex;gap:6px;align-items:center}
+.wheel-dots button{width:7px;height:7px;padding:0;border-radius:var(--r-pill);background:var(--surface-3);
+  transition:width var(--d-2) var(--e-out),background var(--d-2);position:relative}
+.wheel-dots button::before{content:"";position:absolute;inset:-9px -4px}   /* área táctil cómoda */
+.wheel-dots button:hover{background:var(--mut)}
+.wheel-dots button[aria-current="true"]{width:22px;background:var(--acc)}
 .wheel-hint{font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);color:var(--mut);text-transform:uppercase}
 @media(max-width:760px){
   .wheel-stage{height:min(70vh,520px);perspective:1000px}

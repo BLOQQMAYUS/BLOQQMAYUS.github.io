@@ -14,11 +14,12 @@ página en GitHub Pages: **sin build, sin npm, sin framework**. Lo que está en 
 | Quiero… | Archivo |
 |---|---|
 | Agregar/quitar un videoclip, cambiar email, teléfono, redes, showreel | `content/site.js` (`CONFIG`) |
+| Créditos en la ficha de un videoclip | `credits: [["Cámara","Nombre"], …]` en ese film de `CONFIG.films` (opcional) |
 | Agregar un reel vertical | `assets/reels/` + `FALLBACK_REELS` en `js/reels.js` (ver README) |
 | Colores, fuentes, variables | `css/tokens.css` |
 | Estructura HTML de las secciones | `index.html` |
 | Estilos de una sección | `css/<sección>.css` (nav, hero, proof, work, vertical, services, contact, footer, overlays) |
-| Cifras bajo el hero y cinta «Trabajé con» | `index.html` (`#proof`) + `js/proof.js`: videoclips y artistas se cuentan solos desde `CONFIG.films` |
+| Cifras bajo el hero | `index.html` (`#proof`) + `js/proof.js`: videoclips y artistas = `CONFIG.films` + `data-base` (150 y 50) |
 | Lógica de una sección | `js/<sección>.js` (cada archivo arranca con una línea que dice qué hace) |
 | Galería 3D | `lab/vortex/index.html` (su lista `UNIQUE` también se actualiza al sumar videos) |
 

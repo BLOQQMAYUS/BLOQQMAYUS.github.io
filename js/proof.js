@@ -1,5 +1,5 @@
-/* proof.js — F3: cifras y cinta de artistas. Todo sale de CONFIG (content/site.js): al sumar un
-   videoclip o un artista nuevo, los números y la cinta se actualizan solos. */
+/* proof.js — Cifras bajo el hero. Videoclips y artistas salen de CONFIG (content/site.js) + la base
+   fija de cada <dd data-base>: al sumar un videoclip o un artista nuevo, el número sube solo. */
 (() => {
   const films = CONFIG.films || [];
   const artists = [...new Set(films.map(f => f.cat).filter(Boolean))];
@@ -8,7 +8,7 @@
   /* cifras: valor real + conteo animado una sola vez al entrar en pantalla */
   const dds = [...document.querySelectorAll(".stats dd")];
   dds.forEach(dd => {
-    const n = dd.dataset.countFrom ? SRC[dd.dataset.countFrom] : +dd.dataset.count;
+    const n = (dd.dataset.countFrom ? SRC[dd.dataset.countFrom] : +dd.dataset.count) + (+dd.dataset.base || 0);
     dd.dataset.n = n;
     dd.textContent = (dd.dataset.prefix || "") + n;
   });
@@ -30,13 +30,4 @@
     dds.forEach(dd => io.observe(dd));
   }
 
-  /* cinta de artistas: dos copias para el loop sin costura (la segunda, oculta a lectores) */
-  const track = document.getElementById("mqTrack");
-  const row = shuffle(artists.slice()).map(a => `<span>${esc(a)}</span>`).join("");
-  track.innerHTML = row + row.replace(/<span>/g, '<span aria-hidden="true">');
-  track.style.setProperty("--mq-dur", Math.max(24, artists.length * 4) + "s");
-  const mq = track.closest(".marquee");
-  if ("IntersectionObserver" in window) {
-    new IntersectionObserver(es => es.forEach(en => mq.classList.toggle("on", en.isIntersecting))).observe(mq);
-  } else mq.classList.add("on");
 })();

@@ -94,7 +94,7 @@
     /* cometas: uno cada tanto, cruzando en diagonal con cola degradada.
        Suman variabilidad al patrón sin invadir ni costar frames de más. */
     if (!reduce) {
-      if (!comet && t > nextComet) {
+      if (!comet && t > nextComet && W > 0 && H > 0) {   // con el lienzo en 0 (pestaña oculta / resize) no nace
         /* cada cometa con su profundidad (lejos = fino, lento, tenue; cerca =
            largo, rápido, brillante), dirección y recorrido propios */
         const R = Math.hypot(W, H) / 2, d = Math.random();
@@ -109,7 +109,7 @@
       if (comet) {
         comet.life += dt;
         const u = comet.life / comet.dur;
-        if (u >= 1) { comet = null; nextComet = t + rnd(3500, 12000); }
+        if (!(u < 1)) { comet = null; nextComet = t + rnd(3500, 12000); }   // también corta un NaN
         else {
           const cx = comet.sx + comet.vx * comet.travel * u, cy = comet.sy + comet.vy * comet.travel * u;
           const tx = cx - comet.vx * comet.len, ty = cy - comet.vy * comet.len;

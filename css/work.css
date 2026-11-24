@@ -1,16 +1,25 @@
 /* work.css — 01 · Videoclips: filtros, grilla, botón play, tarjetas con inclinación 3D. */
 @layer work {
 /* ---------- filtros + grid videoclips ---------- */
-.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:34px}
+/* filtros = control segmentado: riel de vidrio + "pulgar" ácido que se desliza al artista elegido
+   (lo posiciona work-grid.js → moveThumb). Sin elegido, el pulgar se apaga. */
+.filters{position:relative;display:flex;gap:2px;flex-wrap:wrap;margin-bottom:34px;padding:4px;
+  border:1px solid var(--line);border-radius:var(--r-lg);background:color-mix(in srgb,var(--card) 60%,transparent);
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--txt) 5%,transparent)}
 @media(max-width:760px){
-  .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;padding-bottom:8px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;border-radius:var(--r-pill)}
   .filters::-webkit-scrollbar{display:none}
   .chip{flex:none}
 }
-.chip{font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;padding:9px 18px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--mut);transition:var(--d-1)}
-/* hover: relleno ámbar + texto hollín; seleccionado: relleno verde ácido */
-@media(hover:hover){.chip:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}}
-.chip.on,.chip.on:hover{background:var(--acid);border-color:var(--acid);color:var(--bg);font-weight:700}
+.chip{position:relative;z-index:1;font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;padding:9px 16px;border-radius:var(--r-pill);color:var(--mut);transition:color var(--d-1),background var(--d-1)}
+@media(hover:hover){.chip:hover{color:var(--txt);background:color-mix(in srgb,var(--txt) 7%,transparent)}}
+.chip.on,.chip.on:hover{color:var(--bg);background:transparent;font-weight:700}
+.seg-thumb{position:absolute;left:0;top:0;z-index:0;border-radius:var(--r-pill);background:var(--acid);pointer-events:none;opacity:0;
+  box-shadow:0 4px 14px color-mix(in srgb,var(--acid) 25%,transparent);will-change:transform;backface-visibility:hidden;
+  transition:transform var(--d-2) var(--e-out),width var(--d-2) var(--e-out),height var(--d-2) var(--e-out),opacity var(--d-1)}
+.filters.has-on .seg-thumb{opacity:1}
+.seg-thumb.jump{transition:opacity var(--d-1)}
+@media(prefers-reduced-motion:reduce){.seg-thumb{transition:opacity var(--d-1)}}
 .work-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
 @media(max-width:760px){.work-grid{grid-template-columns:1fr}}
 .work-card{cursor:pointer}

@@ -9,6 +9,8 @@ const wheelStage = document.getElementById("wheelStage");
 const wheelRotor = document.getElementById("wheelRotor");
 let wheelItems = [], wheelCards = [], wheelAngle = 0, wheelVel = 0;
 let wheelRaf = 0, wheelLast = 0, wheelVisible = false, wheelFocus = false;
+let wheelGo = null, wheelFront = -1;     // giro animado hacia un punto · índice de la pieza al frente
+const wheelDots = document.getElementById("wheelDots");
 const WHEEL_DEG = 7.5;                    // ≈48 s por vuelta: despacio
 const wheelPaused = () => modal.classList.contains("open") || ltOpen || galOpen ||
   document.hidden || !wheelVisible || wheelFocus || rlPhase !== null;
@@ -31,11 +33,34 @@ function wheelPaint() {
     const k = Math.cos((wheelAngle + c._a) * Math.PI / 180);
     c.style.opacity = k <= 0 ? "0" : (0.42 + 0.58 * k).toFixed(3);
   }
+  /* puntos: marca la pieza más al frente (solo toca el DOM cuando cambia) */
+  let best = -1, bk = -2;
+  wheelCards.forEach((c, i) => { const k = Math.cos((wheelAngle + c._a) * Math.PI / 180); if (k > bk) { bk = k; best = i; } });
+  if (best !== wheelFront) {
+    wheelFront = best;
+    [...wheelDots.children].forEach((d, i) => d.setAttribute("aria-current", i === best));
+  }
 }
+/* gira por el camino corto hasta dejar la pieza i al frente (≈0,7 s, ease in-out) */
+function wheelGoto(i) {
+  const c = wheelCards[i]; if (!c) return;
+  const d = ((-c._a - wheelAngle) % 360 + 540) % 360 - 180;
+  wheelVel = 0;
+  wheelGo = { a0: wheelAngle, d, t0: performance.now() };
+}
+wheelDots.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (b) wheelGoto(+b.dataset.i);
+});
 function wheelTick(t) {
   wheelRaf = requestAnimationFrame(wheelTick);
   const dt = Math.min((t - wheelLast) / 1000, .05) || .016;
   wheelLast = t;
+  if (wheelGo) {                         // el punto manda aunque la rueda esté en pausa
+    const k = Math.min(1, (t - wheelGo.t0) / 700), e = k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    wheelAngle = wheelGo.a0 + wheelGo.d * e;
+    if (k >= 1) wheelGo = null;
+    wheelPaint(); return;
+  }
   if (wheelPaused()) return;
   wheelAngle += (WHEEL_DEG + wheelVel) * dt;
   wheelVel *= Math.pow(.05, dt);
@@ -64,6 +89,8 @@ function buildWheel(items) {
       <img class="reel-poster" src="${esc(v.poster)}" alt="" loading="lazy" decoding="async" draggable="false">
     </article>`).join("");
   wheelCards = [...wheelRotor.querySelectorAll(".wheel-card")];
+  wheelDots.innerHTML = items.map((v, i) => `<button type="button" data-i="${i}" aria-label="Ir a ${esc(v.title)}"></button>`).join("");
+  wheelFront = -1;
   wheelCards.forEach(c => {
     const p = c.querySelector(".reel-poster");
     if (!p) return;

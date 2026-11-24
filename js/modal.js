@@ -12,20 +12,41 @@ function videoEmbed(url) {
   if (/\.(mp4|webm|mov)(\?|$)/i.test(url)) return `<video src="${esc(url)}" controls autoplay playsinline></video>`;
   return null;
 }
+/* item.from (opcional) = miniatura de la tarjeta: con View Transitions la miniatura
+   "crece" hasta el reproductor. Sin soporte o con movimiento reducido, abre directo. */
 function openModal(item) {
+  const src = item.from;
+  if (src && document.startViewTransition && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    modal.classList.add("vt");
+    src.style.viewTransitionName = "case";
+    const vt = document.startViewTransition(() => {
+      src.style.viewTransitionName = "";
+      mMedia.style.viewTransitionName = "case";
+      fillModal(item);
+    });
+    vt.finished.finally(() => { mMedia.style.viewTransitionName = ""; modal.classList.remove("vt"); });
+  } else fillModal(item);
+}
+function fillModal(item) {
   /* YouTube no acepta embeds desde file:// (Error 153): solo http/https */
   const canEmbed = /^https?:$/.test(location.protocol);
   const embed = canEmbed ? videoEmbed(item.video) : null;
   mMedia.className = "modal-media" + (item.vert ? " vert" : "");
   if (embed) {
-    mMedia.innerHTML = embed;
+    /* el póster queda debajo del iframe mientras carga (y es lo que se ve en la transición) */
+    mMedia.innerHTML = (item.img && !item.vert ? `<img class="modal-poster" src="${esc(item.img)}" alt="">` : "") + embed;
   } else if (item.video) {
     mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}"><span class="modal-open"><a href="${esc(item.video)}" target="_blank" rel="noopener noreferrer">${ICONS.play} Ver en YouTube</a></span>`;
   } else {
     mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}">`;
   }
   document.getElementById("modalTitle").textContent = item.title;
-  document.getElementById("modalMeta").textContent = item.meta || "";
+  const meta = document.getElementById("modalMeta"), facts = document.getElementById("modalFacts");
+  meta.textContent = item.facts ? "" : (item.meta || "");
+  meta.hidden = !!item.facts;
+  facts.hidden = !item.facts;
+  facts.innerHTML = (item.facts || []).filter(([, v]) => v)
+    .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
   const ext = document.getElementById("modalExt");
   if (item.video) {
     ext.hidden = false;

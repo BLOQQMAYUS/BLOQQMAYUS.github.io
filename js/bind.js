@@ -28,7 +28,35 @@ document.querySelectorAll("[data-bind]").forEach(el => {
 })();
 document.getElementById("mailBtn").href = "mailto:" + CONFIG.email;
 document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
+document.getElementById("footMail").href = "mailto:" + CONFIG.email;
+document.getElementById("footPhone").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
+
+/* ---- copiar email: aviso "Copiado ✓" 1,6 s. Portapapeles moderno; si el navegador lo niega,
+   copia a la vieja usanza (textarea + execCommand); si eso también falla, abre el mail ---- */
+(function () {
+  const b = document.getElementById("copyMail"), tip = b.querySelector(".copy-tip");
+  let tm = 0;
+  const legacyCopy = txt => {
+    const ta = Object.assign(document.createElement("textarea"), { value: txt, readOnly: true });
+    ta.style.cssText = "position:fixed;opacity:0;pointer-events:none";
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch {}
+    ta.remove(); b.focus({ preventScroll: true });
+    return ok;
+  };
+  b.addEventListener("click", async () => {
+    let ok = false;
+    try { await navigator.clipboard.writeText(CONFIG.email); ok = true; } catch { ok = legacyCopy(CONFIG.email); }
+    if (!ok) { location.href = "mailto:" + CONFIG.email; return; }
+    tip.textContent = "Copiado ✓";
+    b.classList.add("done");
+    clearTimeout(tm);
+    tm = setTimeout(() => { b.classList.remove("done"); tip.textContent = ""; }, 1600);
+  });
+})();
 
 /* ---- redes ---- */
 document.getElementById("socials").innerHTML = CONFIG.socials.map(s =>
   `<a data-net="${esc(s.id)}" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${ICONS[s.id] || ""}${esc(s.label)}</a>`).join("");
+document.getElementById("footSocials").insertAdjacentHTML("beforeend", CONFIG.socials.map(s =>
+  `<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)}</a>`).join(""));

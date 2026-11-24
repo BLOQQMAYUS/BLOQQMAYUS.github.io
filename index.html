@@ -103,16 +103,12 @@
   <!-- ============ PRUEBA SOCIAL · cifras + artistas (se completan solos desde content/site.js) ============ -->
   <section class="proof" id="proof" aria-label="El laburo en números">
     <div class="wrap">
+      <!-- videoclips y artistas = lo cargado en content/site.js + una base fija (data-base): trabajos que no están subidos -->
       <dl class="stats">
         <div class="stat reveal"><dt>años de oficio</dt><dd data-count="10" data-prefix="+">+10</dd></div>
-        <div class="stat reveal"><dt>videoclips oficiales</dt><dd data-count-from="films">26</dd></div>
-        <div class="stat reveal"><dt>artistas</dt><dd data-count-from="artists">12</dd></div>
-        <div class="stat reveal"><dt>piezas en la Galería 3D</dt><dd data-count="35">35</dd></div>
+        <div class="stat reveal"><dt>videoclips oficiales</dt><dd data-count-from="films" data-base="150" data-prefix="+">+176</dd></div>
+        <div class="stat reveal"><dt>artistas</dt><dd data-count-from="artists" data-base="50" data-prefix="+">+62</dd></div>
       </dl>
-    </div>
-    <div class="marquee reveal">
-      <p class="mq-label">Trabajé con</p>
-      <div class="mq-view"><div class="mq-track" id="mqTrack"></div></div>
     </div>
   </section>
 
@@ -144,6 +140,7 @@
       </div>
     </div>
     <div class="wrap wheel-foot">
+      <div class="wheel-dots" id="wheelDots" aria-label="Elegir pieza de la rueda"></div>
       <span class="wheel-hint tip">click en una preview = ver con sonido</span>
     </div>
   </section>
@@ -181,6 +178,16 @@
           <p>La ola de contenido nunca frena. Paquetes 4:5 y 9:16 para Reels, TikTok y Shorts.</p>
         </button>
       </div>
+      <!-- Cómo trabajo: 4 pasos fijos, del brief a la entrega -->
+      <div class="process reveal">
+        <h3 class="process-h">Cómo trabajo</h3>
+        <ol class="steps">
+          <li><span class="step-n">01</span><h4>Brief</h4><p>Escucho la idea, el público y la fecha. Definimos alcance y presupuesto.</p></li>
+          <li><span class="step-n">02</span><h4>Guion</h4><p>Concepto, guion y tratamiento visual aprobados antes de filmar.</p></li>
+          <li><span class="step-n">03</span><h4>Post</h4><p>Edición, color, VFX y mograph, con revisión en cada corte.</p></li>
+          <li><span class="step-n">04</span><h4>Entrega</h4><p>Masters para cada red: 16:9, 4:5 y 9:16, listos para publicar.</p></li>
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -199,10 +206,16 @@
       </button>
       <p>Contame tu proyecto — de tu idea pasamos al brief, y mi sistema devuelve RESULTADOS.</p>
       <div class="contact-cta">
-        <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-          <span data-bind="email">fs7benitez@gmail.com</span>
-        </a>
+<div class="mail-row">
+                <a class="btn" id="mailBtn" href="mailto:fs7benitez@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            <span data-bind="email">fs7benitez@gmail.com</span>
+          </a>
+          <button type="button" class="copy-btn" id="copyMail" aria-label="Copiar email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+            <span class="copy-tip" role="status" aria-live="polite"></span>
+          </button>
+        </div>
         <a class="btn btn-ghost" id="phoneBtn" data-net="whatsapp" href="tel:+541159754088">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"/></svg>
           <span data-bind="phone">+54 11 5975 4088</span>
@@ -214,6 +227,16 @@
 </main>
 
 <footer>
+  <!-- pie en columnas: marca · secciones · contacto · redes (contacto y redes los completa bind.js desde CONFIG) -->
+  <div class="wrap foot-cols">
+    <div class="fc fc-brand">
+      <a class="fc-logo" href="#top"><i>⇪</i> BLOQQ MÁYUS</a>
+      <p>Realizador audiovisual. Videoclips, animación 2D y 3D y contenido vertical.</p>
+    </div>
+    <div class="fc"><h4>Secciones</h4><a href="#trabajo">Obras</a><a href="#vertical">Vertical</a><a href="#servicios">Servicios</a><a href="#contacto">Contacto</a></div>
+    <div class="fc"><h4>Contacto</h4><a id="footMail" href="mailto:fs7benitez@gmail.com" data-bind="email">fs7benitez@gmail.com</a><a id="footPhone" href="tel:+541159754088" data-bind="phone">+54 11 5975 4088</a></div>
+    <div class="fc" id="footSocials"><h4>Redes</h4></div>
+  </div>
   <div class="wrap foot">
     <span>© <span data-bind="name">Francisco Benítez</span> <i>⇪</i> BLOQQ MÁYUS · <span data-bind="city">Buenos Aires, Argentina</span> · <span id="copyYear">2026</span></span>
     <span class="foot-ind"><i></i> INDUSTRIA ARGENTINA</span>
@@ -252,7 +275,7 @@
   <div class="modal-box">
     <button class="modal-x" id="modalX" aria-label="Cerrar">✕</button>
     <div class="modal-media" id="modalMedia"></div>
-    <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a></div>
+    <div class="modal-cap"><h3 id="modalTitle"></h3><span class="mono" id="modalMeta"></span><a id="modalExt" class="ext" target="_blank" rel="noopener noreferrer" hidden>Ver en YouTube ↗</a><dl class="modal-facts" id="modalFacts" hidden></dl></div>
     <div class="modal-hint tip" id="modalHint"></div>
   </div>
 </div>

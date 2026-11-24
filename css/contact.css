@@ -102,6 +102,20 @@
   55%{box-shadow:0 0 0 3px var(--brasa);background:color-mix(in srgb,var(--brasa) 6%,transparent)}
   100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--brasa) 0%,transparent);background:transparent}}
 .contact-cta{display:flex;flex-direction:column;align-items:center;gap:14px}
+/* email + botón copiar, pegados como una sola pieza */
+.mail-row{display:flex;align-items:center;gap:8px}
+.copy-btn{position:relative;width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:50%;color:var(--txt);
+  border:1px solid color-mix(in srgb,var(--txt) 30%,transparent);transition:background var(--d-1),border-color var(--d-1),color var(--d-1),transform var(--d-1);
+  will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+.copy-btn svg{width:18px;height:18px}
+.copy-btn:hover{background:color-mix(in srgb,var(--txt) 8%,transparent);border-color:color-mix(in srgb,var(--txt) 55%,transparent)}
+.copy-btn:active{transform:scale(.94)}
+.copy-btn.done{color:var(--bg);background:var(--acid);border-color:var(--acid)}
+.copy-tip{position:absolute;bottom:calc(100% + 10px);left:50%;padding:6px 12px;border-radius:var(--r-pill);background:var(--acid);color:var(--bg);
+  font-family:var(--mono);font-size:var(--t-2xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;pointer-events:none;
+  opacity:0;transform:translate3d(-50%,6px,0);transition:opacity var(--d-2) var(--e-out),transform var(--d-2) var(--e-spring)}
+.copy-btn.done .copy-tip{opacity:1;transform:translate3d(-50%,0,0)}
+@media(prefers-reduced-motion:reduce){.copy-tip{transition:opacity var(--d-1)}}
 .socials{display:flex;justify-content:center;gap:14px;margin-top:40px;flex-wrap:wrap}
 .socials a{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:var(--t-xs);letter-spacing:var(--ls-label);text-transform:uppercase;border:1px solid var(--line);border-radius:var(--r-pill);padding:11px 20px;color:var(--mut);transition:var(--d-1)}
 .socials a:hover{color:var(--txt);border-color:var(--acc);transform:translateY(-2px)}

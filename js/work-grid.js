@@ -76,7 +76,22 @@ CONFIG.films.forEach(f => counts[f.cat] = (counts[f.cat] || 0) + 1);
    y devuelve al pliegue. */
 const cats = shuffle(Object.keys(counts));
 const filters = document.getElementById("filters");
-filters.innerHTML = cats.map(c => `<button class="chip" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+filters.innerHTML = cats.map(c => `<button class="chip" data-cat="${esc(c)}" aria-pressed="false">${esc(c)}</button>`).join("")
+  + `<span class="seg-thumb" aria-hidden="true"></span>`;
+/* control segmentado: el pulgar ácido se desliza hasta el artista elegido.
+   La primera vez aparece en su lugar (sin viajar desde la esquina). */
+const segThumb = filters.querySelector(".seg-thumb");
+function moveThumb() {
+  const b = filters.querySelector(".chip.on");
+  const fresh = !filters.classList.contains("has-on");
+  filters.classList.toggle("has-on", !!b);
+  if (!b) return;
+  segThumb.classList.toggle("jump", fresh);
+  segThumb.style.width = b.offsetWidth + "px";
+  segThumb.style.height = b.offsetHeight + "px";
+  segThumb.style.transform = `translate3d(${b.offsetLeft}px,${b.offsetTop}px,0)`;
+}
+addEventListener("resize", moveThumb);
 /* Pliegue: la grilla muestra las primeras FOLD piezas del orden mezclado.
    El resto de las piezas vive en la Galería 3D: el botón ya no despliega
    la grilla, lleva a 05 · Contacto y hace que el cartel de neón llame la
@@ -104,7 +119,11 @@ function applyWork() {
 filters.addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
   const ya = b.classList.contains("on");
-  filters.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", !ya && c === b));
+  filters.querySelectorAll(".chip").forEach(c => {
+    const on = !ya && c === b;
+    c.classList.toggle("on", on); c.setAttribute("aria-pressed", on);
+  });
+  moveThumb();
   workCat = ya ? "Todos" : b.dataset.cat;
   applyWork();
 });
@@ -128,7 +147,10 @@ applyWork();
 workGrid.addEventListener("click", e => {
   const card = e.target.closest(".work-card"); if (!card) return;
   const f = CONFIG.films[+card.dataset.i];
-  openModal({ ...f, meta: `${f.lineup || f.artist} · ${f.role} · ${f.year}`, vert: false });
+  /* ficha de caso: datos fijos + créditos opcionales del CONFIG (credits: [["Cámara","X"], …]) */
+  const facts = [["Artista", f.lineup || f.artist], ["Año", f.year], ["Rol", f.role], ...(f.credits || [])];
+  openModal({ ...f, meta: `${f.lineup || f.artist} · ${f.role} · ${f.year}`, vert: false, facts,
+    from: card.querySelector(".work-media") });
 });
 /* teclado: Enter / Espacio abren la pieza enfocado (accesibilidad) */
 workGrid.addEventListener("keydown", e => {
