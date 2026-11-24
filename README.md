@@ -368,6 +368,38 @@ NODE_PATH="$PWD/node_modules" node tests/tour.js   # tour real en Chromium (desk
   juntos y **dejan ver el fondo del sitio con sus estrellas**. Antes el
   degradado terminaba en `rgba(...,.95)` y se veía el corte del borde inferior.
 
+## 🔄 Cómo actualizar el contenido (v1.0)
+
+Desde la v1.0 (tag `v1.0`) el diseño está cerrado: **solo se agregan o quitan
+videos**. No se toca CSS/JS salvo pedido explícito.
+
+### Videoclips (sección 1)
+Todo está en `CONFIG.films` de `index.html` (más nuevos primero).
+
+1. **Agregar**: sumar una línea al principio de `films` con este formato:
+   `{ title: "…", cat: "ARTISTA", artist: "…", year: "2026", role: "Videoclip oficial", img: "assets/real/<ID>.jpg", video: "https://www.youtube.com/watch?v=<ID>" }`
+   (`lineup` es opcional). `cat` es el chip de filtro: usar el mismo texto que
+   ya existe para ese artista.
+2. **Miniatura**: guardar la imagen como `assets/real/<ID>.jpg` (el `<ID>` es
+   el de YouTube) y sumar su entrada a `videos.json` (`id`, `group`, `title`,
+   `author`, `thumb`, `thumb_kb`, `date`).
+3. **Quitar**: borrar la línea de `films` y su entrada en `videos.json`
+   (opcional: borrar el `.jpg` de `assets/real/`).
+4. El pliegue (6 en desktop / 5 en mobile, "¿Querés más? ↓"), el orden
+   aleatorio y las reglas de las "Reglas vigentes" se aplican solos.
+
+### Videos verticales (sección 2)
+- **Agregar**: copiar el `.mp4` a `assets/reels/` — se auto-descubre vía la API
+  de GitHub. Sumar también su nombre exacto a `FALLBACK_REELS` (por si la API
+  falla) y generar sus variantes livianas en `assets/reels-lo/`,
+  `assets/reels-xs/` y el poster en `assets/posters/`, igual que los existentes.
+- **Quitar**: borrar el `.mp4` (y sus variantes/poster) y su nombre de `FALLBACK_REELS`.
+
+### Publicar
+1. Verlo en local (`python -m http.server 8000`) y correr los checks de la sección «Checks antes de cada push» (si `tests/` existe en el clon).
+2. Commit → `git push origin main` y `git push origin main:bloqqfolio`.
+3. Verificar online (Pages tarda ~1–2 min) que aparezca el cambio.
+
 ### Contenido vertical
 
 - **Las previews de la rueda NO llevan etiquetas**: se sacó el `.reel-tag` con
