@@ -69,7 +69,7 @@
   .vcard.reel .g{font:400 .55rem/1.5 var(--mono);color:var(--mut);letter-spacing:.18em;text-transform:uppercase}
   .vcard.reel .pl{position:absolute;right:16px;bottom:16px;width:36px;height:36px;border-radius:50%;
     background:var(--brasa);display:grid;place-items:center;pointer-events:none}
-  .vcard.reel .pl svg{width:12px;height:12px;fill:var(--hueso);margin-left:2px}
+  .vcard.reel .pl svg{width:12px;height:12px;fill:var(--hueso);margin-left:0}
   .vcard.reel.is3d .pl{background:var(--acid)}
   .vcard.reel.is3d .pl svg{fill:var(--carbon)}
 
@@ -136,7 +136,7 @@ const $ = id => document.getElementById(id);
 const stage = $("stage"), world = $("world");
 const fly = $("fly"), dim = $("dim"), cine = $("cine"), cineMedia = $("cineMedia");
 const pad2 = n => String(n).padStart(2, "0");
-const PLAY = '<svg viewBox="0 0 24 24"><path d="M7 4l14 8-14 8z"/></svg>';
+const PLAY = '<svg viewBox="0 0 24 24"><path transform="translate(14 12) scale(1.333) translate(-13.42 -12)" d="M8 7.7Q8 5 10.354 6.319L17.186 10.144Q20.5 12 17.186 13.856L10.354 17.681Q8 19 8 16.3Z"/></svg>';
 
 const N = UNIQUE.length, G = 340, D = N * G;   // una vuelta = todas las piezas únicas, sin copias
 const AUTO = 80;                            // paseo automático (px/s)
