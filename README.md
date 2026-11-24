@@ -26,7 +26,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   (`shuffle(Object.keys(counts))`); "Todos" queda primero por ser el filtro
   por defecto. El catálogo son **26 videoclips** (FACE DE FURRO y FACTS, de BLOQQ MÁYUS,
   entraron en noviembre; CHEESY FUCK se retiró por el bloqueo +18).
-  El botón **"¿Querés más? ↓"** ya NO despliega la grilla:
+  El botón **"Más en la Galería ↓"** ya NO despliega la grilla:
   lleva a **04 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
@@ -316,7 +316,7 @@ Todo está en `CONFIG.films` de `content/site.js` (más nuevos primero).
    `author`, `thumb`, `thumb_kb`, `date`).
 3. **Quitar**: borrar la línea de `films` y su entrada en `videos.json`
    (opcional: borrar el `.jpg` de `assets/real/`).
-4. El pliegue (6 en desktop / 5 en mobile, "¿Querés más? ↓"), el orden
+4. El pliegue (6 en desktop / 5 en mobile, "Más en la Galería ↓"), el orden
    aleatorio y las reglas de las "Reglas vigentes" se aplican solos.
 
 ### Videos verticales (sección 2)

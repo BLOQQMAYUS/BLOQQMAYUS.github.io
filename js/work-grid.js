@@ -105,7 +105,7 @@ const foldNow = () => (foldMQ.matches ? FOLD_SM : FOLD);
 let workCat = "Todos";
 const moreBtn = document.getElementById("moreBtn");
 const workMore = document.getElementById("workMore");
-const MORE_LABEL = "¿Querés más? ↓";
+const MORE_LABEL = "Más en la Galería ↓";
 function applyWork() {
   workGrid.querySelectorAll(".work-card").forEach(card => {
     const off = workCat !== "Todos"
