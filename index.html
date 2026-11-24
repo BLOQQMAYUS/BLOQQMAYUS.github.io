@@ -1085,7 +1085,7 @@ function armThumb(img) {
        así nunca se apaga estando a la vista */
     do { p.x = rnd(-spread, spread); p.y = rnd(-spread, spread); } while (Math.hypot(p.x, p.y) < minR);
     p.z = far ? FAR : NEAR + (FAR - NEAR) * Math.pow(Math.random(), 1.35);  // algo más de cerca → se reparten, no se amontonan en el centro
-    p.r = rnd(0.5, 1.5); p.o = rnd(0.25, 0.7);
+    p.r = rnd(0.5, 1.5); p.o = rnd(0.25, 0.7); p.h = Math.random();   // p.h: cuáles se ocultan sobre la imagen
     return p;
   }
   function size() {
@@ -1138,6 +1138,9 @@ function armThumb(img) {
       }
       if (y < cutT) {
         const u = (y - hr.top) / hh, f = Math.max(0, Math.min(1, (0.9 - u) / 0.35));
+        /* sobre la imagen se ve ~30% menos de estrellas (para no saturar el inicio); el recorte se
+           desvanece hacia el fundido de abajo, donde vale la densidad normal del resto del sitio */
+        if (p.h < 0.3 * f) continue;
         gT.globalAlpha = Math.max(0, Math.min(1, a + (Math.max(a, 0.7) - a) * f));
         gT.drawImage(sprite, x - rad, y - rad, rad * 2, rad * 2);
       }
