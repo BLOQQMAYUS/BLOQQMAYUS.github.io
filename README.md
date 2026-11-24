@@ -443,3 +443,11 @@ Todas las medidas salen de `css/tokens.css`: tipo `--t-2xs…--t-3xl` (9 pasos),
 Colores de la paleta: `var(--acc)` etc.; transparencias con `color-mix(in srgb,var(--acc) 30%,transparent)`.
 Cada hoja va en su `@layer` (mismo orden que los `<link>`); `reveal` es la última capa.
 Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
+
+## Hero, cifras y secciones (F3–F4, rama `saas`)
+- **Cifras bajo el hero** (`#proof`): +10 años de oficio · videoclips = `CONFIG.films` **+150** · artistas = `cat` únicos **+50** (`data-base` en el HTML). Sin cinta de artistas ni «piezas de la Galería 3D» (pedido).
+- **«Disponible para proyectos · respondo en 24 h»** arriba del neón; **nav en píldora de vidrio** al bajar (solo ≥761 px).
+- **Filtros = control segmentado** (pulgar ácido que se desliza, `moveThumb`). **Ficha de caso**: Artista / Año / Rol + `credits` opcionales, con View Transition desde la miniatura.
+- **Rueda**: cada pieza con marco de celular + puntos (`#wheelDots`, `wheelGoto`).
+- **Servicios en bento** (≥1024 px; 03 y 04 siempre anchas por sus íconos) + **«Cómo trabajo»** (Brief → Guion → Post → Entrega).
+- **Contacto**: botón copiar email con aviso «Copiado ✓». **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.
