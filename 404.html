@@ -7,7 +7,14 @@
 html,body{height:100%;margin:0}
 body{background:#1A1714;color:#F4EEE3;display:grid;place-items:center;text-align:center;font-family:"Space Mono",ui-monospace,monospace}
 h1{font-family:"Big Shoulders","Arial Narrow",Impact,sans-serif;font-weight:800;font-size:clamp(5rem,26vw,12rem);line-height:.9;margin:0;color:#F2A51A;text-shadow:0 0 18px rgba(242,165,26,.55)}
-p{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:#A79D8E;margin:18px 0 28px}
-a{display:inline-block;background:#F2A51A;color:#1A1714;padding:14px 28px;border-radius:999px;font-weight:700;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+p{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:#A79D8E;margin:26px 0 28px}
+a.btn{display:inline-block;background:#F2A51A;color:#1A1714;padding:14px 28px;border-radius:999px;font-weight:700;text-decoration:none;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase}
+.key-link{display:inline-block;padding:0;background:none;border-radius:0;margin:22px 0 0;text-decoration:none}
+.key{position:relative;width:44px;height:44px;box-sizing:border-box;border:2px solid rgba(244,238,227,.35);border-radius:11px;display:grid;place-items:center;color:#F2A51A;font-size:1.5rem;font-weight:700;font-family:Helvetica,Arial,sans-serif;transition:transform .26s cubic-bezier(.4,0,.2,1),background-color .26s,color .26s,border-color .26s}
+.key::after{content:"";position:absolute;top:-8px;right:-6px;width:10px;height:10px;border-radius:50%;background:#B5E61D;animation:blink 2.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.key-link:hover .key,.key-link:focus-visible .key{background:#F2A51A;border-color:#F2A51A;color:#1A1714;transform:scale(1.15)}
+.key-link:focus-visible{outline:2px solid #B5E61D;outline-offset:6px;border-radius:13px}
+@media(prefers-reduced-motion:reduce){.key{transition:none}.key::after{animation:none}}
 </style></head>
-<body><main><h1>404</h1><p>Esta señal no existe</p><a href="/">Volver al inicio</a></main></body></html>
+<body><main><h1>404</h1><a class="key-link" href="/" aria-label="Volver al inicio"><span class="key">⇪</span></a><p>Esta señal no existe</p><a class="btn" href="/">Volver al inicio</a></main></body></html>

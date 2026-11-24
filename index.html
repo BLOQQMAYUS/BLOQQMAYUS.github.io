@@ -105,6 +105,14 @@
   .nav-links a{color:var(--mut);transition:color .2s}
   .nav-links a:hover{color:var(--txt)}
   .nav-links a.active{color:var(--txt)}
+  /* la flecha vive a la izquierda del grupo SIN contar para el centrado; solo aparece
+     cuando se scrolleó pasando la sección OBRAS (clase .show por JS) */
+  .nav-links .logo{position:absolute;right:100%;top:50%;margin-right:var(--ngap,26px);
+    transform:translate(-8px,-50%);opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .3s ease,transform .35s cubic-bezier(.34,1.56,.64,1),visibility 0s linear .35s}
+  .nav-links .logo.show{opacity:1;visibility:visible;pointer-events:auto;transform:translate(0,-50%);
+    transition:opacity .3s ease,transform .35s cubic-bezier(.34,1.56,.64,1),visibility 0s}
+  @media(prefers-reduced-motion:reduce){.nav-links .logo,.nav-links .logo.show{transition:none}}
   .nav-links a:not(.cta):not(.logo){position:relative}
   .nav-links a:not(.cta):not(.logo)::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1.5px;background:var(--acc);
     transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease)}
@@ -114,16 +122,16 @@
   .nav-links a.cta:active{transform:scale(.96)}
   @media(max-width:880px){
     .nav-in{padding:14px 16px;min-height:62px}
-    .nav-links{gap:14px;font-size:.7rem}
+    .nav-links{gap:14px;font-size:.7rem;--ngap:14px}
     .nav-links a.cta{padding:8px 13px}
   }
   @media(max-width:430px){
     .nav-in{padding:13px 12px;min-height:58px}
     .key{width:25px;height:25px}
-    .nav-links{gap:8px;font-size:.64rem}
+    .nav-links{gap:8px;font-size:.64rem;--ngap:8px}
     .nav-links a.cta{padding:7px 10px}
   }
-  @media(max-width:350px){.nav-links .logo{position:fixed;left:12px;top:16px}.nav-links{left:auto;right:12px;top:0;bottom:0;transform:none;gap:6px;font-size:.6rem}.nav-links a.cta{padding:6px 8px}}
+  @media(max-width:350px){.nav-links .logo{position:fixed;right:auto;left:12px;top:16px;margin:0;transform:translate(-8px,0)}.nav-links .logo.show{transform:none}.nav-links{left:auto;right:12px;top:0;bottom:0;transform:none;gap:6px;font-size:.6rem}.nav-links a.cta{padding:6px 8px}}
 
   /* ---------- hero ---------- */
   .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
@@ -1901,6 +1909,12 @@ const navLinks = document.getElementById("navLinks");
    frames vienen espaciados y una animación por tiempo se saltearía entera sin
    verse nunca. Acá la tecla queda llena hasta que se vea de verdad. */
 const logoKey = document.querySelector(".logo .key");
+/* la flecha aparece solo al pasar la sección OBRAS (no en el hero ni dentro de OBRAS) */
+(function logoVisible() {
+  const lg = document.querySelector(".logo"), obras = document.getElementById("trabajo");
+  const upd = () => lg.classList.toggle("show", obras.getBoundingClientRect().bottom < 80);
+  addEventListener("scroll", upd, { passive: true }); addEventListener("resize", upd); upd();
+})();
 let tapRaf = 0;
 document.querySelector(".logo").addEventListener("click", () => {
   cancelAnimationFrame(tapRaf);
