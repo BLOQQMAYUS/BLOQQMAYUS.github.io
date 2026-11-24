@@ -75,9 +75,9 @@ h1{font-family:var(--sans);font-size:var(--t-2xl);line-height:1.08;font-weight:7
 @media(max-width:640px){.hn-box::after{background:radial-gradient(ellipse 48% 18% at 62% 28%,color-mix(in srgb,var(--acc) 22%,transparent),transparent 72%),
     radial-gradient(ellipse 40% 20% at 50% 76%,color-mix(in srgb,var(--acid) 20%,transparent),transparent 72%),
     linear-gradient(115deg,transparent 38%,rgba(255,255,255,.045) 47%,transparent 56%)}}
-.hero-neon.ignite .hn-box::after{animation:hnSpill 2.6s ease-out backwards .35s}
-.hero-neon.ignite .hn-row{animation:hnOn 1.9s linear backwards .35s}
-.hero-neon.ignite .hn-row+.hn-row{animation-delay:.95s}
+.hero-neon.ignite .hn-box::after{animation:hnSpill 1.3s ease-out backwards .1s}
+.hero-neon.ignite .hn-row{animation:hnOn .85s linear backwards .1s}   /* F3: legible en < 1 s */
+.hero-neon.ignite .hn-row+.hn-row{animation-delay:.22s}
 @keyframes hnOn{0%,6%{opacity:.04}8%{opacity:.9}10%{opacity:.08}17%{opacity:.08}19%{opacity:.75}22%{opacity:.1}38%{opacity:.1}40%{opacity:1}44%{opacity:.25}48%{opacity:1}52%{opacity:.6}55%,100%{opacity:1}}
 @keyframes hnSpill{0%,30%{opacity:0}45%{opacity:.9}60%{opacity:.4}100%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.hero-neon.ignite .hn-row,.hero-neon.ignite .hn-box::after{animation:none}}

@@ -8,7 +8,7 @@
   const cv = document.getElementById("starfield");
   const g = cv.getContext("2d", { alpha: true });
   const cvT = document.getElementById("starfieldTop"), gT = cvT.getContext("2d", { alpha: true });
-  const desde = document.getElementById("trabajo"), heroEl = document.getElementById("top");
+  const desde = document.querySelector("main"), heroEl = document.getElementById("top");
   if (!g || !gT || !desde || !heroEl) return;
   const SPEED = 80 * 0.6;                 // AUTO de la galería × 0.6 (40% más lento)
   const STEP = 1000 / 30;                 // 30 fps: el drift es lento, 60 no aporta

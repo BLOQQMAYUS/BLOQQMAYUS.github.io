@@ -17,7 +17,8 @@ página en GitHub Pages: **sin build, sin npm, sin framework**. Lo que está en 
 | Agregar un reel vertical | `assets/reels/` + `FALLBACK_REELS` en `js/reels.js` (ver README) |
 | Colores, fuentes, variables | `css/tokens.css` |
 | Estructura HTML de las secciones | `index.html` |
-| Estilos de una sección | `css/<sección>.css` (nav, hero, work, vertical, services, contact, footer, overlays) |
+| Estilos de una sección | `css/<sección>.css` (nav, hero, proof, work, vertical, services, contact, footer, overlays) |
+| Cifras bajo el hero y cinta «Trabajé con» | `index.html` (`#proof`) + `js/proof.js`: videoclips y artistas se cuentan solos desde `CONFIG.films` |
 | Lógica de una sección | `js/<sección>.js` (cada archivo arranca con una línea que dice qué hace) |
 | Galería 3D | `lab/vortex/index.html` (su lista `UNIQUE` también se actualiza al sumar videos) |
 
@@ -33,7 +34,7 @@ página en GitHub Pages: **sin build, sin npm, sin framework**. Lo que está en 
 ```
 node tests/qa.mjs _plan/qa-ahora --compare _plan/qa-antes
 ```
-Edge headless, sin dependencias: capturas por sección (desktop 1440 y celu 390), 20 chequeos de
+Edge headless, sin dependencias: capturas por sección (desktop 1440 y celu 390), 21 chequeos de
 conducta (pliegue, filtros, rueda, Showreel, Escape, Galería 3D, consola limpia) y una **huella** del
 DOM + estilos computados. Para refactors sin cambio visual la huella tiene que dar **IDÉNTICA**.
 Vista previa manual: `python -m http.server 8765` en esta carpeta.

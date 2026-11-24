@@ -1,6 +1,6 @@
 /* tokens.css — Paleta Brasa y variables globales. Un color o medida nueva se declara ACÁ. */
 /* Orden de las capas = orden de carga. Una capa posterior gana sin pelear especificidad. */
-@layer tokens, base, nav, hero, work, vertical, services, contact, titles, work-cards, footer, overlays, reveal;
+@layer tokens, base, nav, hero, proof, work, vertical, services, contact, titles, work-cards, footer, overlays, reveal;
 @layer tokens {
 /* ============ PALETA BRASA · Biblia BLOQQ MÁYUS ============
    Hollín #1A1714 · Brasa #B8321F · Ámbar #F2A51A

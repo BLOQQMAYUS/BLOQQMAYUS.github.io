@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/nav.css">
 <link rel="stylesheet" href="css/hero.css">
+<link rel="stylesheet" href="css/proof.css">
 <link rel="stylesheet" href="css/work.css">
 <link rel="stylesheet" href="css/vertical.css">
 <link rel="stylesheet" href="css/services.css">
@@ -78,6 +79,7 @@
   <div class="cam" aria-hidden="true"><span class="cam-c tl"></span><span class="cam-c tr"></span><span class="cam-c bl"></span><span class="cam-c br"></span></div>
   <div class="rec"><span class="rec-l"><i></i> REC</span><span class="rec-r">FRANCISCO BENÍTEZ · CABA</span></div>
   <div class="hero-in">
+    <a class="avail" href="#contacto"><i aria-hidden="true"></i>Disponible para proyectos <span>· respondo en 24 h</span></a>
     <h1 class="hero-neon" id="heroNeon">
       <span class="hn-box">
         <span class="hn-screw bl"></span><span class="hn-screw br"></span>
@@ -98,6 +100,22 @@
 </header>
 
 <main>
+  <!-- ============ PRUEBA SOCIAL · cifras + artistas (se completan solos desde content/site.js) ============ -->
+  <section class="proof" id="proof" aria-label="El laburo en números">
+    <div class="wrap">
+      <dl class="stats">
+        <div class="stat reveal"><dt>años de oficio</dt><dd data-count="10" data-prefix="+">+10</dd></div>
+        <div class="stat reveal"><dt>videoclips oficiales</dt><dd data-count-from="films">26</dd></div>
+        <div class="stat reveal"><dt>artistas</dt><dd data-count-from="artists">12</dd></div>
+        <div class="stat reveal"><dt>piezas en la Galería 3D</dt><dd data-count="35">35</dd></div>
+      </dl>
+    </div>
+    <div class="marquee reveal">
+      <p class="mq-label">Trabajé con</p>
+      <div class="mq-view"><div class="mq-track" id="mqTrack"></div></div>
+    </div>
+  </section>
+
   <!-- ============ 01 · TRABAJO · VIDEOCLIPS ============ -->
   <section id="trabajo">
     <div class="wrap">
@@ -257,6 +275,7 @@
 <script src="js/services.js"></script>
 <script src="js/effects.js"></script>
 <script src="js/work-cards.js"></script>
+<script src="js/proof.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
