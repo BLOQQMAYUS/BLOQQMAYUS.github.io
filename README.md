@@ -71,10 +71,11 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   `.hn-tube`/`.hn-low` llevan `white-space:nowrap`, así en mobile cada bloque
   baja entero y el cartel queda en 3 renglones.
 - **Todo el header va CENTRADO** (cartel, párrafo y "Showreel"), **menos
-  "REC · FRANCISCO BENÍTEZ · CABA", que queda SIEMPRE a la izquierda.**
+  la fila superior: "● REC" solo a la izquierda y "FRANCISCO BENÍTEZ · CABA"
+  alineado a la derecha, a la misma altura y sin líneas.**
 - **Interfaz de cámara grabando** (decorativa, `aria-hidden`): cuatro escuadras
-  ámbar finas (`.cam-c`, 1px al 34%) más dos hairlines ámbar — una detrás del
-  REC y otra sobre el timecode. El marco arranca **debajo del nav** (`top:84px`,
+  ámbar finas (`.cam-c`, 1px al 34%) más una hairline ámbar sobre el timecode
+  (la del REC se quitó). El marco arranca **debajo del nav** (`top:84px`,
   74px en celu) para no pelearse con el logo. **El timecode "4K · 120 FPS / TC"
   ahora se ve también en mobile** (antes se ocultaba bajo 640px). Sin glow y sin
   loops JS: el único movimiento es el LED rojo del REC y el contador `#tc`.
