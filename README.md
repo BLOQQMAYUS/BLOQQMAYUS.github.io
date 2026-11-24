@@ -449,5 +449,5 @@ Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
 - **«Disponible para proyectos · respondo en 24 h»** arriba del neón; **nav en píldora de vidrio** al bajar (solo ≥761 px).
 - **Filtros = control segmentado** (pulgar ácido que se desliza, `moveThumb`). **Ficha de caso**: Artista / Año / Rol + `credits` opcionales, con View Transition desde la miniatura.
 - **Rueda**: cada pieza con marco de celular + puntos (`#wheelDots`, `wheelGoto`).
-- **Servicios en bento** (≥1024 px; 03 y 04 siempre anchas por sus íconos) + **«Cómo trabajo»** (Brief → Guion → Post → Entrega).
-- **Contacto**: botón copiar email con aviso «Copiado ✓». **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.
+- **Servicios en bento** (≥1024 px): 01–03 horizontales en dos columnas y **04 · Contenido Vertical en vertical** (columna derecha, alta, como un celular). Sin bloque «Cómo trabajo» (sacado a pedido).
+- **Contacto**: sin botón copiar aparte; **click en el botón del email copia la dirección** y muestra un aviso sutil «Copiado ✓» (1,6 s). Si el navegador no deja copiar, abre el `mailto:`; Ctrl/rueda siguen abriendo el mail (`js/bind.js`). **Pie en columnas** (marca · secciones · contacto · redes) sobre la barra con el LED de INDUSTRIA ARGENTINA.

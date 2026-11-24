@@ -31,10 +31,11 @@ document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]
 document.getElementById("footMail").href = "mailto:" + CONFIG.email;
 document.getElementById("footPhone").href = "tel:" + CONFIG.phone.replace(/[^+\d]/g, "");
 
-/* ---- copiar email: aviso "Copiado ✓" 1,6 s. Portapapeles moderno; si el navegador lo niega,
-   copia a la vieja usanza (textarea + execCommand); si eso también falla, abre el mail ---- */
+/* ---- botón del email: al click COPIA la dirección y muestra un aviso sutil "Copiado ✓" (1,6 s).
+   Portapapeles moderno; si el navegador lo niega, textarea + execCommand; si nada copia,
+   sigue el mailto: normal. Click con rueda / Ctrl+click siguen abriendo el mail. ---- */
 (function () {
-  const b = document.getElementById("copyMail"), tip = b.querySelector(".copy-tip");
+  const b = document.getElementById("mailBtn"), tip = b.querySelector(".copy-tip");
   let tm = 0;
   const legacyCopy = txt => {
     const ta = Object.assign(document.createElement("textarea"), { value: txt, readOnly: true });
@@ -44,14 +45,16 @@ document.getElementById("footPhone").href = "tel:" + CONFIG.phone.replace(/[^+\d
     ta.remove(); b.focus({ preventScroll: true });
     return ok;
   };
-  b.addEventListener("click", async () => {
+  b.addEventListener("click", async e => {
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
     let ok = false;
     try { await navigator.clipboard.writeText(CONFIG.email); ok = true; } catch { ok = legacyCopy(CONFIG.email); }
     if (!ok) { location.href = "mailto:" + CONFIG.email; return; }
     tip.textContent = "Copiado ✓";
-    b.classList.add("done");
+    b.classList.add("copied");
     clearTimeout(tm);
-    tm = setTimeout(() => { b.classList.remove("done"); tip.textContent = ""; }, 1600);
+    tm = setTimeout(() => { b.classList.remove("copied"); tip.textContent = ""; }, 1600);
   });
 })();
 
