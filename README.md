@@ -454,6 +454,7 @@ Secciones numeradas 01 Videoclips · 02 Vertical · 03 Servicios · 04 Contacto.
 - **Pie**: una sola barra «Francisco Benítez ⇪ Buenos Aires · 2026» + LED «INDUSTRIA ARGENTINA» (sin bloque de marca ni columnas: contacto y redes están en Contacto, justo arriba). En celu la píldora «Disponible… 24 hs» se ve entera (letra más chica ≤370 px).
 
 ## Rendimiento y SEO (F5, rama `saas`)
+- **Menú tocado mientras carga**: en celu lento la página sigue creciendo después del salto (obras, rueda y tarjetas se arman con JS), y «Contacto» caía en otra sección. `pinSection` (js/core.js) deja la sección pedida clavada arriba hasta que termina de cargar (+1,2 s, máx. 15 s) y se suelta apenas el visitante scrollea. La recarga sigue arrancando arriba, pero ya no tira arriba a quien tocó el menú o scrolleó mientras cargaba. Prueba: `node tests/nav-temprano.mjs` (24 casos, celu y compu).
 - **Medir**: `node tests/perf.mjs [veces] [--lista]` → FCP, LCP, CLS, TBT, peso y pedidos en celu (CPU ×4 + 4G lenta,
   como Lighthouse móvil) y compu, con gzip como GitHub Pages. `--lista` agrega los 15 archivos más pesados, los
   corrimientos de layout y cuándo termina cada tipo de archivo. Sin Lighthouse ni dependencias.

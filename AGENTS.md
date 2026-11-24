@@ -41,6 +41,7 @@ Edge headless, sin dependencias: capturas por sección (desktop 1440 y celu 390)
 conducta (pliegue, filtros, rueda, Showreel, Escape, Galería 3D, consola limpia) y una **huella** del
 DOM + estilos computados. Para refactors sin cambio visual la huella tiene que dar **IDÉNTICA**.
 Velocidad: `node tests/perf.mjs` (FCP/LCP/CLS/TBT en celu y compu; `--lista` dice qué pesa y qué salta).
+Menú apenas entra: `node tests/nav-temprano.mjs` (toca cada link del menú mientras carga, en celu lento y compu; `--debug` muestra clicks y saltos de scroll). El que lo hace andar es `pinSection` en `js/core.js`.
 Vista previa manual: `python -m http.server 8765` en esta carpeta.
 
 ## Estilo del código
