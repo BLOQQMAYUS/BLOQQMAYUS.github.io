@@ -78,11 +78,6 @@
   .work-media img.ld,.lt-thumb img.ld{animation:imgIn .6s ease}
   @keyframes imgIn{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
 
-  /* ---------- grano de película ---------- */
-  .grain{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:2000;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    animation:grain 8s steps(10) infinite}
-  @keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-2%)}80%{transform:translate(3%,3%)}}
 
   .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
   .mono{font-family:var(--mono)}
@@ -360,7 +355,7 @@
   .strip-arrow svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
   .strip-arrow.left{left:16px}
   .strip-arrow.right{right:16px}
-  @media(max-width:700px){.strip-arrow{display:none}.grain{animation:none;opacity:.03}}
+  @media(max-width:700px){.strip-arrow{display:none}}
   .strip-foot{display:flex;align-items:center;gap:22px}
   .strip-progress{flex:1;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
   .strip-progress i{display:block;height:100%;width:0;background:var(--acc);transition:width .12s linear}
@@ -686,7 +681,6 @@
 <canvas id="starfield" aria-hidden="true"></canvas>
 
 <a class="skip" href="#trabajo">Saltar al contenido</a>
-<div class="grain" aria-hidden="true"></div>
 
 <nav id="nav">
   <div class="nav-in">
