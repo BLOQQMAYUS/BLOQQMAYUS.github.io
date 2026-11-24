@@ -492,7 +492,7 @@ Todo está en `CONFIG.films` de `index.html` (más nuevos primero).
 - **Tarjetas de obras**: inclinación 3D + brillo que siguen al mouse, y tras 650 ms encima, loop mudo del videoclip (iframe `youtube-nocookie`, solo se muestra cuando el player reporta `playerState 1`; si no arranca en 9 s se descarta). Solo con `(hover:hover) and (pointer:fine)`, sin `saveData` ni reduced-motion; una a la vez y se limpia al salir.
 
 ## Texto del hero
-Párrafo reducido (≈ 61 % del original). Dos versiones en el mismo `<p class="hero-sub">`: `.hs-long` (escritorio) y `.hs-short` (celular, ≤ 600 px).
+Párrafo reducido (≈ 61 % del original). Una sola frase en el HTML (`#heroTail`, la larga, para buscadores/IAs); en celular (≤ 600 px) un script la cambia por la corta guardada en su atributo `data-short`.
 
 ## Escala tipográfica (variables en :root)
 - `--fs-micro .68rem` (metadatos, contadores, pies, etiquetas chicas) · `--fs-label .76rem` (kicker, chips, botones mono, REC) · `--fs-lead` (párrafo de hero y descripciones de sección) · `--fs-h3 1.5rem` (títulos de tarjetas, servicios y modal) · `--ls-label .14em` (tracking de etiquetas mono; kicker/REC/índice quedan en .24em).
