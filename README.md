@@ -26,7 +26,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
   (`shuffle(Object.keys(counts))`); "Todos" queda primero por ser el filtro
   por defecto. El catálogo son **26 videoclips** (FACE DE FURRO y FACTS, de BLOQQ MÁYUS,
   entraron en noviembre; CHEESY FUCK se retiró por el bloqueo +18).
-  El botón **"¿Más? Galería ↓"** ya NO despliega la grilla:
+  El botón **"¿Querés más? ↓"** ya NO despliega la grilla:
   lleva a **05 · Contacto** y dispara la clase `.attn` del cartel de neón
   (una pasada de 2.4 s, transform+opacity, se limpia en `animationend`)
   para que el usuario entre solo a la Galería 3D, donde están todas las piezas.
@@ -44,7 +44,7 @@ Sitio de una sola página, oscuro y cinematográfico. Flujo del visitante:
 - **Textos vigentes de 04 y 05**: h2 de 04 **"Mi sistema,
   (salto de línea) tus resultados."** (con punto final); Post **"Edición, etalonaje, VFX, animación 2D/3D y mograph son
   la materia prima."**; Vertical **"La ola de contenido nunca frena. Paquetes
-  9:16 para Reels, TikTok y Shorts."**; Contacto **"Contame tu proyecto — de tu
+  4:5 y 9:16 para Reels, TikTok y Shorts."**; Contacto **"Contame tu proyecto — de tu
   idea pasamos al brief, y mi sistema devuelve RESULTADOS."**. El párrafo de
   Contacto lleva `margin:36px auto` → **36px de aire arriba y abajo** (el
   margen inferior del neón colapsa con el superior del párrafo: por eso 36 y

@@ -340,7 +340,7 @@
   .work-more{display:flex;justify-content:center;margin-top:36px}
   #moreBtn{font-family:var(--mono);font-size:var(--fs-label);letter-spacing:var(--ls-label);text-transform:uppercase;
     padding:13px 28px;border-radius:999px;border:1px solid var(--line);color:var(--txt);transition:.2s}
-  #moreBtn:hover{border-color:var(--brasa);color:var(--brasa)}
+  @media(hover:hover){#moreBtn:hover{background:var(--acid);border-color:var(--acid);color:var(--bg)}}
   .work-media{position:relative;aspect-ratio:16/9;border-radius:var(--rad);overflow:hidden;border:1px solid var(--line);background:var(--card);
     transition:border-color .35s var(--ease),box-shadow .35s var(--ease),transform .2s var(--ease)}
   .work-card:hover .work-media{border-color:rgba(242,165,26,.4);box-shadow:0 18px 48px rgba(0,0,0,.45)}
@@ -821,7 +821,7 @@
       </div>
       <div class="filters reveal" id="filters"></div>
       <div class="work-grid" id="workGrid"></div>
-      <div class="work-more" id="workMore"><button type="button" id="moreBtn" aria-label="Ir a Contacto y abrir la Galería 3D">¿Más? Galería ↓</button></div>
+      <div class="work-more" id="workMore"><button type="button" id="moreBtn" aria-label="Ir a Contacto y abrir la Galería 3D">¿Querés más? ↓</button></div>
     </div>
   </section>
 
@@ -873,7 +873,7 @@
           <span class="serv-plus">+</span>
           <span class="serv-ico"><svg viewBox="0 0 24 24"><defs><mask id="vm" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><rect x="6.9" y="2.1" width="10.2" height="19.8" rx="2.8" fill="#000"/></mask></defs><g mask="url(#vm)" stroke-width="1.3"><rect x="3.4" y="6.4" width="6" height="12.4" rx="1.5" transform="rotate(-13 6.4 12.6)"/><rect x="14.6" y="6.4" width="6" height="12.4" rx="1.5" transform="rotate(13 17.6 12.6)"/></g><rect x="8.3" y="3.4" width="7.4" height="17.2" rx="1.9"/><path d="M11 5.9h2"/><path class="solid" d="M20.6 2.1000000000000005Q21.11 3.89 22.900000000000002 4.4Q21.11 4.91 20.6 6.7Q20.09 4.91 18.3 4.4Q20.09 3.89 20.6 2.1000000000000005Z"/><path class="solid" d="M3.4 17.8Q3.80 19.20 5.2 19.6Q3.80 20.00 3.4 21.400000000000002Q3.00 20.00 1.5999999999999999 19.6Q3.00 19.20 3.4 17.8Z"/><path class="solid" d="M21.2 18.0Q21.46 18.94 22.4 19.2Q21.46 19.46 21.2 20.4Q20.94 19.46 20.0 19.2Q20.94 18.94 21.2 18.0Z"/></svg></span>
           <h3>Estrategia Vertical</h3>
-          <p>La ola de contenido nunca frena. Paquetes 9:16 para Reels, TikTok y Shorts.</p>
+          <p>La ola de contenido nunca frena. Paquetes 4:5 y 9:16 para Reels, TikTok y Shorts.</p>
         </button>
       </div>
     </div>
@@ -1323,7 +1323,7 @@ const foldNow = () => (foldMQ.matches ? FOLD_SM : FOLD);
 let workCat = "Todos";
 const moreBtn = document.getElementById("moreBtn");
 const workMore = document.getElementById("workMore");
-const MORE_LABEL = "¿Más? Galería ↓";
+const MORE_LABEL = "¿Querés más? ↓";
 function applyWork() {
   workGrid.querySelectorAll(".work-card").forEach(card => {
     const off = workCat !== "Todos"
