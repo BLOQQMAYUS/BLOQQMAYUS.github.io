@@ -249,12 +249,12 @@
      brillo que barre el botón y el play que se asoma; click que se hunde y rebota */
   #showreelBtn{position:relative;overflow:hidden;flex-direction:column;gap:9px;padding:18px 40px 15px;border-radius:30px;line-height:1;
     transition:transform .38s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,background .2s}
-  #showreelBtn svg{width:30px;height:38px;transition:transform .38s cubic-bezier(.34,1.56,.64,1)}
+  #showreelBtn svg{width:18px;height:23px;transition:transform .38s cubic-bezier(.34,1.56,.64,1)}
   #showreelBtn span{transition:letter-spacing .35s cubic-bezier(.2,.8,.2,1)}
   #showreelBtn::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;pointer-events:none;
     background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);opacity:0}
   @media(hover:hover) and (pointer:fine){
-    #showreelBtn:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 14px 30px -6px rgba(242,165,26,.5)}
+    #showreelBtn:hover{transform:translateY(-4px) scale(1.05);box-shadow:0 10px 21px -6px rgba(242,165,26,.35)}
     #showreelBtn:hover svg{transform:scale(1.14) translateX(2px)}
     #showreelBtn:hover span{letter-spacing:.09em}
     #showreelBtn:hover::after{animation:srShine .75s ease-out}
