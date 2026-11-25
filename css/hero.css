@@ -8,8 +8,8 @@
    La máscara afecta también al ::after, o sea que imagen y scrim se van
    juntos. El último tramo es transparente sobre el mismo var(--bg) del body. */
 .hero-img{position:absolute;inset:0;
-  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.85) 58%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.12) 88%,transparent 95%);
-  mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.85) 58%,rgba(0,0,0,.5) 74%,rgba(0,0,0,.12) 88%,transparent 95%)}
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,.6) 86%,rgba(0,0,0,.15) 95%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 72%,rgba(0,0,0,.6) 86%,rgba(0,0,0,.15) 95%,transparent 100%)}
 /* el zoom suave en loop lo pone esta regla, no el archivo: sirve igual para
    <img> y para <video>, así que cambiar el medio no toca la animación */
 .hero-img picture{display:contents}   /* <picture> con AVIF/WebP: no agrega caja, el <img> sigue llenando el header */
@@ -17,6 +17,12 @@
   transform:scale(1.05);animation:slowzoom 24s ease-in-out infinite alternate;
   will-change:transform}   /* el zoom corre en el compositor, no repinta la imagen */
 @keyframes slowzoom{from{transform:scale(1.05)}to{transform:scale(1.13)}}
+/* mientras el video baja, el poster «busca foco» como una cámara (no queda un cuadro
+   congelado); al arrancar el video enfoca en .6 s. La clase la saca core.js. */
+.hero-img video{transition:filter .6s var(--e-out)}
+.hero-img video.buscando{animation:slowzoom 24s ease-in-out infinite alternate,foco 2.4s ease-in-out infinite}
+@keyframes foco{0%,100%{filter:blur(10px) brightness(.8)}38%{filter:blur(3px) brightness(.92)}55%{filter:blur(5px) brightness(.88)}}
+@media(prefers-reduced-motion:reduce){.hero-img video.buscando{animation:none;filter:none}}
 /* en celu el encuadre es angosto: se corre hacia el personaje para que la
    ilustración no quede en pura calle vacía */
 @media(max-width:760px){.hero-img img,.hero-img video{object-position:50% 30%}}
@@ -26,9 +32,9 @@
    La banda de abajo es larga (~45%) y ahí ya entran las estrellas, así que
    imagen y fondo se mezclan en vez de cortarse. */
 .hero-img::after{content:"";position:absolute;inset:0;background:
-  linear-gradient(180deg,color-mix(in srgb,var(--bg) 62%,transparent) 0%,color-mix(in srgb,var(--bg) 20%,transparent) 32%,color-mix(in srgb,var(--bg) 34%,transparent) 55%,
-    color-mix(in srgb,var(--bg) 62%,transparent) 72%,color-mix(in srgb,var(--bg) 86%,transparent) 85%,color-mix(in srgb,var(--bg) 97%,transparent) 94%,var(--bg) 100%),
-  linear-gradient(90deg,color-mix(in srgb,var(--bg) 86%,transparent) 0%,color-mix(in srgb,var(--bg) 44%,transparent) 52%,color-mix(in srgb,var(--bg) 16%,transparent) 100%)}
+  linear-gradient(180deg,color-mix(in srgb,var(--bg) 45%,transparent) 0%,color-mix(in srgb,var(--bg) 8%,transparent) 22%,transparent 45%,
+    color-mix(in srgb,var(--bg) 18%,transparent) 75%,color-mix(in srgb,var(--bg) 55%,transparent) 100%),
+  radial-gradient(ellipse 55% 42% at 50% 54%,color-mix(in srgb,var(--bg) 30%,transparent),transparent 100%)}
 .hero-in{position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:150px 24px 90px;text-align:center}
 /* subtítulo: frase larga en compu, corta en celu (en CSS, no en JS: así no salta el hero al cargar) */
 .ht-short{display:none}

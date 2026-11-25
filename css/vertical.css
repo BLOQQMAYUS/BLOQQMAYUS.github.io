@@ -66,7 +66,7 @@ section.acid .strip-arrow:hover{background:var(--acid);border-color:var(--acid)}
    espejadas. La rueda del mouse NO la mueve: scrollea la página. */
 .wheel-wrap{position:relative}
 .wheel-stage{position:relative;height:min(78vh,640px);perspective:1400px;perspective-origin:50% 50%;
-  overflow:hidden;touch-action:pan-y;cursor:grab;-webkit-tap-highlight-color:transparent}
+  overflow:hidden;overflow:clip visible;   /* recorta solo a los costados: las sombras de los celulares bajan sin cortarse */touch-action:pan-y;cursor:grab;-webkit-tap-highlight-color:transparent}
 .wheel-stage.dragging{cursor:grabbing}
 .wheel-rotor{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
 .wheel-card{position:absolute;left:0;top:0;width:var(--cw,230px);height:var(--ch,409px);aspect-ratio:auto;

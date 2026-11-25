@@ -66,14 +66,19 @@ addEventListener("pageshow", e => { if (e.persisted) startAtTop(); });
 
 /* ---- LOOP DEL SHOWREEL EN EL HEADER ----------------------------------------
    El video baja recién cuando la página terminó de cargar: en un celu con 4G
-   lenta competía con CSS/JS y el menú tardaba en responder. Hasta entonces se
-   ve el poster (mismo cuadro de arranque). Con «reducir movimiento» o ahorro
+   lenta competía con CSS/JS y el menú tardaba en responder. Hasta entonces el
+   poster «busca foco» (clase .buscando, ver hero.css) y enfoca al arrancar el video. Con «reducir movimiento» o ahorro
    de datos queda solo el poster. */
 addEventListener("load", () => {
   const v = document.getElementById("heroVid");
-  if (!v || matchMedia("(prefers-reduced-motion: reduce)").matches || (navigator.connection && navigator.connection.saveData)) return;
+  if (!v) return;
+  const enfoca = () => v.classList.remove("buscando");   // fin del «buscando foco» del poster
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || (navigator.connection && navigator.connection.saveData)) return enfoca();
+  v.addEventListener("playing", enfoca, { once: true });
+  v.addEventListener("error", enfoca, true);
+  setTimeout(enfoca, 12000);                              // red muy lenta o video caído: queda el poster nítido
   v.querySelectorAll("source[data-src]").forEach(s => { s.src = s.dataset.src; });
-  v.load(); const p = v.play(); if (p && p.catch) p.catch(() => {});
+  v.load(); const p = v.play(); if (p && p.catch) p.catch(enfoca);
 });
 
 const TIPS_ON = false;
