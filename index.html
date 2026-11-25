@@ -13,16 +13,16 @@
 <meta property="og:url" content="https://bloqqmayus.github.io/">
 <meta property="og:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker &amp; Contenido Vertical">
 <meta property="og:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO. Buenos Aires, Argentina.">
-<meta property="og:image" content="https://bloqqmayus.github.io/assets/hero/og-anterior.jpg">
+<meta property="og:image" content="https://bloqqmayus.github.io/assets/hero/og-reel.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Francisco Benítez (BLOQQ MÁYUS) mirando a cámara a través de sus dedos">
+<meta property="og:image:alt" content="Cuadro del showreel de Francisco Benítez (BLOQQ MÁYUS)">
 <meta property="og:site_name" content="BLOQQ MÁYUS">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Francisco Benítez — BLOQQ MÁYUS · Filmmaker">
 <meta name="twitter:description" content="Director creativo, rapero y filmmaker: guión, montaje, edición, VFX y motion graphics. De tu idea, al RESULTADO.">
-<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/og-anterior.jpg">
+<meta name="twitter:image" content="https://bloqqmayus.github.io/assets/hero/og-reel.jpg">
 <!-- Datos estructurados para buscadores e IAs (schema.org). Si cambian email, teléfono o redes en
      content/site.js, actualizarlos también acá: Google lee esto sin ejecutar JS. -->
 <script type="application/ld+json">
@@ -33,7 +33,7 @@
   "name": "Francisco Benítez",
   "alternateName": ["BLOQQ MÁYUS", "Bloqq Máyus"],
   "url": "https://bloqqmayus.github.io/",
-  "image": "https://bloqqmayus.github.io/assets/hero/og-anterior.jpg",
+  "image": "https://bloqqmayus.github.io/assets/hero/og-reel.jpg",
   "jobTitle": "Director creativo y filmmaker",
   "description": "Director creativo, rapero y filmmaker argentino: guion, montaje, edición, VFX, motion graphics y contenido vertical.",
   "knowsAbout": ["Dirección de videoclips", "Edición de video", "Color", "VFX", "Motion graphics", "Animación 2D/3D", "Contenido vertical"],
@@ -98,12 +98,14 @@
          · volver a la anterior:  assets/hero/anterior.jpg
          · imagen nueva:          copiá el archivo a assets/hero/ y usá su nombre
          · video:                 descomentá el <video> de abajo y borrá el <img>
+         · AHORA: loop del showreel (reel.mp4 en compu, reel-vertical.mp4 en celu
+           vertical, por <source media>); la foto anterior.jpg queda para volver
        El zoom suave en loop lo pone la CSS (.hero-img img/video), no el archivo.
        ⚠️ REGLA: si cambia el medio del header, cambia también og:image y
        twitter:image del <head> — es la vista previa al compartir el link.
        ═══════════════════════════════════════════════════════════════════════ -->
   <div class="hero-img">
-    <picture><source srcset="assets/hero/anterior.avif" type="image/avif"><source srcset="assets/hero/anterior.webp" type="image/webp"><img src="assets/hero/anterior.jpg" width="1280" height="720" alt="Francisco Benítez mirando a cámara a través de sus dedos" fetchpriority="high" decoding="async"></picture>
+    <video muted loop playsinline preload="none" poster="assets/hero/reel-poster.jpg" aria-hidden="true" id="heroVid"><source data-src="assets/hero/reel-vertical.mp4" media="(max-width:760px) and (orientation:portrait)" type="video/mp4"><source data-src="assets/hero/reel.mp4" type="video/mp4"></video>
     <!-- <video src="assets/hero/clip.mp4" poster="assets/hero/bloqq-bg.jpg" autoplay muted loop playsinline></video> -->
   </div>
   <div class="cam" aria-hidden="true"><span class="cam-c tl"></span><span class="cam-c tr"></span><span class="cam-c bl"></span><span class="cam-c br"></span></div>

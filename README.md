@@ -283,6 +283,12 @@ de filtros, obras y rueda se compara como conjunto: es aleatorio por regla.
   - video: `./cambiar-hero.sh assets/hero/clip.mp4` → pone `<video autoplay muted
     loop playsinline>` con **poster** (el poster es lo que se comparte: WhatsApp
     no hace preview de video).
+- **AHORA el header es el loop del showreel** (2026-11-25): `reel.mp4` (1280×720) en compu y
+  `reel-vertical.mp4` (720×1280, reencuadrado plano por plano) en celu vertical, elegidos con
+  `<source media>`; poster `reel-poster.jpg`, preview de redes `og-reel.jpg`. 6,3 s, mudo, sin
+  planos con texto. **Baja recién en `load`** (core.js, `#heroVid` con `data-src`): en 4G lenta
+  competía con CSS/JS y el menú fallaba. Con reducir movimiento o ahorro de datos queda el poster.
+  Fuente y script del corte en `_plan/reel/`. Volver a la foto: `./cambiar-hero.sh assets/hero/anterior.jpg`.
 - Los medios viven en **`assets/hero/`**: `bloqq-bg.jpg` (el actual, ilustración
   del personaje cruzando la avenida con el Obelisco) y `anterior.jpg` (la foto
   anterior, guardada para volver en un segundo).

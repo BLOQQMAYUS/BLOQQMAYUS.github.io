@@ -64,6 +64,18 @@ document.addEventListener("click", e => {
 if (location.hash && location.hash !== LOAD_HASH) pinSection(decodeURIComponent(location.hash.slice(1)));
 addEventListener("pageshow", e => { if (e.persisted) startAtTop(); });
 
+/* ---- LOOP DEL SHOWREEL EN EL HEADER ----------------------------------------
+   El video baja recién cuando la página terminó de cargar: en un celu con 4G
+   lenta competía con CSS/JS y el menú tardaba en responder. Hasta entonces se
+   ve el poster (mismo cuadro de arranque). Con «reducir movimiento» o ahorro
+   de datos queda solo el poster. */
+addEventListener("load", () => {
+  const v = document.getElementById("heroVid");
+  if (!v || matchMedia("(prefers-reduced-motion: reduce)").matches || (navigator.connection && navigator.connection.saveData)) return;
+  v.querySelectorAll("source[data-src]").forEach(s => { s.src = s.dataset.src; });
+  v.load(); const p = v.play(); if (p && p.catch) p.catch(() => {});
+});
+
 const TIPS_ON = false;
 document.body.classList.toggle("no-tips", !TIPS_ON);
 
