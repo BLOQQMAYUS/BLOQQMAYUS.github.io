@@ -114,7 +114,7 @@ function applyWork() {
     card.classList.toggle("hidden", off);
   });
   workMore.hidden = !(workCat === "Todos" && CONFIG.films.length > foldNow());
-  moreBtn.textContent = MORE_LABEL;
+  moreBtn.textContent = t(MORE_LABEL);
 }
 filters.addEventListener("click", e => {
   const b = e.target.closest(".chip"); if (!b) return;
@@ -148,8 +148,8 @@ workGrid.addEventListener("click", e => {
   const card = e.target.closest(".work-card"); if (!card) return;
   const f = CONFIG.films[+card.dataset.i];
   /* ficha de caso: datos fijos + créditos opcionales del CONFIG (credits: [["Cámara","X"], …]) */
-  const facts = [["Artista", f.lineup || f.artist], ["Año", f.year], ["Rol", f.role], ...(f.credits || [])];
-  openModal({ ...f, meta: `${f.lineup || f.artist} · ${f.role} · ${f.year}`, vert: false, facts,
+  const facts = [[t("Artista"), f.lineup || f.artist], [t("Año"), f.year], [t("Rol"), t(f.role)], ...(f.credits || []).map(([k, v]) => [t(k), v])];
+  openModal({ ...f, meta: `${f.lineup || f.artist} · ${t(f.role)} · ${f.year}`, vert: false, facts,
     from: card.querySelector(".work-media") });
 });
 /* teclado: Enter / Espacio abren la pieza enfocado (accesibilidad) */

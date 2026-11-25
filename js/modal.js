@@ -36,7 +36,7 @@ function fillModal(item) {
     /* el póster queda debajo del iframe mientras carga (y es lo que se ve en la transición) */
     mMedia.innerHTML = (item.img && !item.vert ? `<img class="modal-poster" src="${esc(item.img)}" alt="">` : "") + embed;
   } else if (item.video) {
-    mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}"><span class="modal-open"><a href="${esc(item.video)}" target="_blank" rel="noopener noreferrer">${ICONS.play} Ver en YouTube</a></span>`;
+    mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}"><span class="modal-open"><a href="${esc(item.video)}" target="_blank" rel="noopener noreferrer">${ICONS.play} ${t("Ver en YouTube")}</a></span>`;
   } else {
     mMedia.innerHTML = `<img src="${esc(item.img)}" alt="${esc(item.title)}">`;
   }
@@ -51,7 +51,7 @@ function fillModal(item) {
   if (item.video && /^https:\/\//i.test(item.video)) {   /* solo https: nunca javascript:/data: en el enlace */
     ext.hidden = false;
     ext.href = item.video;
-    ext.textContent = /vimeo\.com/.test(item.video) ? "Ver en Vimeo ↗" : (/youtube|youtu\.be/.test(item.video) ? "Ver en YouTube ↗" : "Abrir video ↗");
+    ext.textContent = t(/vimeo\.com/.test(item.video) ? "Ver en Vimeo ↗" : (/youtube|youtu\.be/.test(item.video) ? "Ver en YouTube ↗" : "Abrir video ↗"));
   } else ext.hidden = true;
   document.getElementById("modalHint").textContent = embed ? "" :
     (item.video ? "✦ Archivo local: YouTube no incrusta desde file:// — usá el botón. Publicado en la web, reproduce acá mismo." :
@@ -71,4 +71,4 @@ document.getElementById("modalBg").addEventListener("click", () => closeModal())
 document.getElementById("modalX").addEventListener("click", () => closeModal());
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeTopLayer(); });
 document.getElementById("showreelBtn").addEventListener("click", () =>
-  openModal({ ...CONFIG.showreel, meta: "Director Creativo · Filmmaker · Editor · VFX", vert: false }));
+  openModal({ ...CONFIG.showreel, meta: t("Director Creativo · Filmmaker · Editor · VFX"), vert: false }));

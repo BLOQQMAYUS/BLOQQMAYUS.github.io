@@ -43,7 +43,7 @@ document.getElementById("phoneBtn").href = "tel:" + CONFIG.phone.replace(/[^+\d]
     let ok = false;
     try { await navigator.clipboard.writeText(CONFIG.email); ok = true; } catch { ok = legacyCopy(CONFIG.email); }
     if (!ok) { location.href = "mailto:" + CONFIG.email; return; }
-    tip.textContent = "Copiado ✓";
+    tip.textContent = t("Copiado ✓");
     b.classList.add("copied");
     clearTimeout(tm);
     tm = setTimeout(() => { b.classList.remove("copied"); tip.textContent = ""; }, 1600);

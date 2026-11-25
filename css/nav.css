@@ -58,4 +58,13 @@ nav.scrolled{background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-fi
   .nav-links a.cta{padding:7px 10px}
 }
 @media(max-width:350px){.nav-links{--ngap:5px;font-size:var(--t-2xs);letter-spacing:.06em}.nav-links a.cta{padding:6px 7px}}
+/* ---------- selector de idioma ES / EN (esquina izquierda; los links van centrados) ---------- */
+.lang{position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid var(--line);border-radius:var(--r-pill);
+  background:transparent;color:var(--mut);font-family:var(--mono);font-size:var(--t-xs);letter-spacing:.12em;cursor:pointer;transition:color var(--d-1),border-color var(--d-1)}
+.lang:hover{color:var(--txt);border-color:color-mix(in srgb,var(--txt) 35%,transparent)}
+.lang i{font-style:normal;opacity:.4}
+.lang[data-lang="es"] .l-es,.lang[data-lang="en"] .l-en{color:var(--acc);font-weight:700}
+@media(max-width:480px){.lang{padding:5px 8px;gap:3px;font-size:var(--t-2xs);letter-spacing:.06em}}
+/* pantallas mínimas: muestra solo el idioma al que cambia (EN o ES) para no pisar los links */
+@media(max-width:350px){.lang i,.lang[data-lang="es"] .l-es,.lang[data-lang="en"] .l-en{display:none}.lang{padding:5px 8px}.lang[data-lang="es"] .l-en,.lang[data-lang="en"] .l-es{color:var(--acc);font-weight:700}}
 } /* fin @layer nav */
