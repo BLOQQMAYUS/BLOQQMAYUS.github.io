@@ -51,6 +51,7 @@ const S = [
     "The content wave never stops. 4:5 and 9:16 packs for Reels, TikTok and Shorts."]],
   ["#contacto .kicker", "<b>04 ·</b> Contact"],
   ["#contacto h2", 'switch on the <span class="nw">bloqq <em>MÁYUS</em></span>'],
+  [".neon-word", 'GALLER<span class="neon-buzz">Y</span>'],
   ["#ledBtn", "Open the 3D Gallery", "aria-label"], ["#ledBtn", "Open the 3D Gallery", "title"],
   ["#contactBox > p", "Tell me about your project — we take your idea to the brief, and my system delivers RESULTS."],
   [".foot-ind", "<i></i> MADE IN ARGENTINA"],
