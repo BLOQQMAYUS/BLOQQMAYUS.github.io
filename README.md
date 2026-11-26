@@ -283,7 +283,8 @@ de filtros, obras y rueda se compara como conjunto: es aleatorio por regla.
   - video: `./cambiar-hero.sh assets/hero/clip.mp4` → pone `<video autoplay muted
     loop playsinline>` con **poster** (el poster es lo que se comparte: WhatsApp
     no hace preview de video).
-- **AHORA el header es el loop del showreel** (2026-11-25): `reel.mp4` (1280×720) en compu y
+- **AHORA el header es la foto `anterior.jpg`** (2026-11-26): se sacó el video porque hacía cargar lenta la página. Encuadre 72% 28% compu / 62% 20% celu en `css/hero.css`; preview de redes `og-anterior.jpg`. Lo que sigue describe el loop del showreel que estuvo antes y que sigue en `assets/hero/` por si se quiere volver.
+- **Antes, el header era el loop del showreel** (2026-11-25): `reel.mp4` (1280×720) en compu y
   `reel-vertical.mp4` (720×1280, reencuadrado plano por plano) en celu vertical, elegidos con
   `<source media>`; poster `reel-poster.jpg`, preview de redes `og-reel.jpg`. 6,3 s, mudo, sin
   planos con texto. **Baja recién en `load`** (core.js, `#heroVid` con `data-src`): en 4G lenta
